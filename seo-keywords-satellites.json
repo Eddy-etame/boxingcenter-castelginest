@@ -1,0 +1,485 @@
+{
+  "version": "2026-09-08",
+  "porte": "Registre de MOTIFS pour la famille des sites satellites Boxing Center. Un motif porte des fentes ({ville}, {commune}, {club}, {transport}, {sortie}) : chaque site l'instancie sur sa ville et ses communes. On ne copie jamais une liste Toulouse : on génère depuis les faits du site.",
+  "sources_analysees": {
+    "seo-keywords.json": "18 clusters Toulouse, 18 principaux, 15 longue traîne (2026-09-06) — repris, généralisés, débarrassés des prix, des adresses, des titres de pages et des noms de concurrents",
+    "seo-keywords-par-source.json": "629 expressions relevées sur 7 sites du réseau : 701 occurrences viennent de <meta name=keywords>, qui n'est PAS un signal de classement pour Google. Le registre ci-dessous ne vise que ce qui se lit à l'écran : title, H1, H2, texte, alt, FAQ, données structurées."
+  },
+  "lois": [
+    "Un motif n'entre dans une page que si la page répond réellement à la question qu'il porte. Pas de mur de mots.",
+    "Chaque motif prioritaire d'une page est vérifié au build dans le texte visible (scripts/verifier.mjs).",
+    "Un motif qui contient 'à {ville}' ou 'salle ... {ville}' est une INTENTION de recherche, jamais une AFFIRMATION : la page y répond par 'à proximité de {ville}', 'accessible depuis {ville}', jamais 'situé à {ville}'.",
+    "Une commune satellite reçoit les mêmes motifs, instanciés sur elle, sur SA page, avec au moins 40 % de contenu propre (test du remplacement).",
+    "Les variantes orthographiques comptent : kick-boxing / kickboxing / kick boxing, Muay Thaï / boxe thaï / boxe thaïlandaise, JJB / jiu-jitsu brésilien, MMA / arts martiaux mixtes. On en écrit une par page en titre, les autres dans le corps ou la FAQ."
+  ],
+  "fentes": {
+    "{ville}": "la ville du site (Muret, Cugnaux, Tournefeuille, Labège, L'Union, Castelginest)",
+    "{commune}": "une commune satellite du site (Villeneuve-Tolosane, Frouzins, Seysses, Fonsorbes, Plaisance-du-Touch, Saint-Orens, Castanet-Tolosan, Saint-Jean, Rouffiac-Tolosan, Saint-Alban, Fenouillet, Aucamville, Launaguet)",
+    "{club}": "le club de destination, dans ses mots (Portet-sur-Garonne, Saint-Cyprien, Ramonville, Toulouse États-Unis)",
+    "{transport}": "l'accès réel depuis la ville (A64 sortie Portet, Linéo L3, métro A Saint-Cyprien-République, métro B terminus Ramonville, rocade sortie 33b Lalande, gare TER Portet-Saint-Simon…)",
+    "{secteur}": "sud toulousain / ouest toulousain / sud-est toulousain / nord toulousain / nord-est toulousain",
+    "{gentile}": "Muretains, Cugnalais, Tournefeuillais, Labègeois, Unionais, Castelginestois"
+  },
+  "motifs_imposes_par_le_brief": {
+    "note": "Les neuf motifs d'Eddy, page cible et rôle. Déclinés sur {ville} ET sur chaque {commune}.",
+    "liste": [
+      {
+        "motif": "boxe {ville}",
+        "page": "accueil",
+        "role": "prioritaire"
+      },
+      {
+        "motif": "club de boxe {ville}",
+        "page": "accueil",
+        "role": "prioritaire"
+      },
+      {
+        "motif": "boxe anglaise {ville}",
+        "page": "boxe-anglaise",
+        "role": "prioritaire"
+      },
+      {
+        "motif": "club MMA {ville}",
+        "page": "mma",
+        "role": "prioritaire"
+      },
+      {
+        "motif": "salle MMA {ville}",
+        "page": "mma",
+        "role": "prioritaire",
+        "reponse_obligatoire": "salle MMA à proximité de {ville} — la cage est à {club}"
+      },
+      {
+        "motif": "sport de combat {ville}",
+        "page": "accueil",
+        "role": "prioritaire",
+        "variantes": [
+          "sports de combat {ville}"
+        ]
+      },
+      {
+        "motif": "club boxe thaï {ville}",
+        "page": "kick-boxing",
+        "role": "prioritaire",
+        "variantes": [
+          "boxe thaï {ville}",
+          "boxe thaïlandaise {ville}",
+          "Muay Thaï {ville}"
+        ],
+        "verite": "n'affirmer 'boxe thaï' que si le club de destination publie Muay Thaï (Saint-Cyprien, États-Unis) ; sinon répondre par kick-boxing / pieds-poings et dire la nuance"
+      },
+      {
+        "motif": "club kick boxing {ville}",
+        "page": "kick-boxing",
+        "role": "prioritaire",
+        "variantes": [
+          "kick-boxing {ville}",
+          "kickboxing {ville}",
+          "K1 {ville}"
+        ]
+      },
+      {
+        "motif": "boxe pieds poings {ville}",
+        "page": "kick-boxing",
+        "role": "prioritaire",
+        "variantes": [
+          "boxe pieds-poings {ville}",
+          "pieds-poings {ville}"
+        ]
+      }
+    ]
+  },
+  "motifs_elargis": {
+    "proximite": {
+      "note": "Le cœur de la famille : ce que tape quelqu'un qui ne veut pas aller loin. C'est aussi la formulation qui protège du doorway : on ne dit pas 'à', on dit 'près de'.",
+      "page": "accueil / ta-seance",
+      "role": "prioritaire",
+      "liste": [
+        "club de boxe près de {ville}",
+        "club de boxe à proximité de {ville}",
+        "club de boxe autour de {ville}",
+        "club MMA près de {ville}",
+        "salle de boxe près de {ville}",
+        "salle de sport combat proche {ville}",
+        "boxe accessible depuis {ville}",
+        "cours de boxe depuis {ville}",
+        "boxe {secteur}",
+        "MMA {secteur}",
+        "club de boxe 31 {ville}",
+        "boxe Haute-Garonne {ville}",
+        "Boxing Center {ville}",
+        "Boxing Center près de {ville}",
+        "club de boxe {ville} {club}",
+        "{ville} {club} boxe"
+      ]
+    },
+    "transport_et_acces": {
+      "note": "Personne ne cherche 'club de boxe sortie 33b', mais les moteurs de réponse citent ce qui situe. À placer en fiche club, FAQ commune, llms.txt.",
+      "page": "accueil (fiche club) / communes",
+      "role": "secondaire",
+      "liste": [
+        "club de boxe {transport}",
+        "salle de boxe métro {transport}",
+        "boxe près de la gare {ville}",
+        "club de boxe sortie {sortie}",
+        "MMA accès {transport}",
+        "club de boxe parking facile {club}",
+        "boxe en sortant du travail {ville}",
+        "club de boxe sur la route de Toulouse {ville}"
+      ]
+    },
+    "communes_satellites": {
+      "note": "Instancier CHAQUE motif imposé sur CHAQUE commune, sur sa page. Plus ces liants :",
+      "page": "commune",
+      "role": "prioritaire",
+      "liste": [
+        "club de boxe {commune}",
+        "boxe {commune}",
+        "MMA {commune}",
+        "boxe anglaise {commune}",
+        "kick boxing {commune}",
+        "boxe thaï {commune}",
+        "boxe pieds poings {commune}",
+        "salle MMA {commune}",
+        "sport de combat {commune}",
+        "club de boxe près de {commune}",
+        "boxe enfant {commune}",
+        "boxe {commune} {ville}",
+        "{commune} ou {ville} boxe"
+      ]
+    },
+    "debutant_et_premiere_seance": {
+      "page": "premiere-seance",
+      "role": "prioritaire",
+      "liste": [
+        "boxe débutant {ville}",
+        "commencer la boxe {ville}",
+        "débuter la boxe {ville}",
+        "première séance boxe {ville}",
+        "cours d'essai boxe {ville}",
+        "séance d'essai boxe {ville}",
+        "séance découverte boxe {ville}",
+        "essayer le MMA {ville}",
+        "jamais fait de boxe",
+        "cours de boxe pour adultes débutants {ville}",
+        "grand débutant boxe",
+        "boxe sans expérience",
+        "boxe après 40 ans",
+        "reprendre le sport par la boxe {ville}",
+        "boxe loisir sans combat {ville}",
+        "boxe sans opposition {ville}",
+        "que prendre pour un premier cours de boxe",
+        "faut-il des gants pour commencer la boxe"
+      ]
+    },
+    "enfants_et_ados": {
+      "page": "boxe-enfants",
+      "role": "prioritaire",
+      "liste": [
+        "boxe enfant {ville}",
+        "cours de boxe enfant {ville}",
+        "boxe éducative {ville}",
+        "baby boxe {ville}",
+        "boxe 3 ans {ville}",
+        "boxe dès 3 ans",
+        "boxe enfant 6 ans",
+        "boxe 7 à 11 ans",
+        "boxe ado {ville}",
+        "boxe adolescent {ville}",
+        "cours ados 12 16 ans",
+        "MMA enfant {ville}",
+        "MMA jeunes {ville}",
+        "kick boxing enfant {ville}",
+        "sport de combat enfant {ville}",
+        "école de boxe enfant {ville}",
+        "sport confiance en soi enfant",
+        "boxe éducative filles et garçons",
+        "boxe enfant timide",
+        "la boxe rend-elle violent",
+        "licence FFBoxe enfant",
+        "certificat médical boxe enfant"
+      ]
+    },
+    "femmes": {
+      "page": "boxing-fitness ou kick-boxing selon l'offre réelle du club",
+      "role": "prioritaire",
+      "liste": [
+        "boxe femme {ville}",
+        "cours de boxe féminin {ville}",
+        "Boxing Lady {ville}",
+        "Lady Boxing {ville}",
+        "Lady Punch {ville}",
+        "boxe 100 % féminin {ville}",
+        "MMA féminin {ville}",
+        "boxe femme débutante",
+        "boxe femme sans opposition",
+        "créneau 100 % féminin boxe"
+      ]
+    },
+    "fitness_et_forme": {
+      "page": "boxing-fitness / preparation-physique selon l'offre",
+      "role": "secondaire",
+      "liste": [
+        "boxing fitness {ville}",
+        "cardio boxing {ville}",
+        "boxing camp {ville}",
+        "cross training {ville}",
+        "HYROX {ville}",
+        "préparation physique {ville}",
+        "remise en forme boxe {ville}",
+        "perte de poids boxe {ville}",
+        "se défouler boxe {ville}",
+        "boxe anti-stress",
+        "renforcement musculaire boxe",
+        "musculation {club}",
+        "salle de sport avec boxe près de {ville}"
+      ]
+    },
+    "mma_et_sol": {
+      "page": "mma",
+      "role": "prioritaire",
+      "liste": [
+        "MMA {ville}",
+        "cours de MMA {ville}",
+        "MMA débutant {ville}",
+        "arts martiaux mixtes {ville}",
+        "cage MMA {ville}",
+        "octogone {ville}",
+        "grappling {ville}",
+        "jiu-jitsu brésilien {ville}",
+        "JJB {ville}",
+        "combat au sol {ville}",
+        "grappling no-gi {ville}",
+        "lutte {ville}",
+        "MMA loisir {ville}",
+        "MMA compétition {ville}",
+        "club MMA {secteur}",
+        "MMA près de {ville}",
+        "où faire du MMA près de {ville}",
+        "différence MMA et boxe"
+      ]
+    },
+    "boxe_anglaise": {
+      "page": "boxe-anglaise",
+      "role": "prioritaire",
+      "liste": [
+        "cours de boxe anglaise {ville}",
+        "club de boxe anglaise {ville}",
+        "école de boxe {ville}",
+        "boxe anglaise loisir {ville}",
+        "boxe anglaise compétition {ville}",
+        "boxe amateur {ville}",
+        "noble art {ville}",
+        "apprendre à boxer {ville}",
+        "cours de boxe adulte {ville}",
+        "boxe loisir {ville}",
+        "sparring encadré {ville}",
+        "pattes d'ours {ville}",
+        "boxe anglaise {secteur}"
+      ]
+    },
+    "pieds_poings": {
+      "page": "kick-boxing",
+      "role": "secondaire",
+      "liste": [
+        "full contact {ville}",
+        "striking {ville}",
+        "boxe française {ville}",
+        "savate {ville}",
+        "K-1 {ville}",
+        "kick boxing débutant {ville}",
+        "boxe thaï débutant {ville}",
+        "Muay Thaï {secteur}",
+        "kick boxing enfants ados {ville}"
+      ],
+      "verite": "savate / boxe française : uniquement si un club de destination la publie. Aucun ne le fait au 2026-09-08 → ne pas cibler, garder en FAQ 'on ne fait pas de savate, voici ce qu'on fait'."
+    },
+    "horaires_et_temps": {
+      "page": "accueil (amplitude) / ta-seance / FAQ",
+      "role": "secondaire",
+      "liste": [
+        "horaires boxe {ville}",
+        "planning boxe {ville}",
+        "planning MMA {ville}",
+        "boxe le soir {ville}",
+        "boxe le midi {ville}",
+        "boxe le samedi {ville}",
+        "cours de boxe après le travail",
+        "club de boxe ouvert 6 jours sur 7",
+        "boxe ouvert jusqu'à 21h30",
+        "horaires club de boxe {club}",
+        "quel créneau boxe débutant"
+      ],
+      "verite": "Plannings et Tarifs de la nav pointent sur les pages du club : ces motifs vivent dans l'accueil et la FAQ, jamais sur une page interne 'plannings' qui n'existe plus."
+    },
+    "prix_et_inscription": {
+      "page": "FAQ accueil / premiere-seance",
+      "role": "secondaire",
+      "liste": [
+        "tarif boxe {ville}",
+        "prix club de boxe {ville}",
+        "prix MMA {ville}",
+        "abonnement boxe {ville}",
+        "abonnement boxe sans engagement {ville}",
+        "combien coûte la boxe {ville}",
+        "inscription boxe {ville}",
+        "inscription boxe en cours d'année",
+        "offre rentrée boxe",
+        "boxe étudiant {ville}",
+        "Pass'Sport boxe",
+        "paiement en plusieurs fois boxe"
+      ],
+      "verite": "Aucun prix n'est écrit sur un satellite (décision Eddy 2026-09-08). On répond à l'intention prix par 'ce que comprend une adhésion' et un lien direct vers la page tarifs du club."
+    },
+    "questions": {
+      "note": "Les formes interrogatives — ce que tapent les gens et ce que lisent les moteurs de réponse. Titres de FAQ, jamais de H1.",
+      "page": "FAQ de la page concernée",
+      "role": "longue_traine",
+      "liste": [
+        "y a-t-il un club de boxe à {ville}",
+        "où faire de la boxe quand on habite {ville}",
+        "où faire du MMA près de {ville}",
+        "quel club de boxe choisir près de {ville}",
+        "comment aller au Boxing Center depuis {ville}",
+        "combien de temps de {ville} à {club}",
+        "à partir de quel âge la boxe",
+        "la boxe est-elle dangereuse pour les enfants",
+        "peut-on faire de la boxe sans combattre",
+        "est-ce que je vais prendre des coups",
+        "je n'ai jamais fait de sport puis-je faire de la boxe",
+        "que faut-il apporter à un premier cours de boxe",
+        "boxe anglaise ou kick boxing pour débuter",
+        "MMA ou boxe pour commencer",
+        "quelle différence entre boxe thaï et kick boxing",
+        "y a-t-il des cours de boxe pour femmes près de {ville}",
+        "peut-on s'inscrire en cours d'année",
+        "faut-il une licence pour boxer"
+      ],
+      "verite": "'y a-t-il un club de boxe à {ville}' se répond par ce qui existe (deux clubs / un club à proximité, {transport}) — jamais par 'non'."
+    },
+    "recherche_vocale_et_ia": {
+      "note": "Phrases complètes, à la première personne : les assistants les répètent telles quelles. Une ou deux par page, dans le corps ou la FAQ, dites naturellement.",
+      "page": "accueil / ta-seance / llms.txt",
+      "role": "longue_traine",
+      "liste": [
+        "je cherche un club de boxe près de {ville}",
+        "je veux faire du MMA près de chez moi à {ville}",
+        "trouver un cours de boxe pour mon fils à {ville}",
+        "club de boxe le plus proche de {ville}",
+        "salle de sport de combat la plus proche de {commune}",
+        "boxe pour débutant près de {ville} le soir"
+      ]
+    },
+    "anglais": {
+      "note": "Présent sur les sites du réseau ('boxing gym Toulouse', 'women boxing', 'kids boxing') : expatriés, étudiants. Une occurrence par site, en FAQ ou fiche club — pas plus.",
+      "page": "accueil (FAQ)",
+      "role": "longue_traine",
+      "liste": [
+        "boxing gym near {ville}",
+        "MMA gym near {ville}",
+        "kids boxing {ville}",
+        "women boxing {ville}",
+        "boxing classes {ville} beginners"
+      ]
+    },
+    "comparaison_et_choix": {
+      "page": "ta-seance / quel-club",
+      "role": "secondaire",
+      "liste": [
+        "meilleur club de boxe près de {ville}",
+        "avis club de boxe {ville}",
+        "club de boxe sérieux {ville}",
+        "club de boxe convivial {ville}",
+        "club affilié FFBoxe près de {ville}",
+        "coach diplômé boxe {ville}",
+        "club de boxe avec cage MMA près de {ville}",
+        "club de boxe avec ring près de {ville}"
+      ],
+      "verite": "'meilleur' et 'avis' se traitent par des faits (diplômes, surface, équipements, ouverture) — jamais par une note ni un avis inventé."
+    },
+    "saison": {
+      "page": "accueil / premiere-seance (texte vivant, à dater)",
+      "role": "longue_traine",
+      "liste": [
+        "boxe rentrée {ville}",
+        "inscription boxe septembre {ville}",
+        "commencer la boxe en janvier",
+        "boxe pendant l'été {ville}",
+        "stage boxe vacances {ville}"
+      ],
+      "verite": "Ne publier un motif de saison que si le club publie l'offre correspondante ; sinon le retirer."
+    },
+    "images": {
+      "note": "Décision Eddy 2026-09-08 : nom = <sujet>-<ville-du-site>.<ext>, minuscules, sans accent, sans 'boxing-center', sans numéro (sauf -2, -3 en cas de doublon). Le sujet = ce qu'on voit. La ville = celle du site, jamais celle de la salle. Alt = ce qu'on voit. Légende = ce qu'on voit + « Boxing Center », sans nommer une autre salle, sans prétendre au lieu.",
+      "noms_de_fichiers": [
+        "club-boxe-{ville}",
+        "ring-de-boxe-{ville}",
+        "sac-de-frappe-{ville}",
+        "cage-mma-{ville}",
+        "salle-mma-{ville}",
+        "boxe-anglaise-{ville}",
+        "kick-boxing-{ville}",
+        "boxe-thai-{ville}",
+        "boxe-enfant-{ville}",
+        "boxe-femme-{ville}",
+        "coach-boxe-{ville}",
+        "pattes-d-ours-{ville}",
+        "sparring-{ville}",
+        "preparation-physique-{ville}",
+        "salle-de-boxe-{ville}",
+        "premiere-seance-boxe-{ville}",
+        "grappling-{ville}"
+      ]
+    }
+  },
+  "a_ne_pas_cibler": {
+    "note": "Présents dans les fichiers du réseau, retirés du registre satellite, et pourquoi.",
+    "liste": [
+      {
+        "motif": "prix chiffrés (29 euros, 259 euros, badge 34 euros)",
+        "pourquoi": "aucun prix sur un satellite ; ils changent et appartiennent au club"
+      },
+      {
+        "motif": "noms de concurrents (Toulouse Fight Club, Académie de Boxe…)",
+        "pourquoi": "on ne cite jamais un concurrent dans nos pages ; ils vivent dans .recherche/concurrence-<ville>.md"
+      },
+      {
+        "motif": "boutique, matériel, gants, protège-tibias",
+        "pourquoi": "intention d'achat, pas d'orientation ; c'est boutique.boxingcenter.fr"
+      },
+      {
+        "motif": "adresses et téléphones comme mots-clés",
+        "pourquoi": "ce sont des faits du registre, pas des cibles"
+      },
+      {
+        "motif": "titres de pages ('Page introuvable', 'Galerie photos')",
+        "pourquoi": "bruit d'extraction"
+      },
+      {
+        "motif": "quartiers de Toulouse (Barrière de Paris, Purpan, Basso Cambo…)",
+        "pourquoi": "territoire des sites de clubs, pas des satellites — sauf comme {transport} réel (Basso Cambo pour Cugnaux)"
+      },
+      {
+        "motif": "savate, boxe française, krav maga, canne de combat",
+        "pourquoi": "aucun club de destination ne les publie : les cibler serait mentir"
+      },
+      {
+        "motif": "'salle de boxe à {ville}' en H1",
+        "pourquoi": "affirme une salle dans la ville ; on garde l'intention en FAQ, on répond 'à proximité'"
+      },
+      {
+        "motif": "<meta name=keywords>",
+        "pourquoi": "701 occurrences dans le réseau, zéro effet chez Google ; on ne l'émet pas"
+      }
+    ]
+  },
+  "generation": {
+    "note": "Un script génère src/data/mots-cles.ts d'un site depuis ce registre et son registre de vérité : scripts/generer-mots-cles.mjs <dossier-du-site>. Le résultat est ensuite RELU et coupé à la main : on garde par page 3 à 5 prioritaires et 8 à 15 secondaires, pas 60.",
+    "regles": [
+      "{ville} → SITE.villeOrigine ; {commune} → chaque COMMUNES[].nom ; {secteur} → CONTEXTE_GEO.secteur ; {club} → CLUBS[].nomCourt ; {transport} → CLUBS[].acces",
+      "un motif de page 'kick-boxing' n'est généré que si le club publie une famille kick-boxing / pieds-poings / Muay Thaï ; 'boxing-fitness' seulement si une famille femme / fitness existe",
+      "les motifs 'commune' vont sur /<commune>/ ; jamais sur l'accueil",
+      "tout motif prioritaire généré est vérifié au build dans le texte visible de sa page"
+    ]
+  }
+}
