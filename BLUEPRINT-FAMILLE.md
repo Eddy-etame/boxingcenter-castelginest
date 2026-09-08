@@ -301,3 +301,13 @@ Ces quatre-là ont vécu en ligne. Chacun coûtait une section entière, et aucu
 4. **La marge d'ancre tient compte du geste d'entrée.** Un bloc arrive translaté de `--mouv-y` et remonte en se posant : `scroll-padding-top` vaut donc `calc(6rem + var(--mouv-y))`, sinon la cible d'une ancre finit sous la barre.
 
 Et une cinquième, d'écriture : **une réponse ne s'ouvre jamais sur une négation.** Ni « Non. », ni « Pas de ». Elle commence par ce qui est vrai. « Le cours accueille tous les âges d'adultes » remplace « Non, ce n'est pas réservé aux jeunes ».
+
+### 13.10 LA PASSE PERSONA — ce qu'elle a trouvé, et ce qu'elle vérifie désormais
+La passe se fait **sur le HTML livré**, aux trois largeurs — 1440, 1150 et 390 — et jamais sur le code source. Ce que le build accepte n'est pas ce qu'un visiteur voit.
+
+Les trois défauts qu'elle a sortis le 2026-09-09, tous invisibles au build :
+1. **La barre poussait la page.** Neuf entrées, la pastille et le téléphone demandaient 1 405 px dans une grille de 1 344 : au-dessus de 68rem, le téléphone sortait du conteneur et le document glissait de 20 px vers la droite. Règle : **l'espacement de barre se resserre avec la largeur, la barre porte `overflow-x: clip`, et la liste de liens n'apparaît qu'à partir de la largeur où elle tient en entier.**
+2. **Le seuil du bouton menu doit être exactement celui de la liste.** Relever l'un sans l'autre ouvre une bande de largeurs sans aucune navigation. Un seuil, deux règles, jamais deux valeurs.
+3. **Un arrêt de bus faux.** Cugnaux envoyait à « Route d'Espagne », qui est l'arrêt de Toulouse — huit arrêts au nord du club. L'arrêt du 61 route d'Espagne à Portet s'appelle **« Jean Jaurès »**, sur les trois sites qui y mènent. Règle : **un nom d'arrêt se relève sur la fiche de ligne, et il est le même sur tous les sites qui visent le même club.**
+
+Ce que la passe mesure, à chaque livraison : contraste calculé de chaque nœud de texte contre son fond réel · cible de pointage sous 24 px (44 px sur téléphone) · débordement horizontal du document · bloc resté invisible après l'entrée · image sans `alt` ou sans dimensions · lien sans texte ou au libellé opaque · mesure de ligne au-delà de 92 caractères · titre ou `h1` dupliqué entre deux pages · saut de niveau de titre · lien interne mort · figure de style et formule creuse dans le texte visible.
