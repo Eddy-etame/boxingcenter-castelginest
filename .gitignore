@@ -1,0 +1,15 @@
+node_modules/
+dist/
+.vercel/
+.astro/
+.DS_Store
+*.log
+.env
+.env.*
+!.env.example
+
+# Photos brutes (WeTransfer) : jamais dans le dépôt
+wetransfer_*/
+
+# Recherche et veille : reste en local
+.recherche/

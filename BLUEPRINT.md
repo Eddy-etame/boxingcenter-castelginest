@@ -1,0 +1,36 @@
+# Boxing Center — depuis Castelginest · brief de site
+
+Loi commune : `../BLUEPRINT-SATELLITES-BOXING-CENTER.md`. Motifs : `../seo-keywords-satellites.json`.
+Domaine `www.boxingcenter-castelginest.fr` · dépôt `https://github.com/Eddy-etame/boxingcenter-castelginest.git` (minuscules — le seul du lot).
+
+## Destination — une seule
+**Boxing Center Toulouse États-Unis** — mêmes faits, URLs (`/planning/`, `/abonnements/`), offre et fun fact que le brief L'Union (`../boxing-center-lunion/BLUEPRINT.md`).
+**Argument propre à Castelginest : l'avenue des États-Unis est l'axe nord de Toulouse — Castelginest y arrive par la D820 / le périphérique nord, sortie Lalande.** Le club est sur la route de la ville.
+
+## Castelginest — faits (Wikipédia, 2026-09-08)
+31780 · INSEE 31116 · 11 271 hab. (2023) · **Castelginestois** · 10 km au nord de Toulouse · Hers-Mort · A62 sortie 11 (Saint-Jory) · bus Tisséo 26, 60, 69, 113 · liO 329 · métro via Trois-Cocus, Borderouge, La Vache.
+Limitrophes : Bruguières, Fonbeauzard, Gratentour, **Launaguet**, Pechbonnieu, **Saint-Alban**, Saint-Loup-Cammas.
+Fait local : église Saint-Étienne restaurée 2010-2013 ; parc Mauvezin et son pigeonnier ; fortifications du XIVe. Clubs : US Castelginest (football), Rugby Castelginest XV — pas de club de combat nommé : à vérifier par la recherche concurrence.
+
+## Communes satellites — une page chacune (quatre)
+| Commune | CP | Note |
+|---|---|---|
+| /saint-alban/ | 31140 | limitrophe de Castelginest ; D820 |
+| /fenouillet/ | 31150 | bord de Garonne, au nord-ouest ; D820 ; à relever |
+| /aucamville/ | 31140 | entre Castelginest et Toulouse ; **Launaguet et Aucamville touchent l'avenue des États-Unis côté Toulouse** — à vérifier, c'est l'argument d'accès le plus fort |
+| /launaguet/ | 31140 | limitrophe de Castelginest ET de L'Union → **maillage inter-sites** L'Union ↔ Castelginest (ancres descriptives, pas de duplication de page : Launaguet n'a de page que sur Castelginest, comme le brief l'impose) |
+
+## Pages
+Accueil · /boxe-anglaise/ · /mma/ · /boxe-thai/ · /boxe-enfants/ · /premiere-seance/ · /ta-seance/ · /saint-alban/ · /fenouillet/ · /aucamville/ · /launaguet/ · /contact/ · /merci/ · légales · 404. Option /preparation-physique/ comme L'Union (même décision pour les deux).
+Nav : Plannings ↗ `clubmma.fr/planning/` · Tarifs ↗ `clubmma.fr/abonnements/`.
+
+## Mots-clés
+9 motifs × {Castelginest, Saint-Alban, Fenouillet, Aucamville, Launaguet}. Secondaires : 31780, Castelginestois, nord toulousain, Hers-Mort, sortie Lalande, La Vache, Borderouge, plus grande salle de sports de combat, cage MMA officielle.
+
+## Images — BLOQUANT, identique à L'Union
+Dossier vide, aucun hero d'États-Unis. Mêmes options (a/b/c) que le brief L'Union. **Ne pas utiliser le même hero que L'Union** si l'on recourt aux photos du réseau : L'Union prend Portet (Muret/Cugnaux non utilisées), Castelginest prend Minimes (Colomiers non utilisées) — ou l'inverse, mais pas les mêmes.
+Nommage : `club-boxe-castelginest-boxing-center-01.jpg`, `salle-mma-castelginest-cage-boxing-center-02.jpg`…
+
+## Système visuel — sous-famille États-Unis (os · encre · bronze clair), **cadrage et hero différents de L'Union**.
+## Concurrence : « club de boxe Castelginest », « MMA Castelginest », « boxe thaï Castelginest » + les 4 communes.
+## Bloquants : photos hero · amplitude horaire États-Unis · vérifier Aucamville/Launaguet ↔ avenue des États-Unis · page préparation physique.
