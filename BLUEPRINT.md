@@ -27,10 +27,10 @@ Nav : Plannings ↗ `clubmma.fr/planning/` · Tarifs ↗ `clubmma.fr/abonnements
 ## Mots-clés
 9 motifs × {Castelginest, Saint-Alban, Fenouillet, Aucamville, Launaguet}. Secondaires : 31780, Castelginestois, nord toulousain, Hers-Mort, sortie Lalande, La Vache, Borderouge, plus grande salle de sports de combat, cage MMA officielle.
 
-## Images — BLOQUANT, identique à L'Union
-Dossier vide, aucun hero d'États-Unis. Mêmes options (a/b/c) que le brief L'Union. **Ne pas utiliser le même hero que L'Union** si l'on recourt aux photos du réseau : L'Union prend Portet (Muret/Cugnaux non utilisées), Castelginest prend Minimes (Colomiers non utilisées) — ou l'inverse, mais pas les mêmes.
-Nommage : `club-boxe-castelginest-boxing-center-01.jpg`, `salle-mma-castelginest-cage-boxing-center-02.jpg`…
+## Images — décision Eddy 2026-09-08 : pas de séance photo, légendes en phase avec le site
+Le dossier est vide et le stock États-Unis n'a que des flyers et du 768×512 (vignettes, plannings). Le site se construit avec les photos du réseau : **Minimes (non-utilisées de Colomiers)**, hero ≥ 2 000 px, jamais les mêmes que l'autre site vers États-Unis. Légendes selon la loi commune §8 : ce qu'on voit + « Boxing Center », sans nommer une autre salle, sans prétendre au lieu. Les deux plannings du stock sont des données réelles à réutiliser en texte.
+Nommage : `club-boxe-castelginest-boxing-center-01.jpg`, `salle-mma-castelginest-cage-boxing-center-02.jpg`, `boxe-thai-castelginest-boxing-center-03.jpg`…
 
 ## Système visuel — sous-famille États-Unis (os · encre · bronze clair), **cadrage et hero différents de L'Union**.
 ## Concurrence : « club de boxe Castelginest », « MMA Castelginest », « boxe thaï Castelginest » + les 4 communes.
-## Bloquants : photos hero · amplitude horaire États-Unis · vérifier Aucamville/Launaguet ↔ avenue des États-Unis · page préparation physique.
+## Bloquants : amplitude horaire États-Unis · vérifier Aucamville/Launaguet ↔ avenue des États-Unis · page préparation physique.
