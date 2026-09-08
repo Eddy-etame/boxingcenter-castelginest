@@ -37,6 +37,15 @@ const QUESTIONS = [
       "C’est une question d’abonnement, et elle appartient au club. Beaucoup de pratiquants combinent deux créneaux — une séance technique et une séance de préparation physique, par exemple. Pose la question au club avant de t’inscrire, il te dira ce que sa formule permet.",
   },
 ];
+
+/* Le nombre de créneaux se compte dans le registre : une offre ajoutée chez le
+   club ne doit pas laisser un chiffre faux en ligne. */
+const NOMBRES = [
+  'zéro', 'un', 'deux', 'trois', 'quatre', 'cinq', 'six', 'sept', 'huit', 'neuf', 'dix',
+  'onze', 'douze', 'treize', 'quatorze', 'quinze', 'seize', 'dix-sept', 'dix-huit', 'dix-neuf',
+  'vingt', 'vingt et un', 'vingt-deux', 'vingt-trois', 'vingt-quatre', 'vingt-cinq',
+];
+const COMBIEN = NOMBRES[OFFRES.length] ?? String(OFFRES.length);
 ---
 
 <Base page="ta-seance" ogPhoto={ROLES.calme} faq={QUESTIONS}>
@@ -58,12 +67,12 @@ const QUESTIONS = [
 
   <Seance titre={'Deux réponses,\net tu sais quoi chercher.'} />
 
-  {/* Les neuf intitulés, en clair : c'est la page qui les porte tous. */}
+  {/* Tous les intitulés, en clair : c'est la page qui les porte. */}
   <section class="section tout" aria-labelledby="t-tout">
     <div class="enveloppe">
       <p class="cartouche"><span class="cartouche__num">—</span><span>Tout ce qui se pratique</span></p>
       <div class="tout__tete">
-        <h2 id="t-tout">Les neuf créneaux publiés par le club.</h2>
+        <h2 id="t-tout">Les {COMBIEN} créneaux publiés par le club.</h2>
         <p class="lead faible">
           Quel que soit ton choix, c’est la même adresse et le même planning. Voilà
           la liste complète, pour que tu saches ce qui existe avant de décider.

@@ -57,7 +57,7 @@ const NOMBRES = ['zéro', 'un', 'deux', 'trois', 'quatre', 'cinq', 'six', 'sept'
 const COMBIEN_TRAJETS =
   ITINERAIRES.length === 1
     ? 'Un seul trajet.'
-    : `${NOMBRES[ITINERAIRES.length] ?? ITINERAIRES.length} trajets possibles.`;
+    : `${(NOMBRES[ITINERAIRES.length] ?? String(ITINERAIRES.length)).replace(/^./, (c) => c.toUpperCase())} trajets possibles.`;
 ---
 
 <section class="section tete" aria-labelledby="t-page" data-sans-scene>

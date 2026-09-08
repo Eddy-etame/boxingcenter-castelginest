@@ -99,6 +99,8 @@ const { actuelle } = Astro.props;
   .entete {
     position: sticky;
     top: 0;
+    /* Un débordement de barre ne peut jamais faire glisser la page. */
+    overflow-x: clip;
     z-index: var(--z-entete);
     background: color-mix(in srgb, var(--encre) 94%, transparent);
     backdrop-filter: blur(12px);
@@ -111,7 +113,9 @@ const { actuelle } = Astro.props;
   .entete__inner {
     display: flex;
     align-items: center;
-    gap: var(--e-5);
+    /* L'espacement se resserre avec la largeur : neuf entrées, la pastille et
+       le téléphone tiennent mal dans une grille de 84rem sinon. */
+    gap: clamp(0.75rem, 1.2vw, 1.5rem);
     min-height: 4.25rem;
   }
 
@@ -134,14 +138,22 @@ const { actuelle } = Astro.props;
   }
   @media (max-width: 30rem) { .entete__depuis { display: none; } }
 
-  .entete__nav { margin-left: auto; }
+  .entete__nav { margin-left: auto; min-width: 0; }
   .entete__nav ul {
     display: flex;
     align-items: center;
-    gap: var(--e-5);
+    gap: clamp(0.7rem, 1.15vw, 1.5rem);
     list-style: none;
   }
-  @media (max-width: 68rem) { .entete__nav { display: none; } }
+  /* La liste ne s'affiche qu'à partir de la largeur où elle tient en entier.
+     En dessous, le menu prend le relais : mieux vaut un bouton qu'une barre
+     qui pousse la page vers la droite. */
+  @media (max-width: 78rem) { .entete__nav { display: none; } }
+  /* Entre les deux, la mention « depuis … » cède sa place aux liens. Le logo
+     et le titre de la page disent déjà d'où l'on part. */
+  @media (min-width: 78.01rem) and (max-width: 86rem) {
+    .entete__depuis { display: none; }
+  }
 
   .entete__lien {
     position: relative;
@@ -235,7 +247,7 @@ const { actuelle } = Astro.props;
     92%, 100% { transform: translateX(0); }
   }
   @media (prefers-reduced-motion: reduce) { .entete__bus::after { animation: none; } }
-  @media (max-width: 62rem) { .entete__pastille { display: none; } }
+  @media (max-width: 46rem) { .entete__pastille { display: none; } }
 
   .entete__tel {
     flex: none;
@@ -243,7 +255,10 @@ const { actuelle } = Astro.props;
     color: var(--papier);
     font-weight: 700;
     letter-spacing: 0.06em;
-    padding: 0.4rem 0.7rem;
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.5rem;
+    padding: 0.4rem 0.8rem;
     border: 1px solid rgba(243, 239, 230, 0.22);
     border-radius: var(--rayon-1);
     transition: border-color var(--d-rapide) var(--e-mecanique), color var(--d-rapide) var(--e-mecanique);
@@ -264,7 +279,9 @@ const { actuelle } = Astro.props;
     cursor: pointer;
     position: relative;
   }
-  @media (max-width: 68rem) { .entete__bascule { display: block; } }
+  /* Le bouton menu prend le relais exactement là où la liste s'arrête :
+     entre les deux seuils, la barre n'offrirait plus rien. */
+  @media (max-width: 78rem) { .entete__bascule { display: block; } }
 
   .entete__barres,
   .entete__barres::before,
