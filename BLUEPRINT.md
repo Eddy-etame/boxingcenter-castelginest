@@ -21,7 +21,7 @@ Fait local : église Saint-Étienne restaurée 2010-2013 ; parc Mauvezin et son 
 | /launaguet/ | 31140 | limitrophe de Castelginest ET de L'Union → **maillage inter-sites** L'Union ↔ Castelginest (ancres descriptives, pas de duplication de page : Launaguet n'a de page que sur Castelginest, comme le brief l'impose) |
 
 ## Pages
-Accueil · /boxe-anglaise/ · /mma/ · /boxe-thai/ · /boxe-enfants/ · /premiere-seance/ · /ta-seance/ · /saint-alban/ · /fenouillet/ · /aucamville/ · /launaguet/ · /contact/ · /merci/ · légales · 404. Option /preparation-physique/ comme L'Union (même décision pour les deux).
+Accueil · /boxe-anglaise/ · /mma/ · /boxe-thai/ · /boxe-enfants/ · /premiere-seance/ · /ta-seance/ · /saint-alban/ · /fenouillet/ · /aucamville/ · /launaguet/ · /contact/ · /merci/ · légales · 404. **/preparation-physique/ — oui (Eddy, 2026-09-08)**, comme L'Union : « salle de sport Castelginest », « cross training Castelginest », « Hyrox Castelginest ».
 Nav : Plannings ↗ `clubmma.fr/planning/` · Tarifs ↗ `clubmma.fr/abonnements/`.
 
 ## Mots-clés
@@ -29,8 +29,8 @@ Nav : Plannings ↗ `clubmma.fr/planning/` · Tarifs ↗ `clubmma.fr/abonnements
 
 ## Images — décision Eddy 2026-09-08 : pas de séance photo, légendes en phase avec le site
 Le dossier est vide et le stock États-Unis n'a que des flyers et du 768×512 (vignettes, plannings). Le site se construit avec les photos du réseau : **Minimes (non-utilisées de Colomiers)**, hero ≥ 2 000 px, jamais les mêmes que l'autre site vers États-Unis. Légendes selon la loi commune §8 : ce qu'on voit + « Boxing Center », sans nommer une autre salle, sans prétendre au lieu. Les deux plannings du stock sont des données réelles à réutiliser en texte.
-Nommage : `club-boxe-castelginest-boxing-center-01.jpg`, `salle-mma-castelginest-cage-boxing-center-02.jpg`, `boxe-thai-castelginest-boxing-center-03.jpg`…
+Nommage : `<sujet>-castelginest.webp` — `ring-de-boxe-castelginest.webp`, `cage-mma-castelginest.webp`, `boxe-thai-castelginest.webp`… (loi commune §8, décision Eddy).
 
 ## Système visuel — sous-famille États-Unis (os · encre · bronze clair), **cadrage et hero différents de L'Union**.
 ## Concurrence : « club de boxe Castelginest », « MMA Castelginest », « boxe thaï Castelginest » + les 4 communes.
-## Bloquants : amplitude horaire États-Unis · vérifier Aucamville/Launaguet ↔ avenue des États-Unis · page préparation physique.
+## Bloquants : amplitude horaire États-Unis · vérifier Aucamville/Launaguet ↔ avenue des États-Unis.
