@@ -28,7 +28,7 @@ Nav : Plannings ↗ `clubmma.fr/planning/` · Tarifs ↗ `clubmma.fr/abonnements
 9 motifs × {Castelginest, Saint-Alban, Fenouillet, Aucamville, Launaguet}. Secondaires : 31780, Castelginestois, nord toulousain, Hers-Mort, sortie Lalande, La Vache, Borderouge, plus grande salle de sports de combat, cage MMA officielle.
 
 ## Images — décision Eddy 2026-09-08 : pas de séance photo, légendes en phase avec le site
-Le dossier est vide et le stock États-Unis n'a que des flyers et du 768×512 (vignettes, plannings). Le site se construit avec les photos du réseau : **Minimes (non-utilisées de Colomiers)**, hero ≥ 2 000 px, jamais les mêmes que l'autre site vers États-Unis. Légendes selon la loi commune §8 : ce qu'on voit + « Boxing Center », sans nommer une autre salle, sans prétendre au lieu. Les deux plannings du stock sont des données réelles à réutiliser en texte.
+Le dossier est vide et le stock États-Unis n'a que des flyers et du 768×512 (vignettes, plannings). Le site se construit avec les photos du réseau : **Minimes (non-utilisées de Colomiers)**, hero ≥ 2 000 px, jamais les mêmes que l'autre site vers États-Unis. Légendes selon la loi commune §8 : ce qu'on voit + « Boxing Center Toulouse États-Unis », quelle que soit la salle d'origine de la photo. Les deux plannings du stock sont des données réelles à réutiliser en texte.
 Nommage : `<sujet>-castelginest.webp` — `ring-de-boxe-castelginest.webp`, `cage-mma-castelginest.webp`, `boxe-thai-castelginest.webp`… (loi commune §8, décision Eddy).
 
 ## Système visuel — sous-famille États-Unis (os `#f4f1ea` · encre `#1e2044` · bronze : texte `#7d5a1e`, aplats `#c9a45a` — loi commune §7), **cadrage et hero différents de L'Union**.
