@@ -291,3 +291,13 @@ pas**. Chaque site a sa propre teinte et sa propre signature de mouvement.
 
 ### 13.7 Ce qu'un site de la famille doit pouvoir devenir
 Une référence dans la banque : passer les cinq tests du portillon (incrédulité, mécanisme nommable, cohérence sur toutes les surfaces, parité mobile, performance) comme n'importe quel site capturé. Le mécanisme nommable de la famille : **la route cotée par des faits sourcés, qui se tend à mesure que la personne décide**. Si, en le regardant, on peut nommer la référence dont il vient, c'est raté.
+
+### 13.9 CE QUE LE CSS N'A PAS LE DROIT DE SAVOIR — quatre défauts trouvés en regardant les pages
+Ces quatre-là ont vécu en ligne. Chacun coûtait une section entière, et aucun n'a été attrapé par le build : ils passent tous la compilation. On les relit avant chaque livraison.
+
+1. **Aucune règle CSS ne nomme une donnée du registre.** Les onglets d'itinéraire choisissaient leur panneau par une liste de `:has(#trajet-<id>:checked)` écrite à la main. Elle portait les identifiants de Muret : sur les quatre sites au registre différent, la page affichait ses onglets et jamais de trajet. Ces règles se génèrent depuis `ITINERAIRES`, dans un `<style is:inline set:html={…}>`. Règle générale : **si une classe ou un sélecteur contient une valeur qui vit dans un registre, la règle se génère.**
+2. **Aucun nombre ne s'écrit en lettres à la main.** « Deux trajets possibles », « les neuf intitulés » : faux sur quatre sites sur six. Un nombre se compte depuis le registre et se met en lettres par une table.
+3. **L'opacité ne se pose jamais sur un parent dont un enfant doit rester plein.** La pastille Transports portait `opacity: .45` sur le fil ; le point mobile, qui est son `::after`, pâlissait avec lui et disparaissait à chaque cycle. Le fil et le véhicule sont deux couches. Et une boucle qui ramène l'opacité à 0 laisse, la moitié du temps, un pictogramme incomplet : **au repos, un signe doit déjà se lire.**
+4. **La marge d'ancre tient compte du geste d'entrée.** Un bloc arrive translaté de `--mouv-y` et remonte en se posant : `scroll-padding-top` vaut donc `calc(6rem + var(--mouv-y))`, sinon la cible d'une ancre finit sous la barre.
+
+Et une cinquième, d'écriture : **une réponse ne s'ouvre jamais sur une négation.** Ni « Non. », ni « Pas de ». Elle commence par ce qui est vrai. « Le cours accueille tous les âges d'adultes » remplace « Non, ce n'est pas réservé aux jeunes ».
