@@ -1,0 +1,264 @@
+---
+/**
+ * PREMIÈRE SÉANCE.
+ *
+ * L'intention la plus chargée d'appréhension du site. Quelqu'un qui cherche
+ * « cours d'essai boxe Muret » ne compare rien : il veut être rassuré sur le
+ * déroulé exact. La page ne vend pas, elle décrit — minute par minute.
+ *
+ * Aucune condition d'essai n'est inventée : le prêt de matériel et les
+ * modalités appartiennent au club, on renvoie vers lui.
+ */
+import Base from '../layouts/Base.astro';
+import Photo from '../components/Photo.astro';
+import { DESTINATION, SITE, CONTACT } from '../data/verite';
+import { route } from '../data/routes';
+import { ROLES } from '../data/medias';
+
+const AVANT = [
+  { titre: 'Une tenue de sport', texte: 'Short ou legging, t-shirt, chaussures propres réservées à la salle. Rien de technique.' },
+  { titre: 'Une bouteille d’eau', texte: 'Tu vas transpirer plus que tu ne le penses. Une serviette est bienvenue.' },
+  { titre: 'Dix minutes d’avance', texte: 'Le temps de te présenter à l’accueil, de dire que c’est ta première fois, et d’être accueilli comme tel.' },
+  { titre: 'Pas de gants obligatoires', texte: 'Les conditions de prêt de gants et de bandes sont fixées par le club : demande-les en arrivant, ou par téléphone avant de venir.' },
+];
+
+const PENDANT = [
+  {
+    etape: 'Échauffement',
+    duree: '10 à 15 min',
+    texte: 'Corde à sauter, mobilité, déplacements à vide. Le coach te montre la garde et les appuis : c’est là que tout commence, et c’est déjà de la boxe.',
+  },
+  {
+    etape: 'Technique',
+    duree: '20 à 30 min',
+    texte: 'Un ou deux gestes, décomposés, répétés lentement puis en rythme. Le coach corrige au geste près — c’est exactement ce que tu es venu chercher, et ce qu’aucune vidéo ne remplace.',
+  },
+  {
+    etape: 'Sac ou pattes d’ours',
+    duree: '15 à 20 min',
+    texte: 'Tu appliques le geste sur un sac, ou face au coach qui tient les pattes d’ours. Tu frappes ; personne ne te frappe.',
+  },
+  {
+    etape: 'Renforcement et retour au calme',
+    duree: '10 min',
+    texte: 'Gainage, abdominaux, étirements. Tu repars essoufflé et content, pas cassé.',
+  },
+];
+
+const QUESTIONS = [
+  {
+    titre: 'Est-ce que je vais prendre des coups à la première séance ?',
+    texte:
+      "Non. L’opposition n’est jamais le point de départ. Une première séance de boxe ou de MMA, c’est de l’échauffement, du geste, du sac et des pattes d’ours. Le sparring arrive bien plus tard, encadré, et uniquement pour celles et ceux qui le souhaitent. Si tu veux la voie la plus sûre, le grappling se pratique sans aucune frappe.",
+  },
+  {
+    titre: 'Je n’ai jamais fait de sport. C’est un problème ?',
+    texte:
+      "C’est la situation la plus courante dans un club de boxe. Le coach adapte l’intensité à la personne qu’il a devant lui, et tout le monde dans la salle a été le débutant essoufflé du fond un jour. Personne ne regarde : chacun est occupé à sa propre séance.",
+  },
+  {
+    titre: 'Y a-t-il un cours d’essai ou une séance découverte ?',
+    texte:
+      "Les modalités d’essai — séance découverte, conditions, prêt de matériel — appartiennent au club et peuvent changer avec la saison. Le plus simple : appelle le club au " +
+      DESTINATION.telephone +
+      ", ou écris-nous, et on te dit exactement comment ça se passe cette semaine.",
+  },
+  {
+    titre: `Quelle discipline pour une première séance depuis ${SITE.ville} ?`,
+    texte:
+      "La boxe anglaise est la porte d’entrée la plus simple : quatre coups, une garde, et on progresse vite. Si la frappe t’inquiète, le grappling se pratique sans coup. Si tu veux le plus complet et que tu acceptes de mal faire pendant quelques semaines, le MMA — et il s’entraîne dans la cage.",
+  },
+  {
+    titre: 'Et le lendemain ?',
+    texte:
+      "Des courbatures, surtout aux épaules et aux jambes, et l’envie d’y retourner. La deuxième séance est plus facile que la première : les gestes ont commencé à s’installer, et tu sais où tu mets les pieds.",
+  },
+];
+---
+
+<Base page="premiere-seance" ogPhoto={ROLES.premiereSeance} faq={QUESTIONS}>
+  <section class="section tete" aria-labelledby="t-page">
+    <div class="enveloppe tete__inner">
+      <nav class="fil mono" aria-label="Fil d’Ariane">
+        <a href="/">Accueil</a><span aria-hidden="true">/</span>
+        <span aria-current="page">Première séance</span>
+      </nav>
+      <h1 id="t-page">Ta première séance de boxe près de {SITE.ville}, minute par minute.</h1>
+      <p class="tete__chapeau">
+        Tu n’as jamais mis de gants et tu veux savoir exactement ce qui t’attend avant
+        de pousser la porte. Voilà le déroulé d’une première séance à
+        {' '}{DESTINATION.nom} — ce qu’il faut apporter, ce que tu vas faire, et ce que
+        tu ne feras pas.
+      </p>
+      <div class="tete__actions">
+        <a class="bouton bouton--signal" href={route('contact').chemin}>
+          <span>Dire que je débute</span><span class="fleche" aria-hidden="true">→</span>
+        </a>
+        <a class="bouton" href={route('ta-seance').chemin}>
+          <span>Trouver ma séance</span><span class="fleche" aria-hidden="true">→</span>
+        </a>
+      </div>
+    </div>
+    <div class="enveloppe">
+      <Photo slug={ROLES.premiereSeance} prioritaire sizes="100vw" ratio="21 / 9" class="tete__photo" />
+    </div>
+  </section>
+
+  <section class="section creuse avant" aria-labelledby="t-avant">
+    <div class="enveloppe">
+      <p class="cartouche"><span class="cartouche__num">01</span><span>Avant</span></p>
+      <h2 id="t-avant" class="avant__titre">Ce qu’il faut apporter. C’est court.</h2>
+      <div class="avant__grille">
+        {AVANT.map((a, i) => (
+          <article class="reveler" style={`--retard:${i * 60}ms`}>
+            <p class="mono avant__num">{String(i + 1).padStart(2, '0')}</p>
+            <h3 class="avant__nom">{a.titre}</h3>
+            <p class="avant__texte">{a.texte}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section pendant" aria-labelledby="t-pendant">
+    <div class="enveloppe pendant__inner">
+      <div class="pendant__texte">
+        <p class="cartouche"><span class="cartouche__num">02</span><span>Pendant</span></p>
+        <h2 id="t-pendant">Une heure, quatre temps, zéro coup reçu.</h2>
+        <p class="lead faible">
+          Le déroulé varie selon le coach et la discipline, mais l’ossature d’une
+          première séance est celle-ci.
+        </p>
+        <ol class="pendant__liste">
+          {PENDANT.map((p, i) => (
+            <li>
+              <span class="mono pendant__num">{String(i + 1).padStart(2, '0')}</span>
+              <div>
+                <p class="pendant__etape">{p.etape} <span class="mono pendant__duree">{p.duree}</span></p>
+                <p class="pendant__detail">{p.texte}</p>
+              </div>
+            </li>
+          ))}
+        </ol>
+      </div>
+      <div class="pendant__image">
+        <Photo slug={ROLES.effort} sizes="(max-width: 62rem) 100vw, 42vw" ratio="3 / 4" />
+      </div>
+    </div>
+  </section>
+
+  <section class="section encre ou" aria-labelledby="t-ou">
+    <div class="enveloppe ou__inner">
+      <div>
+        <p class="cartouche"><span class="cartouche__num">03</span><span>Où, et comment y aller</span></p>
+        <h2 id="t-ou">{DESTINATION.nom}</h2>
+        <p class="lead">{DESTINATION.adresse}</p>
+        <p class="faible">
+          Depuis {SITE.ville}&nbsp;: {DESTINATION.acces}
+          {' '}{DESTINATION.singularite} Le club accueille {DESTINATION.horaires.valeur}.
+        </p>
+        <div class="ou__portes">
+          <a class="bouton" href={DESTINATION.plannings} rel="noopener">
+            <span>Le planning</span><span class="fleche" aria-hidden="true">↗</span>
+          </a>
+          <a class="bouton" href={`tel:${DESTINATION.telephoneLien}`}>
+            <span>{DESTINATION.telephone}</span><span class="fleche" aria-hidden="true">↗</span>
+          </a>
+        </div>
+      </div>
+      <div class="ou__photo">
+        <Photo slug={ROLES.hero} sizes="(max-width: 62rem) 100vw, 40vw" ratio="4 / 3" />
+      </div>
+    </div>
+  </section>
+
+  <section class="section faq" aria-labelledby="t-faq">
+    <div class="enveloppe faq__inner">
+      <div>
+        <p class="cartouche"><span class="cartouche__num">04</span><span>Questions</span></p>
+        <h2 id="t-faq">Ce que demandent celles et ceux qui débutent.</h2>
+      </div>
+      <div class="faq__liste">
+        {QUESTIONS.map((q, i) => (
+          <details class="qr" open={i === 0}>
+            <summary><span class="qr__q">{q.titre}</span><span class="qr__signe" aria-hidden="true"></span></summary>
+            <p class="qr__r">{q.texte}</p>
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section creuse conversion" aria-labelledby="t-conversion">
+    <div class="enveloppe conversion__inner">
+      <p class="cartouche"><span class="cartouche__num">05</span><span>Passer à l’acte</span></p>
+      <h2 id="t-conversion">Dis-nous que tu débutes. On te dit où et quand venir.</h2>
+      <p class="lead conversion__texte">
+        Discipline, créneau, point de départ&nbsp;: en deux lignes on te répond avec
+        le cours de boxe débutant qui te correspond depuis {SITE.ville}, et comment
+        se passe l’essai cette semaine.
+      </p>
+      <div class="conversion__actions">
+        <a class="bouton bouton--signal" href={route('contact').chemin}>
+          <span>Poser ma question</span><span class="fleche" aria-hidden="true">→</span>
+        </a>
+        <a class="bouton" href={`tel:${CONTACT.telephoneLien.valeur}`}>
+          <span>{CONTACT.telephone.valeur}</span><span class="fleche" aria-hidden="true">↗</span>
+        </a>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .tete { padding-bottom: var(--e-6); }
+  .tete__inner { max-width: 60rem; }
+  .fil { display: flex; gap: var(--e-2); margin-bottom: var(--e-5); }
+  .fil a { color: var(--graphite); text-decoration: none; }
+  .fil a:hover { color: var(--signal-texte); }
+  .fil span[aria-current] { color: var(--encre-pale); }
+  .tete h1 { max-width: 20ch; margin-bottom: var(--e-5); }
+  .tete__chapeau {
+    max-width: 62ch;
+    padding-left: var(--e-5);
+    border-left: 2px solid var(--signal);
+    font-size: var(--t-lead);
+    line-height: 1.5;
+    color: var(--texte-faible);
+  }
+  .tete__actions { display: flex; flex-wrap: wrap; gap: var(--e-3); margin-top: var(--e-6); }
+  .tete__photo { margin-top: var(--e-8); }
+
+  .avant__titre { max-width: 20ch; margin-bottom: var(--e-7); }
+  .avant__grille { display: grid; grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr)); gap: var(--e-7) var(--e-6); }
+  .avant__num { color: var(--signal-texte); font-weight: 700; margin-bottom: var(--e-3); }
+  .avant__nom { margin-bottom: var(--e-3); }
+  .avant__texte { color: var(--texte-faible); font-size: var(--t-petit); max-width: 34ch; }
+
+  .pendant__inner { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr); gap: var(--e-8); align-items: start; }
+  @media (max-width: 62rem) { .pendant__inner { grid-template-columns: 1fr; } }
+  .pendant__texte h2 { max-width: 18ch; margin-bottom: var(--e-4); }
+  .pendant__texte .lead { max-width: 46ch; margin-bottom: var(--e-6); }
+  .pendant__liste { list-style: none; display: grid; }
+  .pendant__liste li { display: grid; grid-template-columns: 2.5rem 1fr; gap: var(--e-4); padding: var(--e-4) 0; border-top: 1px solid var(--trait); }
+  .pendant__num { color: var(--signal-texte); padding-top: 0.3em; font-weight: 700; }
+  .pendant__etape { font-weight: 600; display: flex; flex-wrap: wrap; gap: var(--e-3); align-items: baseline; margin-bottom: var(--e-2); }
+  .pendant__duree { color: var(--graphite); }
+  .pendant__detail { color: var(--texte-faible); font-size: var(--t-petit); max-width: 52ch; }
+
+  .ou__inner { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr); gap: var(--e-8); align-items: center; }
+  @media (max-width: 62rem) { .ou__inner { grid-template-columns: 1fr; } }
+  .ou h2 { max-width: 16ch; margin-bottom: var(--e-4); }
+  .ou .lead { margin-bottom: var(--e-3); }
+  .ou .faible { max-width: 52ch; }
+  .ou__portes { display: flex; flex-wrap: wrap; gap: var(--e-3); margin-top: var(--e-6); }
+
+  .faq__inner { display: grid; grid-template-columns: 0.8fr 1.2fr; gap: var(--e-8); align-items: start; }
+  @media (max-width: 62rem) { .faq__inner { grid-template-columns: 1fr; gap: var(--e-6); } }
+  .faq h2 { max-width: 16ch; }
+
+  .conversion__inner { max-width: 48rem; }
+  .conversion h2 { max-width: 24ch; margin-bottom: var(--e-5); }
+  .conversion__texte { max-width: 54ch; color: var(--texte-faible); }
+  .conversion__actions { display: flex; flex-wrap: wrap; gap: var(--e-3); margin-top: var(--e-7); }
+</style>

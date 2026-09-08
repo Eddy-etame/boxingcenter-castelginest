@@ -1,0 +1,21 @@
+{
+  "name": "boxing-center-castelginest",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev --port 4326",
+    "build": "astro build && node scripts/verifier.mjs",
+    "preview": "astro preview",
+    "images": "node scripts/build-images.mjs",
+    "verifier": "node scripts/verifier.mjs",
+    "indexnow": "node scripts/indexnow.mjs"
+  },
+  "dependencies": {
+    "astro": "^5.13.0",
+    "@astrojs/vercel": "^8.2.0",
+    "@fontsource-variable/bricolage-grotesque": "^5.2.0",
+    "@fontsource-variable/instrument-sans": "^5.2.0",
+    "@fontsource/jetbrains-mono": "^5.2.0"
+  },
+  "devDependencies": { "sharp": "^0.34.0" }
+}

@@ -1,0 +1,139 @@
+---
+import Base from '../layouts/Base.astro';
+import { CONTACT, DESTINATION } from '../data/verite';
+import { route } from '../data/routes';
+---
+
+<Base page="merci">
+  <section class="section merci" aria-labelledby="t-merci">
+    <div class="enveloppe merci__inner">
+      {/* Le trait se ferme : c'est le seul endroit du site où le plan est
+          entièrement tracé, parce que quelque chose s'est réellement conclu. */}
+      <svg class="merci__marque" viewBox="0 0 72 40" aria-hidden="true">
+        <path class="merci__trait" d="M 4 30 H 34 L 60 12" fill="none" />
+        <circle class="merci__depart" cx="4" cy="30" r="3.5" />
+        <circle class="merci__cible" cx="60" cy="12" r="9" fill="none" />
+        <circle class="merci__point" cx="60" cy="12" r="3.5" />
+      </svg>
+
+      <p class="cartouche"><span class="cartouche__num">—</span><span>Message reçu</span></p>
+
+      <h1 id="t-merci">
+        C’est parti.<br />
+        <span class="merci__accent">On te répond.</span>
+      </h1>
+
+      <p class="lead merci__texte">
+        Ta demande est arrivée. Une vraie personne la lit et te répond avec la
+        discipline et le créneau qui correspondent à ce que tu as décrit — pas un
+        message automatique.
+      </p>
+
+      <div class="merci__urgent">
+        <p class="mono">Si c’est pressé</p>
+        <a class="merci__tel" href={`tel:${CONTACT.telephoneLien.valeur}`}>
+          {CONTACT.telephone.valeur}
+        </a>
+        <p class="mono merci__horaires">{DESTINATION.horaires.valeur}</p>
+      </div>
+
+      <div class="merci__suite">
+        <p class="mono">En attendant, va voir le club</p>
+        <div class="merci__liens">
+          <a class="bouton" href={DESTINATION.plannings} rel="noopener">
+            <span>Le planning</span><span class="fleche" aria-hidden="true">↗</span>
+          </a>
+          <a class="bouton" href={DESTINATION.activites} rel="noopener">
+            <span>Les neuf disciplines</span><span class="fleche" aria-hidden="true">↗</span>
+          </a>
+          <a class="bouton" href={route('premiere-seance').chemin}>
+            <span>Ma première séance</span><span class="fleche" aria-hidden="true">→</span>
+          </a>
+        </div>
+        <a class="lien merci__retour" href="/">← Revenir à l’accueil</a>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .merci { min-height: 74svh; display: grid; align-items: center; }
+  .merci__inner { display: grid; justify-items: start; max-width: 46rem; }
+
+  .merci__marque { width: 5.5rem; height: auto; margin-bottom: var(--e-5); overflow: visible; }
+  .merci__trait {
+    stroke: var(--signal-texte);
+    stroke-width: 2;
+    vector-effect: non-scaling-stroke;
+    stroke-dasharray: 100;
+    stroke-dashoffset: 100;
+    animation: fermer 900ms var(--e-resolution) 150ms forwards;
+  }
+  @keyframes fermer { to { stroke-dashoffset: 0; } }
+  .merci__depart, .merci__point { fill: var(--signal-texte); }
+  .merci__cible {
+    stroke: var(--signal-texte);
+    stroke-width: 1.5;
+    vector-effect: non-scaling-stroke;
+    opacity: 0;
+    animation: arriver 500ms var(--e-sortie) 950ms forwards;
+  }
+  @keyframes arriver {
+    from { opacity: 0; transform: scale(1.5); transform-origin: 60px 12px; }
+    to { opacity: 1; transform: scale(1); transform-origin: 60px 12px; }
+  }
+
+  .merci h1 { margin-bottom: var(--e-5); }
+  .merci__accent { color: var(--signal-texte); }
+  .merci__texte { max-width: 46ch; color: var(--texte-faible); }
+
+  .merci__urgent {
+    margin-top: var(--e-7);
+    padding: var(--e-5);
+    border: 1px solid var(--trait);
+    border-radius: var(--rayon-1);
+    background: var(--papier-vif);
+    width: 100%;
+    max-width: 24rem;
+  }
+  .merci__urgent .mono { color: var(--graphite); margin-bottom: var(--e-2); }
+  .merci__tel {
+    display: block;
+    font-family: var(--police-titre);
+    font-size: var(--t-h3);
+    font-weight: 700;
+    color: var(--encre);
+    text-decoration: none;
+    font-variant-numeric: tabular-nums;
+  }
+  .merci__tel:hover { color: var(--signal-texte); }
+  .merci__horaires {
+    margin-top: var(--e-3);
+    padding-top: var(--e-3);
+    border-top: 1px solid var(--trait-faible);
+    text-transform: none;
+    color: var(--texte-faible);
+  }
+
+  .merci__suite {
+    margin-top: var(--e-8);
+    padding-top: var(--e-5);
+    border-top: 1px solid var(--trait);
+    width: 100%;
+  }
+  .merci__suite > .mono { color: var(--graphite); margin-bottom: var(--e-4); }
+  .merci__liens { display: flex; flex-wrap: wrap; gap: var(--e-3); }
+  .merci__retour { display: inline-block; margin-top: var(--e-6); font-size: var(--t-petit); }
+
+  @media (prefers-reduced-motion: reduce) {
+    .merci__trait { stroke-dashoffset: 0; animation: none; }
+    .merci__cible { opacity: 1; animation: none; }
+  }
+</style>
+
+<script>
+  // Le parcours a rempli son office : la demande est partie. On le remet à
+  // zéro pour que la prochaine visite reparte d'une page propre.
+  import { effacer } from '../scripts/parcours';
+  effacer();
+</script>

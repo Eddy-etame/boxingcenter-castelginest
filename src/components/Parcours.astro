@@ -1,0 +1,175 @@
+---
+/**
+ * LA BARRE DE PARCOURS — la ligne de temps du visiteur.
+ *
+ * MURET ──── discipline ──── créneau ──── ta séance
+ *
+ * Le club est acquis d'avance : il n'y en a qu'un. Ce qui se mérite, c'est le
+ * *quand*. Chaque décision tend un segment de plus et le fait passer au
+ * cuivre — la même variable `--tension` que le trait du hero, pour qu'il
+ * n'existe qu'une seule source de vérité sur le site.
+ *
+ * Sans JavaScript, la barre reste repliée : elle n'a jamais la charge d'une
+ * information critique.
+ */
+import { SITE } from '../data/verite';
+---
+
+<aside class="parcours" data-parcours hidden aria-labelledby="parcours-titre">
+  <div class="enveloppe parcours__inner">
+    <h2 id="parcours-titre" class="vh">Ton parcours</h2>
+
+    <svg class="parcours__ligne" viewBox="0 0 100 8" preserveAspectRatio="none" aria-hidden="true">
+      <line class="parcours__latent" x1="1" y1="4" x2="99" y2="4" />
+      <line class="parcours__tendu" x1="1" y1="4" x2="99" y2="4" />
+    </svg>
+
+    <ol class="parcours__etapes">
+      <li class="parcours__etape est-acquis" data-etape="origine">
+        <span class="parcours__cle">Départ</span>
+        <span class="parcours__valeur">{SITE.ville}</span>
+      </li>
+      <li class="parcours__etape" data-etape="discipline">
+        <span class="parcours__cle">Discipline</span>
+        <span class="parcours__valeur" data-vide="à choisir"></span>
+      </li>
+      <li class="parcours__etape" data-etape="creneau">
+        <span class="parcours__cle">Créneau</span>
+        <span class="parcours__valeur" data-vide="à choisir"></span>
+      </li>
+      <li class="parcours__etape parcours__etape--fin" data-etape="seance">
+        <span class="parcours__cle">Ta séance</span>
+        <span class="parcours__valeur" data-vide="—"></span>
+      </li>
+    </ol>
+
+    <button type="button" class="parcours__effacer" data-effacer>
+      <span class="vh">Effacer mon parcours</span>
+      <svg viewBox="0 0 16 16" width="12" height="12" aria-hidden="true">
+        <path d="M2 2 L14 14 M14 2 L2 14" stroke="currentColor" stroke-width="1.6" fill="none" />
+      </svg>
+    </button>
+  </div>
+</aside>
+
+<style>
+  .parcours {
+    position: relative;
+    z-index: var(--z-colle);
+    background: var(--papier-creuse);
+    border-bottom: 1px solid var(--trait);
+    /* La barre se déplie : elle arrive quand on a commencé à décider. */
+    animation: deplier var(--d-normal) var(--e-sortie) both;
+  }
+  @keyframes deplier {
+    from { opacity: 0; clip-path: inset(0 0 100% 0); }
+    to { opacity: 1; clip-path: inset(0 0 0 0); }
+  }
+
+  .parcours__inner {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: var(--e-4);
+    min-height: 3rem;
+  }
+
+  .parcours__ligne {
+    position: absolute;
+    inset-inline: var(--marge);
+    top: 50%;
+    width: calc(100% - 2 * var(--marge));
+    height: 8px;
+    transform: translateY(-50%);
+    pointer-events: none;
+  }
+
+  .parcours__latent {
+    stroke: var(--graphite);
+    stroke-width: 1;
+    vector-effect: non-scaling-stroke;
+    opacity: 0.4;
+  }
+
+  /* Le trait cuivre se tend depuis la gauche, à proportion exacte de ce qui
+     est décidé. Un quart acquis = un quart de trait. */
+  .parcours__tendu {
+    stroke: var(--signal-texte);
+    stroke-width: 1.5;
+    vector-effect: non-scaling-stroke;
+    stroke-dasharray: 100;
+    stroke-dashoffset: calc(100 - var(--tension, 0) * 98);
+    transition: stroke-dashoffset var(--d-trace) var(--e-resolution);
+  }
+
+  .parcours__etapes {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex: 1;
+    list-style: none;
+    gap: var(--e-3);
+  }
+
+  .parcours__etape {
+    display: flex;
+    align-items: baseline;
+    gap: var(--e-2);
+    background: var(--papier-creuse);
+    padding-inline: var(--e-2);
+    font-family: var(--police-mono);
+    font-size: var(--t-micro);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+  .parcours__etape:first-child { padding-left: 0; }
+  .parcours__etape:last-child { padding-right: 0; }
+
+  .parcours__cle { color: var(--graphite); }
+  @media (max-width: 62rem) { .parcours__cle { display: none; } }
+
+  .parcours__valeur {
+    color: var(--encre-pale);
+    transition: color var(--d-normal) var(--e-mecanique);
+  }
+  .parcours__valeur:empty::before {
+    content: attr(data-vide);
+    color: var(--graphite);
+    text-transform: none;
+    letter-spacing: 0.05em;
+    font-style: italic;
+  }
+
+  .est-acquis .parcours__valeur { color: var(--signal-texte); font-weight: 700; }
+  .parcours__etape--fin.est-acquis .parcours__valeur {
+    color: var(--papier-vif);
+    background: var(--signal-texte);
+    padding: 0.15em 0.5em;
+    border-radius: var(--rayon-1);
+  }
+
+  .parcours__effacer {
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 1.75rem;
+    height: 1.75rem;
+    padding: 0;
+    border: 1px solid var(--trait);
+    border-radius: var(--rayon-1);
+    background: transparent;
+    color: var(--graphite);
+    cursor: pointer;
+    transition: color var(--d-rapide) var(--e-mecanique),
+      border-color var(--d-rapide) var(--e-mecanique);
+  }
+  .parcours__effacer:hover { color: var(--signal-texte); border-color: var(--signal-texte); }
+
+  @media (max-width: 40rem) {
+    .parcours__inner { gap: var(--e-2); }
+    .parcours__etapes { gap: var(--e-1); }
+    .parcours__etape { font-size: 0.625rem; letter-spacing: 0.05em; }
+  }
+</style>

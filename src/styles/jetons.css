@@ -1,0 +1,198 @@
+/*
+  JETONS — Boxing Center depuis Castelginest.
+
+  Chaque site de la famille a sa teinte, pour qu'on ne les confonde jamais —
+  même structure, même typographie, autre couleur. Celle-ci est le violet
+  sombre : la seule du lot, et la plus éloignée des cinq autres.
+
+  CONTRASTES MESURÉS (formule WCAG, 2026-09-09) :
+    encre #241a3a sur papier #f2eff5 ......... 14,4:1
+    encre sur papier creusé #e6e0ec .......... 12,7:1
+    accent texte #6a3aa0 sur papier .......... 6,8:1  (AA, y compris petit texte)
+    accent texte #6a3aa0 sur papier creusé ... 6,0:1
+    graphite #61557e sur papier .............. 5,9:1
+    aplat #8353bf, papier posé dessus ........ 4,7:1  (AA petit texte)
+  Sur fond encre :
+    papier sur encre ......................... 14,4:1
+    accent clair #c4a3ee ..................... 7,7:1
+    graphite clair #9b90b6 ................... 5,5:1
+  Barre de navigation, toujours sombre :
+    nav-accent #c4a3ee sur #180f2b ........... 8,6:1
+    nav-gris #a196b8 sur #180f2b ............. 6,6:1
+*/
+
+@font-face {
+  font-family: 'Bricolage Grotesque';
+  src: url('/fonts/bricolage-grotesque-latin-wght-normal.woff2') format('woff2-variations');
+  font-weight: 200 800;
+  font-display: swap;
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+    U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
+    U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Instrument Sans';
+  src: url('/fonts/instrument-sans-latin-wght-normal.woff2') format('woff2-variations');
+  font-weight: 400 700;
+  font-display: swap;
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+    U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
+    U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'JetBrains Mono';
+  src: url('/fonts/jetbrains-mono-latin-400-normal.woff2') format('woff2');
+  font-weight: 400;
+  font-display: swap;
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+    U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
+    U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'JetBrains Mono';
+  src: url('/fonts/jetbrains-mono-latin-700-normal.woff2') format('woff2');
+  font-weight: 700;
+  font-display: swap;
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+    U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
+    U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+:root {
+  /* ── Couleur ───────────────────────────────────────────────────────── */
+  --papier: #f2eff5;      /* le fond, froid comme le sol de la salle */
+  --papier-creuse: #e6e0ec; /* la deuxième teinte du papier : plaques, tableaux */
+  --papier-vif: #faf8fc;  /* les cartes qui se détachent du papier */
+  --encre: #241a3a;       /* l'encre du site, la couleur du trait */
+  --encre-pale: #4b3f68;  /* texte secondaire, 8,3:1 sur papier */
+  /* Le graphite porte TOUTES les étiquettes du site : cotes, clés de fiche,
+     cartouches, légendes. Mesuré : 5,93:1 sur papier et 5,22:1 sur papier
+     creusé — AA y compris en 12 px, parce qu'ici le petit texte EST le
+     contenu, et jamais de la décoration. */
+  --graphite: #61557e;
+  --trait: rgba(36, 26, 58, 0.16);
+  --trait-faible: rgba(36, 26, 58, 0.08);
+
+  /* L'accent. --signal-texte pour les mots, --signal pour les aplats. */
+  --signal: #8353bf;
+  --signal-texte: #6a3aa0;
+  --signal-profond: #4b2775;
+  --signal-voile: rgba(131, 83, 191, 0.14);
+  /* Le quadrillage du calque posé sur les photos, dans la teinte du site. */
+  --calque-trait: rgba(106, 58, 160, 0.26);
+
+  /* La barre de navigation reste sombre quelle que soit la polarité de la
+     section : elle a donc ses propres jetons, pour suivre la couleur du
+     site sans dépendre du contexte où elle se trouve. */
+  --nav-accent: #c4a3ee;
+  --nav-gris: #a196b8;
+  --nav-faible: #d3cade;
+  --nav-fonce: #180f2b;
+  --nav-ombre: rgba(36, 26, 58, 0.85);
+
+  /* ── Signature de mouvement ─────────────────────────────────────────
+     Castelginest : la montée qui se resserre. Les blocs arrivent d'en bas,
+     de plus loin que partout ailleurs, en partant légèrement trop grands —
+     ils se posent en même temps qu'ils rétrécissent. Le décalage entre deux
+     blocs est le plus long de la famille : la section se remplit en cascade
+     plutôt que d'un bloc.
+     Aucun site de la famille n'entre de la même façon : c'est ce qui
+     empêche deux sites de donner la même sensation au scroll. */
+  --mouv-x: 0rem;
+  --mouv-y: 2.8rem;
+  --mouv-echelle: 1.035;
+  --mouv-duree: 960ms;
+  --mouv-decalage: 190ms;
+  --mouv-courbe: cubic-bezier(0.13, 0.9, 0.2, 1);
+
+  /* Polarité par défaut : papier. Une section peut basculer en encre. */
+  --fond: var(--papier);
+  --texte: var(--encre);
+  --texte-faible: var(--encre-pale);
+
+  /* ── Typographie ───────────────────────────────────────────────────── */
+  --police-titre: 'Bricolage Grotesque', 'Instrument Sans', system-ui, sans-serif;
+  --police-texte: 'Instrument Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --police-mono: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', monospace;
+
+  --t-micro: clamp(0.6875rem, 0.66rem + 0.14vw, 0.75rem);
+  --t-petit: clamp(0.8125rem, 0.79rem + 0.12vw, 0.875rem);
+  --t-base: clamp(1rem, 0.96rem + 0.2vw, 1.125rem);
+  --t-lead: clamp(1.125rem, 1.02rem + 0.52vw, 1.5rem);
+  --t-h3: clamp(1.25rem, 1.09rem + 0.8vw, 1.75rem);
+  --t-h2: clamp(1.75rem, 1.32rem + 2.1vw, 3rem);
+  --t-h1: clamp(2.25rem, 1.3rem + 4.8vw, 5.25rem);
+  --t-display: clamp(3rem, 0.9rem + 10.5vw, 9rem);
+
+  /* ── Espace ────────────────────────────────────────────────────────── */
+  --e-1: 0.25rem;
+  --e-2: 0.5rem;
+  --e-3: 0.75rem;
+  --e-4: 1rem;
+  --e-5: 1.5rem;
+  --e-6: 2rem;
+  --e-7: 3rem;
+  --e-8: 4rem;
+  --e-9: 6rem;
+  --e-10: 8rem;
+  --section-y: clamp(4rem, 3rem + 6vw, 9rem);
+
+  /* ── Grille ────────────────────────────────────────────────────────── */
+  --marge: clamp(1.25rem, 0.7rem + 2.6vw, 4rem);
+  --largeur-max: 84rem;
+  --largeur-lecture: 38rem;
+
+  /* ── Rayons — presque rien. Un plan n'a pas de coins arrondis. ─────── */
+  --rayon-0: 0;
+  --rayon-1: 2px;
+  --rayon-2: 3px;
+  --rayon-rond: 999px;
+
+  /* ── Trait de plan ─────────────────────────────────────────────────── */
+  --trait-fin: 1px;
+  --trait-normal: 1.5px;
+  --trait-epais: 2.5px;
+
+  /* ── Mouvement ─────────────────────────────────────────────────────── */
+  --d-instant: 90ms;
+  --d-rapide: 180ms;
+  --d-normal: 320ms;
+  --d-lent: 620ms;
+  --d-trace: 900ms;   /* le temps qu'un trait met à se dessiner */
+
+  --e-sortie: cubic-bezier(0.22, 1, 0.36, 1);
+  --e-mecanique: cubic-bezier(0.65, 0, 0.35, 1);
+  --e-resolution: cubic-bezier(0.16, 0.84, 0.24, 1);
+
+  --z-fond: 0;
+  --z-contenu: 10;
+  --z-colle: 100;
+  --z-entete: 200;
+  --z-menu: 300;
+  --z-saut: 400;
+}
+
+/* Polarité encre — appliquée par section, jamais par préférence système :
+   le parcours de couleur est narratif, il n'appartient pas au visiteur. */
+.encre {
+  --calque-trait: rgba(196, 163, 238, 0.24);
+  --fond: var(--encre);
+  --texte: var(--papier);
+  --texte-faible: #d3cade;
+  --trait: rgba(242, 239, 245, 0.18);
+  --trait-faible: rgba(242, 239, 245, 0.09);
+  /* Sur encre, le graphite s'éclaircit symétriquement : 5,5:1, mesuré. */
+  --graphite: #9b90b6;
+  /* Sur encre, l'accent s'éclaircit pour rester lisible : #c4a3ee donne
+     7,7:1 sur #241a3a, mesuré. */
+  --signal-texte: #c4a3ee;
+  --signal: #9d6fd6;
+  --papier-vif: #33254f;
+  --papier-creuse: #1a1230;
+}
+
+/* Polarité papier creusé — pour poser une plaque sans changer de monde. */
+.creuse {
+  --fond: var(--papier-creuse);
+  --papier-vif: var(--papier);
+}

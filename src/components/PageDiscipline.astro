@@ -1,0 +1,392 @@
+---
+/**
+ * Gabarit des cinq pages disciplines.
+ *
+ * Une seule structure, cinq contenus. S'il faut un traitement différent pour
+ * une discipline, c'est le contenu qui change, pas la mise en page — sinon le
+ * site perd sa cohérence en trois modifications.
+ *
+ * La page finit par une action, jamais par une porte de sortie : le maillage
+ * vers les autres disciplines passe AVANT la bande de conversion.
+ */
+import Base from '../layouts/Base.astro';
+import Photo from '../components/Photo.astro';
+import { contenu } from '../data/contenus';
+import { offresDeLaPage, type PageDiscipline } from '../data/offres';
+import { DESTINATION, SITE, CONTACT } from '../data/verite';
+import { ROUTES, route } from '../data/routes';
+
+interface Props { id: PageDiscipline }
+const { id } = Astro.props;
+
+const c = contenu(id);
+const r = route(id);
+const offres = offresDeLaPage(id);
+const autres = ROUTES.filter(
+  (x) => x.menu && x.id !== id && x.id !== 'accueil' && x.id !== 'contact' && x.id !== 'ta-seance'
+);
+---
+
+<Base page={id} discipline={id} ogPhoto={c.photoHero} faq={c.faq}>
+  {/* ── Chapeau : la réponse avant tout le reste ── */}
+  <section class="section tete" aria-labelledby="t-page" data-sans-scene>
+    <div class="enveloppe tete__inner">
+      <div class="tete__texte">
+      <nav class="fil mono" aria-label="Fil d’Ariane">
+        <a href="/">Accueil</a>
+        <span aria-hidden="true">/</span>
+        <span aria-current="page">{r.nav}</span>
+      </nav>
+
+      <h1 id="t-page">{c.h1}</h1>
+
+      {/* Le bloc-réponse : c'est ce que citent Google et les moteurs de réponse. */}
+      <p class="tete__chapeau">{c.chapeau}</p>
+
+      <div class="tete__actions">
+        <a class="bouton bouton--signal" href="#au-club">
+          <span>Ce que le club publie</span>
+          <span class="fleche" aria-hidden="true">↓</span>
+        </a>
+        <a class="bouton" href={route('contact').chemin}>
+          <span>Poser ma question</span>
+          <span class="fleche" aria-hidden="true">→</span>
+        </a>
+      </div>
+      </div>
+
+      {/* La photo arrive sur sa plaque, pas en bandeau : c'est un tirage posé
+          sur la table à dessin, et le calque se lève dessus. */}
+      <div class="tete__plaque">
+        <Photo
+          slug={c.photoHero}
+          prioritaire
+          sizes="(max-width: 62rem) 100vw, 42vw"
+          ratio="4 / 5"
+          legende
+          class="tete__photo"
+        />
+      </div>
+    </div>
+  </section>
+
+  {/* ── Le corps éditorial ── */}
+  <section class="section creuse corps" aria-labelledby="t-corps">
+    <div class="enveloppe">
+      <h2 id="t-corps" class="vh">En détail</h2>
+      <div class="corps__grille">
+        {c.blocs.map((b, i) => (
+          <article class="bloc reveler" style={`--retard:${i * 60}ms`}>
+            <p class="mono bloc__num">{String(i + 1).padStart(2, '0')}</p>
+            <h3 class="bloc__titre">{b.titre}</h3>
+            <p class="bloc__texte">{b.texte}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  {/* ── Le déroulé d'une séance ── */}
+  <section class="section seance" aria-labelledby="t-seance">
+    <div class="enveloppe seance__inner">
+      <div class="seance__texte">
+        <p class="cartouche"><span class="cartouche__num">—</span><span>Une séance</span></p>
+        <h2 id="t-seance">À quoi ressemble une séance, dans l’ordre.</h2>
+        <p class="lead faible">
+          Le déroulé varie selon le coach et le cycle en cours, mais l’ossature est
+          celle-ci. Rien n’est laissé au hasard, et rien n’est improvisé.
+        </p>
+        <ol class="seance__liste">
+          {c.seance.map((e, i) => (
+            <li>
+              <span class="mono">{String(i + 1).padStart(2, '0')}</span>
+              <span>{e}</span>
+            </li>
+          ))}
+        </ol>
+        <p class="seance__horaires mono">
+          Le club accueille {DESTINATION.horaires.valeur}
+        </p>
+      </div>
+      <div class="seance__image">
+        <Photo slug={c.photoSecondaire} sizes="(max-width: 62rem) 100vw, 42vw" ratio="3 / 4" />
+      </div>
+    </div>
+  </section>
+
+  {/* ── Ce que le club publie, mot pour mot ── */}
+  <section class="section encre auclub" id="au-club" aria-labelledby="t-auclub">
+    <div class="enveloppe">
+      <p class="cartouche"><span class="cartouche__num">—</span><span>Au club</span></p>
+      <h2 id="t-auclub">Les intitulés exacts, chez {DESTINATION.nomCourt}.</h2>
+      <p class="lead faible auclub__intro">
+        {offres.length === 1
+          ? 'Le club publie un intitulé pour cette pratique. Le voici, mot pour mot.'
+          : `Le club publie ${offres.length} intitulés pour cette pratique. Les voici, mot pour mot.`}
+        {' '}Si un nom ne figure pas ici, c’est qu’il ne figure pas chez eux.
+      </p>
+
+      <ul class="auclub__liste">
+        {offres.map((o) => (
+          <li>
+            <span class="auclub__nom">{o.intitule}</span>
+            <span class="auclub__detail">{o.detail}</span>
+            {o.ages && <span class="mono auclub__age">{o.ages}</span>}
+          </li>
+        ))}
+      </ul>
+
+      <div class="auclub__fiche">
+        <dl>
+          <div><dt class="mono">Adresse</dt><dd>{DESTINATION.adresse}</dd></div>
+          <div><dt class="mono">Depuis {SITE.ville}</dt><dd>{DESTINATION.acces}</dd></div>
+          <div><dt class="mono">Accueil</dt><dd>{DESTINATION.horaires.valeur}</dd></div>
+          <div><dt class="mono">Téléphone</dt><dd><a class="lien" href={`tel:${DESTINATION.telephoneLien}`}>{DESTINATION.telephone}</a></dd></div>
+        </dl>
+        <div class="auclub__portes">
+          <a class="bouton" href={DESTINATION.plannings} rel="noopener">
+            <span>Le planning</span><span class="fleche" aria-hidden="true">↗</span>
+          </a>
+          <a class="bouton" href={DESTINATION.tarifs} rel="noopener">
+            <span>Les tarifs</span><span class="fleche" aria-hidden="true">↗</span>
+          </a>
+          <a class="bouton" href={DESTINATION.activites} rel="noopener">
+            <span>Toutes les activités</span><span class="fleche" aria-hidden="true">↗</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {/* ── FAQ ── */}
+  <section class="section faq" aria-labelledby="t-faq">
+    <div class="enveloppe faq__inner">
+      <div>
+        <p class="cartouche"><span class="cartouche__num">—</span><span>Questions</span></p>
+        <h2 id="t-faq">Ce qu’on nous demande le plus souvent.</h2>
+      </div>
+      <div class="faq__liste">
+        {c.faq.map((q, i) => (
+          <details class="qr" open={i === 0}>
+            <summary>
+              <span class="qr__q">{q.titre}</span>
+              <span class="qr__signe" aria-hidden="true"></span>
+            </summary>
+            <p class="qr__r">{q.texte}</p>
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  {/* ── Les autres disciplines : le maillage passe AVANT la conversion ── */}
+  <section class="section creuse suite" aria-labelledby="t-suite">
+    <div class="enveloppe">
+      <p class="cartouche"><span class="cartouche__num">—</span><span>Les autres disciplines</span></p>
+      <h2 id="t-suite" class="suite__titre">Ce n’est peut-être pas ça que tu cherches.</h2>
+      <ul class="suite__liste">
+        {autres.map((a) => (
+          <li>
+            <a href={a.chemin}>
+              <span class="suite__nom">{a.nav} près de {SITE.ville}</span>
+              <span class="suite__q">{a.question}</span>
+              <span class="suite__fleche" aria-hidden="true">→</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  {/* ── Conversion : la page finit par une action ── */}
+  <section class="section conversion" aria-labelledby="t-conversion">
+    <div class="enveloppe conversion__inner">
+      <p class="cartouche"><span class="cartouche__num">—</span><span>Passer à l’acte</span></p>
+      <h2 id="t-conversion">{c.promesse}</h2>
+      <p class="lead conversion__texte">
+        {DESTINATION.nom}, ouvert {DESTINATION.horaires.valeur}. Si tu sais ce que tu
+        cherches, le planning du club te dira quand venir. Si tu hésites, dis-nous en
+        deux lignes ce que tu veux&nbsp;: on te répond avec le créneau qui tient.
+      </p>
+      <div class="conversion__actions">
+        <a class="bouton bouton--signal" href={route('contact').chemin}>
+          <span>Poser ma question</span><span class="fleche" aria-hidden="true">→</span>
+        </a>
+        <a class="bouton" href={route('ta-seance').chemin}>
+          <span>Trouver ma séance</span><span class="fleche" aria-hidden="true">→</span>
+        </a>
+        <a class="bouton" href={`tel:${CONTACT.telephoneLien.valeur}`}>
+          <span>{CONTACT.telephone.valeur}</span><span class="fleche" aria-hidden="true">↗</span>
+        </a>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  /* ── Chapeau ─────────────────────────────────────────────────────── */
+  .tete { padding-bottom: var(--e-6); }
+  .tete__inner {
+    display: grid;
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+    gap: var(--e-8);
+    align-items: center;
+  }
+  @media (max-width: 62rem) { .tete__inner { grid-template-columns: 1fr; gap: var(--e-7); } }
+  .tete__texte { animation: poser-tete 720ms var(--e-sortie) both; }
+  @keyframes poser-tete {
+    from { opacity: 0; transform: translateY(1rem); }
+    to { opacity: 1; transform: none; }
+  }
+  /* La plaque : un aplat cuivre décalé derrière le tirage. */
+  .tete__plaque { position: relative; animation: poser-tete 720ms var(--e-sortie) 160ms both; }
+  .tete__plaque::before {
+    content: '';
+    position: absolute;
+    inset: var(--e-4) calc(-1 * var(--e-4)) calc(-1 * var(--e-4)) var(--e-4);
+    background: var(--signal-voile);
+    border: 1px solid var(--signal);
+    border-radius: var(--rayon-1);
+  }
+  .tete__photo { position: relative; }
+  @media (prefers-reduced-motion: reduce) {
+    .tete__texte,
+    .tete__plaque { animation: none; }
+  }
+  .fil { display: flex; gap: var(--e-2); margin-bottom: var(--e-5); }
+  .fil a { color: var(--graphite); text-decoration: none; }
+  .fil a:hover { color: var(--signal-texte); }
+  .fil span[aria-current] { color: var(--encre-pale); }
+  .tete h1 { max-width: 16ch; margin-bottom: var(--e-5); }
+  .tete__chapeau {
+    max-width: 62ch;
+    padding-left: var(--e-5);
+    border-left: 2px solid var(--signal);
+    font-size: var(--t-lead);
+    line-height: 1.5;
+    color: var(--texte-faible);
+  }
+  .tete__actions { display: flex; flex-wrap: wrap; gap: var(--e-3); margin-top: var(--e-6); }
+
+  /* ── Corps ───────────────────────────────────────────────────────── */
+  .corps__grille { display: grid; grid-template-columns: 1fr 1fr; gap: var(--e-8); }
+  @media (max-width: 62rem) { .corps__grille { grid-template-columns: 1fr; gap: var(--e-7); } }
+  .bloc__num { color: var(--signal-texte); font-weight: 700; margin-bottom: var(--e-3); }
+  .bloc__titre { margin-bottom: var(--e-3); max-width: 24ch; }
+  .bloc__texte { color: var(--texte-faible); max-width: 58ch; }
+
+  /* ── Séance ──────────────────────────────────────────────────────── */
+  .seance__inner {
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+    gap: var(--e-8);
+    align-items: center;
+  }
+  @media (max-width: 62rem) { .seance__inner { grid-template-columns: 1fr; } }
+  .seance h2 { max-width: 18ch; margin-bottom: var(--e-4); }
+  .seance .lead { max-width: 48ch; margin-bottom: var(--e-6); }
+  .seance__liste { list-style: none; display: grid; }
+  .seance__liste li {
+    display: grid;
+    grid-template-columns: 2.5rem 1fr;
+    gap: var(--e-4);
+    padding: var(--e-3) 0;
+    border-top: 1px solid var(--trait);
+    font-size: var(--t-petit);
+  }
+  .seance__liste .mono { color: var(--signal-texte); font-weight: 700; }
+  .seance__horaires { margin-top: var(--e-5); color: var(--graphite); text-transform: none; letter-spacing: 0.04em; }
+
+  /* ── Au club ─────────────────────────────────────────────────────── */
+  .auclub h2 { max-width: 22ch; margin-bottom: var(--e-4); }
+  .auclub__intro { max-width: 56ch; margin-bottom: var(--e-7); }
+  .auclub__liste { list-style: none; }
+  .auclub__liste li {
+    display: grid;
+    grid-template-columns: minmax(12rem, 0.9fr) minmax(0, 2fr) auto;
+    gap: var(--e-4);
+    align-items: baseline;
+    padding: var(--e-4) 0;
+    border-top: 1px solid var(--trait);
+  }
+  .auclub__liste li:last-child { border-bottom: 1px solid var(--trait); }
+  @media (max-width: 52rem) {
+    .auclub__liste li { grid-template-columns: 1fr; gap: var(--e-2); }
+  }
+  .auclub__nom {
+    font-family: var(--police-titre);
+    font-size: var(--t-h3);
+    font-weight: 700;
+    letter-spacing: -0.015em;
+    color: var(--signal-texte);
+  }
+  .auclub__detail { color: var(--texte-faible); font-size: var(--t-petit); }
+  .auclub__age { color: var(--graphite); }
+
+  .auclub__fiche {
+    display: grid;
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr);
+    gap: var(--e-6) var(--e-8);
+    margin-top: var(--e-7);
+    padding-top: var(--e-6);
+    border-top: 1px solid var(--trait);
+    align-items: start;
+  }
+  @media (max-width: 62rem) { .auclub__fiche { grid-template-columns: 1fr; } }
+  .auclub__fiche dl { display: grid; }
+  .auclub__fiche dl > div {
+    display: grid;
+    grid-template-columns: 9rem 1fr;
+    gap: var(--e-3);
+    padding: var(--e-3) 0;
+    border-bottom: 1px solid var(--trait-faible);
+    font-size: var(--t-petit);
+  }
+  @media (max-width: 34rem) { .auclub__fiche dl > div { grid-template-columns: 1fr; gap: 0.2rem; } }
+  .auclub__fiche dt { color: var(--graphite); padding-top: 0.15em; }
+  .auclub__fiche dd { margin: 0; }
+  .auclub__portes { display: grid; gap: var(--e-3); }
+
+  /* ── FAQ ─────────────────────────────────────────────────────────── */
+  .faq__inner {
+    display: grid;
+    grid-template-columns: 0.8fr 1.2fr;
+    gap: var(--e-8);
+    align-items: start;
+  }
+  @media (max-width: 62rem) { .faq__inner { grid-template-columns: 1fr; gap: var(--e-6); } }
+  .faq h2 { max-width: 16ch; }
+
+  /* ── Suite ───────────────────────────────────────────────────────── */
+  .suite__titre { max-width: 20ch; margin-bottom: var(--e-6); }
+  .suite__liste { list-style: none; border-top: 1px solid var(--trait); }
+  .suite__liste a {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr) auto;
+    gap: var(--e-4);
+    align-items: baseline;
+    padding: var(--e-4) 0;
+    border-bottom: 1px solid var(--trait);
+    text-decoration: none;
+    transition: padding-left var(--d-normal) var(--e-sortie);
+  }
+  .suite__liste a:hover { padding-left: var(--e-3); }
+  @media (max-width: 52rem) {
+    .suite__liste a { grid-template-columns: 1fr auto; }
+    .suite__q { grid-column: 1 / -1; }
+  }
+  .suite__nom {
+    font-family: var(--police-titre);
+    font-size: var(--t-h3);
+    font-weight: 700;
+    letter-spacing: -0.015em;
+  }
+  .suite__q { color: var(--texte-faible); font-size: var(--t-petit); }
+  .suite__fleche { color: var(--signal-texte); }
+
+  /* ── Conversion ──────────────────────────────────────────────────── */
+  .conversion__inner { max-width: 48rem; }
+  .conversion h2 { max-width: 24ch; margin-bottom: var(--e-5); }
+  .conversion__texte { max-width: 54ch; color: var(--texte-faible); }
+  .conversion__actions { display: flex; flex-wrap: wrap; gap: var(--e-3); margin-top: var(--e-7); }
+</style>

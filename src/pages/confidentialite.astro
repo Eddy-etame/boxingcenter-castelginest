@@ -1,0 +1,97 @@
+---
+import Base from '../layouts/Base.astro';
+import { CONTACT, SITE } from '../data/verite';
+import { route } from '../data/routes';
+---
+
+<Base page="confidentialite">
+  <section class="section legal" aria-labelledby="t-conf">
+    <div class="enveloppe legal__inner">
+      <nav class="fil mono" aria-label="Fil d’Ariane">
+        <a href="/">Accueil</a><span aria-hidden="true">/</span>
+        <span aria-current="page">Confidentialité</span>
+      </nav>
+
+      <h1 id="t-conf">Ce que devient ta demande</h1>
+      <p class="legal__chapeau">
+        Court, parce qu’il n’y a pas grand-chose à dire&nbsp;: ce site ne collecte
+        que ce que tu écris toi-même dans le formulaire, et ne s’en sert que pour
+        te répondre.
+      </p>
+
+      <h2>Ce qui est collecté</h2>
+      <p>
+        Uniquement les champs que tu remplis sur la
+        <a class="lien" href={route('contact').chemin}>page contact</a>&nbsp;: prénom,
+        nom, e-mail, téléphone, ce que tu cherches, ton créneau, ton point de départ
+        et ton message. Le champ « parcours » reprend les choix que tu as faits sur
+        le site&nbsp;: il sert à te répondre plus précisément, et rien d’autre.
+      </p>
+
+      <h2>Ce qui n’est pas collecté</h2>
+      <p>
+        Aucun traceur publicitaire, aucun profilage, aucune revente, aucun
+        enregistrement de session. Le site ne dépose pas de cookie de mesure
+        d’audience&nbsp;: c’est la raison pour laquelle tu n’as aucune bannière à
+        refuser en arrivant.
+      </p>
+      <p>
+        Le choix de discipline et de créneau que tu fais sur le site est conservé
+        dans <strong>ton navigateur</strong> (stockage local), pour que tu ne
+        recommences pas à chaque page. Il ne quitte jamais ton appareil, sauf si tu
+        envoies le formulaire. Le bouton «&nbsp;effacer&nbsp;» de la barre de
+        parcours le supprime instantanément.
+      </p>
+
+      <h2>Où va le message</h2>
+      <p>
+        Il est transmis par notre serveur au service d’envoi de formulaires, puis
+        remis à l’adresse <a class="lien" href={`mailto:${CONTACT.email.valeur}`}>{CONTACT.email.valeur}</a>.
+        Il est conservé le temps de te répondre et de traiter ta demande.
+      </p>
+
+      <h2>Tes droits</h2>
+      <p>
+        Tu peux demander l’accès, la rectification ou la suppression de ta demande à
+        tout moment, en écrivant à
+        {' '}<a class="lien" href={`mailto:${CONTACT.email.valeur}`}>{CONTACT.email.valeur}</a>
+        ou en appelant le
+        {' '}<a class="lien" href={`tel:${CONTACT.telephoneLien.valeur}`}>{CONTACT.telephone.valeur}</a>.
+      </p>
+
+      <h2>Hébergement et journaux</h2>
+      <p>
+        Le site est hébergé par Vercel Inc., qui conserve des journaux techniques
+        (adresse IP, horodatage) à des fins de sécurité et de fonctionnement. Ces
+        journaux ne sont pas exploités par {SITE.nomCourt}.
+      </p>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .legal__inner { max-width: 46rem; }
+  .fil { display: flex; gap: var(--e-2); margin-bottom: var(--e-5); }
+  .fil a { color: var(--graphite); text-decoration: none; }
+  .fil a:hover { color: var(--signal-texte); }
+  .fil span[aria-current] { color: var(--encre-pale); }
+
+  .legal h1 { margin-bottom: var(--e-5); }
+  .legal__chapeau {
+    max-width: 58ch;
+    padding-left: var(--e-5);
+    border-left: 2px solid var(--signal);
+    font-size: var(--t-lead);
+    line-height: 1.5;
+    color: var(--texte-faible);
+  }
+  .legal h2 {
+    font-size: var(--t-h3);
+    margin-top: var(--e-7);
+    margin-bottom: var(--e-3);
+    padding-top: var(--e-4);
+    border-top: 1px solid var(--trait);
+  }
+  .legal p { color: var(--texte-faible); max-width: 64ch; }
+  .legal strong { color: var(--encre); font-weight: 600; }
+</style>

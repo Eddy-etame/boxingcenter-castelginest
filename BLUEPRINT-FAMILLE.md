@@ -233,6 +233,55 @@ Tutoiement respectueux · clair, local, rassurant, sportif · le fait avant l'ad
 | « Y a-t-il un club à <Ville> ? — Non. » | « Où s'entraîner quand on habite <Ville> ? — Boxing Center t'accueille à <club>, <accès>. » |
 Une phrase de recherche vocale par page, dite naturellement (« je cherche un club de boxe près de Muret » devient « Si tu cherches un club de boxe près de Muret… »). Une variante orthographique par titre, les autres dans le corps.
 
+### 13.5 bis L'ÉCRITURE — les règles qu'Eddy a dû redire, et qu'on n'a plus le droit d'oublier
+
+Corrections données les 2026-09-08 et 09. Elles priment sur tout ce qui précède.
+
+1. **Zéro figure de style.** Pas de métaphore, pas de comparaison, pas de
+   personnification, pas de clin d'œil, pas de chute. Le style visuel reste ; les
+   figures de rhétorique sortent. « La cage n'est pas un décor », « on s'entraîne
+   ici depuis six mille ans », « la borne du géomètre » : à jeter.
+2. **Zéro négation.** On écrit ce qui existe. Jamais « le club n'est pas à X km »,
+   jamais une réponse de FAQ qui commence par « Non ». On attaque par
+   l'affirmation.
+3. **Le hero ne nomme JAMAIS l'autre ville en premier.** Quelqu'un qui a cliqué
+   « Boxing Center <Ville> » et qui lit une autre commune dans le H1 s'en va. Le
+   H1 dit : « Ton club de boxe et de MMA **à proximité de <Ville>** ». Le nom du
+   club arrive plus bas, une fois la raison de rester donnée. On referme l'écart
+   par la langue : *à proximité de*, *à deux pas*, *la commune voisine*.
+4. **Aucun mot qui évoque une distance.** Pas de kilomètres, pas de durée de
+   trajet. On dit la ligne de bus, la sortie d'autoroute, l'arrêt. Un numéro de
+   ligne rapproche, un chiffre en kilomètres éloigne.
+5. **Des phrases courtes, adressées au lecteur.** Sujet, verbe, complément. On
+   tutoie. On donne l'information dans l'ordre où elle se pose : ce que c'est, où
+   c'est, ce qui va se passer, comment on y va, ce qu'il faut apporter.
+6. **Les titres de FAQ sont des questions, pas des requêtes.** « Où est le club le
+   plus proche ? », pas « « club de boxe X » : où ça se passe ? ». Les expressions
+   exactes vivent dans le `<title>`, la description et le corps des réponses.
+7. **Ne jamais commenter le site lui-même.** Aucune phrase sur « ce site est un
+   plan », « notre légende », « la planche ». Le visiteur cherche un club.
+8. **Test du persona, avant de livrer.** Prendre quelqu'un qui n'a aucune raison
+   d'être là, qui scrolle vite, et relire chaque écran de son point de vue :
+   est-ce qu'il comprend en trois secondes, et est-ce qu'il a une raison de
+   continuer ?
+
+### 13.8 COULEUR ET MOUVEMENT — un site ne doit jamais ressembler au précédent
+
+Décision Eddy, 2026-09-09 : la sous-famille par club de destination **ne suffit
+pas**. Chaque site a sa propre teinte et sa propre signature de mouvement.
+
+- **Couleur.** Papier, encre et accent changent d'un site à l'autre, et la teinte
+  se justifie par ce qu'on voit sur les photos du site (le sol turquoise de la
+  salle pour Cugnaux, le vert de la fresque pour Tournefeuille). Les contrastes
+  se mesurent avant d'écrire une ligne : encre ≥ 12:1, accent texte ≥ 4,5:1 sur
+  papier ET sur papier creusé. Les jetons `--nav-*` portent la barre sombre, qui
+  suit donc la couleur du site.
+- **Mouvement.** `--mouv-x`, `--mouv-y`, `--mouv-echelle`, `--mouv-duree`,
+  `--mouv-decalage` et `--mouv-courbe` forment la signature d'un site : montée
+  franche ici, glissement latéral là, arrivée en échelle ailleurs. Les
+  révélations, les fondus et les délais changent. Deux sites de la famille ne
+  doivent pas donner la même sensation au scroll.
+
 ### 13.6 Contrôles ajoutés au `verifier.mjs` du gabarit
 - Noms de fichiers image : `^[a-z0-9-]+-(<ville>)(-[2-9])?\.(avif|webp|jpg)$` — le nom porte la ville du site, jamais « boxing-center », jamais un numéro d'origine.
 - Aucun `<img>` de hero (attribut `fetchpriority="high"`) sous 2 000 px de large.

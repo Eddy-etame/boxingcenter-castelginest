@@ -1,0 +1,299 @@
+---
+/**
+ * CONTACT.
+ *
+ * Le formulaire poste nativement vers /api/contact/, qui relaie côté serveur
+ * vers Inlet (JSON + preuve de travail) puis renvoie un 303 vers /merci/.
+ * Il fonctionne donc entièrement sans JavaScript ; le script ne fait
+ * qu'ajouter le pré-remplissage depuis le parcours.
+ */
+import Base from '../layouts/Base.astro';
+import Photo from '../components/Photo.astro';
+import { CONTACT, DESTINATION, SITE } from '../data/verite';
+import { ROLES } from '../data/medias';
+import { OFFRES } from '../data/offres';
+
+const erreur = Astro.url.searchParams.get('erreur') === '1';
+---
+
+<Base page="contact" ogPhoto={ROLES.premiereSeance}>
+  <section class="section tete" aria-labelledby="t-contact">
+    <div class="enveloppe tete__inner">
+      <div>
+        <p class="cartouche"><span class="cartouche__num">—</span><span>Contact</span></p>
+        <h1 id="t-contact">Dis-nous ce que tu cherches.<br />On te répond avec un créneau.</h1>
+        <p class="lead faible tete__intro">
+          Il n’y a pas de mauvaise question. «&nbsp;Je n’ai jamais fait de sport&nbsp;»,
+          «&nbsp;j’ai 45 ans&nbsp;», «&nbsp;je ne veux pas prendre de coup&nbsp;»,
+          «&nbsp;mon fils a 9 ans&nbsp;», «&nbsp;je pars de {SITE.ville} le soir&nbsp;» — ce sont
+          les messages qu’on reçoit le plus souvent, et ce sont exactement ceux
+          auxquels on sait répondre.
+        </p>
+      </div>
+
+      <div class="direct">
+        <p class="mono direct__cle">Plus rapide</p>
+        <a class="direct__tel" href={`tel:${CONTACT.telephoneLien.valeur}`}>
+          {CONTACT.telephone.valeur}
+        </a>
+        <p class="direct__horaires mono">{DESTINATION.horaires.valeur}</p>
+        <a class="lien direct__mail" href={`mailto:${CONTACT.email.valeur}`}>
+          {CONTACT.email.valeur}
+        </a>
+        <p class="direct__club mono">
+          Le club directement&nbsp;:
+          <a class="lien" href={`tel:${DESTINATION.telephoneLien}`}>{DESTINATION.telephone}</a>
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section creuse formulaire" id="formulaire">
+    <div class="enveloppe formulaire__inner">
+      <form class="form" method="POST" action="/api/contact/" data-form>
+        {erreur && (
+          <div class="alerte" role="alert" tabindex="-1" data-alerte>
+            <p class="mono">Le message n’est pas parti</p>
+            <p>
+              Vérifie que le prénom, l’e-mail et le message sont bien remplis, puis
+              renvoie. Si ça bloque encore, appelle le {CONTACT.telephone.valeur} —
+              c’est plus rapide que d’insister.
+            </p>
+          </div>
+        )}
+
+        {/* Le parcours suivi sur le site part avec le message. Rempli par le
+            script ; vide si le visiteur n'a rien parcouru. */}
+        <input type="hidden" name="parcours" data-parcours-champ value="" />
+
+        {/* Pot de miel. Hors flux, hors tabulation, invisible aux lecteurs
+            d'écran : seuls les robots le remplissent. */}
+        <div class="pot" aria-hidden="true">
+          <label for="_gotcha">Ne pas remplir</label>
+          <input type="text" id="_gotcha" name="_gotcha" tabindex="-1" autocomplete="off" />
+        </div>
+
+        <div class="form__duo">
+          <p class="champ">
+            <label for="prenom">Prénom <abbr title="obligatoire">*</abbr></label>
+            <input type="text" id="prenom" name="prenom" required autocomplete="given-name" />
+          </p>
+          <p class="champ">
+            <label for="nom">Nom</label>
+            <input type="text" id="nom" name="nom" autocomplete="family-name" />
+          </p>
+        </div>
+
+        <div class="form__duo">
+          <p class="champ">
+            <label for="email">E-mail <abbr title="obligatoire">*</abbr></label>
+            <input type="email" id="email" name="email" required autocomplete="email" inputmode="email" />
+          </p>
+          <p class="champ">
+            <label for="telephone">Téléphone</label>
+            <input type="tel" id="telephone" name="telephone" autocomplete="tel" inputmode="tel" />
+          </p>
+        </div>
+
+        <div class="form__duo">
+          <p class="champ">
+            <label for="activite">Ce que tu cherches</label>
+            <select id="activite" name="activite" data-activite>
+              <option value="">Je ne sais pas encore</option>
+              {OFFRES.map((o) => <option value={o.intitule}>{o.intitule}</option>)}
+              <option value="Autre sport de combat">Autre sport de combat</option>
+            </select>
+          </p>
+          <p class="champ">
+            <label for="creneau">Quand tu peux</label>
+            <select id="creneau" name="creneau" data-creneau>
+              <option value="">Je ne sais pas encore</option>
+              <option value="Le midi">Le midi</option>
+              <option value="L’après-midi">L’après-midi</option>
+              <option value="Le soir">Le soir</option>
+              <option value="Le samedi">Le samedi</option>
+            </select>
+          </p>
+        </div>
+
+        <p class="champ">
+          <label for="secteur">D’où tu pars</label>
+          <input
+            type="text"
+            id="secteur"
+            name="secteur"
+            value={SITE.ville}
+            autocomplete="address-level2"
+          />
+          <span class="champ__aide">{SITE.ville}, une commune voisine, ou ailleurs&nbsp;: dis-le-nous, ça change le créneau qu’on te conseille.</span>
+        </p>
+
+        <p class="champ">
+          <label for="message">Ton message <abbr title="obligatoire">*</abbr></label>
+          <textarea id="message" name="message" rows="6" required data-message></textarea>
+          <span class="champ__aide">Si tu as parcouru le site, on a déjà pré-rempli ce que tu cherches. Corrige librement.</span>
+        </p>
+
+        <button class="bouton bouton--signal bouton--plein" type="submit">
+          <span>Envoyer ma question</span>
+          <span class="fleche" aria-hidden="true">→</span>
+        </button>
+
+        <p class="form__note mono">
+          Ta demande part à {CONTACT.email.valeur}. Elle sert à te répondre, à rien d’autre.
+        </p>
+      </form>
+
+      <aside class="cote">
+        <Photo slug={ROLES.premiereSeance} sizes="(max-width: 62rem) 100vw, 34vw" ratio="4 / 5" />
+        <div class="cote__fiche">
+          <p class="mono cote__cle">Le club</p>
+          <p class="cote__nom">{DESTINATION.nom}</p>
+          <p class="cote__adresse">{DESTINATION.adresse}</p>
+          <p class="cote__acces">{DESTINATION.acces}</p>
+          <a class="lien" href={DESTINATION.site} rel="noopener">
+            {new URL(DESTINATION.site).hostname} ↗
+          </a>
+        </div>
+      </aside>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .tete__inner {
+    display: grid;
+    grid-template-columns: minmax(0, 1.3fr) minmax(0, 0.7fr);
+    gap: var(--e-8);
+    align-items: start;
+  }
+  @media (max-width: 62rem) { .tete__inner { grid-template-columns: 1fr; gap: var(--e-6); } }
+  .tete h1 { max-width: 18ch; margin-bottom: var(--e-5); }
+  .tete__intro { max-width: 54ch; }
+
+  .direct {
+    padding: var(--e-5);
+    border: 1px solid var(--trait);
+    border-radius: var(--rayon-1);
+    background: var(--papier-vif);
+  }
+  .direct__cle { color: var(--graphite); margin-bottom: var(--e-2); }
+  .direct__tel {
+    display: block;
+    font-family: var(--police-titre);
+    font-size: var(--t-h3);
+    font-weight: 700;
+    letter-spacing: -0.015em;
+    text-decoration: none;
+    font-variant-numeric: tabular-nums;
+  }
+  .direct__tel:hover { color: var(--signal-texte); }
+  .direct__horaires {
+    margin: var(--e-2) 0 var(--e-4);
+    padding-bottom: var(--e-3);
+    border-bottom: 1px solid var(--trait-faible);
+    text-transform: none;
+    letter-spacing: 0.04em;
+    color: var(--texte-faible);
+  }
+  .direct__mail { font-size: var(--t-petit); }
+  .direct__club { margin-top: var(--e-4); text-transform: none; letter-spacing: 0.04em; color: var(--graphite); }
+
+  .formulaire__inner {
+    display: grid;
+    grid-template-columns: minmax(0, 1.25fr) minmax(0, 0.75fr);
+    gap: var(--e-8);
+    align-items: start;
+  }
+  @media (max-width: 62rem) { .formulaire__inner { grid-template-columns: 1fr; } }
+
+  .form { display: grid; gap: var(--e-5); }
+  .form__duo { display: grid; grid-template-columns: 1fr 1fr; gap: var(--e-5); }
+  @media (max-width: 40rem) { .form__duo { grid-template-columns: 1fr; } }
+
+  .champ { display: grid; gap: var(--e-2); margin: 0; }
+  .champ label { font-size: var(--t-petit); font-weight: 600; }
+  .champ abbr { color: var(--signal-texte); text-decoration: none; }
+  .champ input,
+  .champ select,
+  .champ textarea {
+    width: 100%;
+    padding: 0.75rem 0.9rem;
+    background: var(--papier-vif);
+    border: 1px solid var(--trait);
+    border-radius: var(--rayon-1);
+    font-size: var(--t-base);
+    transition: border-color var(--d-rapide) var(--e-mecanique);
+  }
+  .champ input:focus,
+  .champ select:focus,
+  .champ textarea:focus { border-color: var(--signal-texte); }
+  .champ textarea { resize: vertical; min-height: 8rem; line-height: 1.6; }
+  .champ__aide { font-size: var(--t-micro); color: var(--graphite); }
+
+  .alerte {
+    padding: var(--e-4);
+    border-left: 3px solid var(--signal-texte);
+    background: var(--signal-voile);
+  }
+  .alerte .mono { color: var(--signal-texte); margin-bottom: var(--e-2); }
+  .alerte p:last-child { font-size: var(--t-petit); }
+
+  /* Le pot de miel : hors du flux, jamais atteignable au clavier. */
+  .pot { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+
+  .form__note { color: var(--graphite); text-transform: none; letter-spacing: 0.04em; }
+
+  .cote { display: grid; gap: var(--e-5); }
+  .cote__fiche {
+    display: grid;
+    gap: 0.3rem;
+    padding: var(--e-5);
+    border: 1px solid var(--trait);
+    border-radius: var(--rayon-1);
+  }
+  .cote__cle { color: var(--graphite); }
+  .cote__nom { font-weight: 700; }
+  .cote__adresse, .cote__acces { font-size: var(--t-petit); color: var(--texte-faible); }
+  .cote__fiche .lien { font-size: var(--t-petit); }
+</style>
+
+<script>
+  import { parcours, enPhrase, LIBELLE_CRENEAU } from '../scripts/parcours';
+  import { OFFRES, FAMILLES_PAR_PAGE } from '../data/offres';
+
+  const p = parcours();
+  const champ = document.querySelector<HTMLInputElement>('[data-parcours-champ]');
+  const message = document.querySelector<HTMLTextAreaElement>('[data-message]');
+  const activite = document.querySelector<HTMLSelectElement>('[data-activite]');
+  const creneau = document.querySelector<HTMLSelectElement>('[data-creneau]');
+
+  if (p.discipline || p.creneau) {
+    const phrase = enPhrase(p);
+    if (champ) champ.value = phrase;
+
+    // Le message arrive écrit : la personne n'a plus qu'à préciser sa question.
+    if (message && !message.value) {
+      message.value = `Bonjour,\n\n${phrase}\n\n`;
+      // Le curseur se pose à la fin, prêt à écrire.
+      message.setSelectionRange(message.value.length, message.value.length);
+    }
+
+    if (activite && p.discipline) {
+      const familles = FAMILLES_PAR_PAGE[p.discipline] as readonly string[];
+      const premier = OFFRES.find((o) => familles.includes(o.famille));
+      if (premier) {
+        const opt = [...activite.options].find((o) => o.value === premier.intitule);
+        if (opt) activite.value = opt.value;
+      }
+    }
+    if (creneau && p.creneau) {
+      const libelle = LIBELLE_CRENEAU[p.creneau];
+      const opt = [...creneau.options].find((o) => o.value === libelle);
+      if (opt) creneau.value = opt.value;
+    }
+  }
+
+  // Une erreur de renvoi doit être entendue, pas seulement affichée.
+  document.querySelector<HTMLElement>('[data-alerte]')?.focus();
+</script>

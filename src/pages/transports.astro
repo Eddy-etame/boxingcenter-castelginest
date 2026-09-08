@@ -1,0 +1,54 @@
+---
+/**
+ * TRANSPORTS EN COMMUN — le trajet complet, de Castelginest au 388 avenue des
+ * États-Unis.
+ *
+ * Le corps vit dans `components/Transports.astro`, piloté par
+ * `data/transports.ts`.
+ */
+import Base from '../layouts/Base.astro';
+import Transports from '../components/Transports.astro';
+import { SITE } from '../data/verite';
+
+const QUESTIONS = [
+  {
+    titre: `Comment aller au club depuis ${SITE.ville} sans voiture ?`,
+    texte:
+      'Le 60 s’arrête six fois dans la commune et finit à Trois Cocus, sur le métro B. Une station plus loin, à La Vache, le 59 démarre et longe l’avenue des États-Unis. Descends à « États-Unis Fondeyre », le club est au 388.',
+  },
+  {
+    titre: 'Quel bus passe devant le club ?',
+    texte:
+      'Le 59. C’est la ligne qui longe l’avenue des États-Unis sur toute sa longueur, depuis La Vache jusqu’à Saint-Jory. Son arrêt « États-Unis Fondeyre » est dans le quartier du club.',
+  },
+  {
+    titre: 'Combien de temps je reste dans le métro ?',
+    texte:
+      'Une station. Trois Cocus, puis La Vache. Le métro sert de raccord entre le terminus du 60 et le départ du 59 : c’est le segment le plus court du trajet.',
+  },
+  {
+    titre: 'Et en voiture ?',
+    texte:
+      'Par la D820, puis le périphérique et la sortie 33b « Lalande ». C’est l’accès que le club indique lui-même, et c’est le même axe du début à la fin depuis Castelginest.',
+  },
+  {
+    titre: 'Je pars de Fenouillet.',
+    texte:
+      'Le 59 dessert Fenouillet Centre Commercial, aux deux entrées, et descend ensuite toute l’avenue des États-Unis. Un seul bus, du départ à l’arrivée.',
+  },
+  {
+    titre: 'Je pars d’Aucamville.',
+    texte:
+      'Le 69 relie Mairie Aucamville à La Vache, son terminus, et le 59 y démarre. Deux bus, un seul changement, au même arrêt.',
+  },
+  {
+    titre: 'Les horaires sont où ?',
+    texte:
+      'Chez Tisséo, qui les publie et les met à jour à chaque saison. Chaque étape de cette page ouvre la fiche officielle de sa ligne.',
+  },
+];
+---
+
+<Base page="transports" faq={QUESTIONS}>
+  <Transports />
+</Base>

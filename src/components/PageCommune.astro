@@ -1,0 +1,564 @@
+---
+/**
+ * GABARIT DES PAGES COMMUNES — et le contrat qui les rend légitimes.
+ *
+ * Le test du remplacement : si l'on remplaçait le nom de la commune par un
+ * autre et que la page restait vraie, la page serait une page satellite et
+ * mériterait d'être traitée comme telle. Tout ce gabarit est construit pour
+ * échouer à ce test — c'est-à-dire pour qu'aucune de ces pages ne puisse être
+ * confondue avec une autre :
+ *
+ *   — sa géographie réelle (limitrophes vérifiées, et on écrit noir sur blanc
+ *     quand la commune NE touche PAS celle du club) ;
+ *   — son axe routier et ses lignes de bus à elle ;
+ *   — son fait local, qui sert à situer et jamais à décorer ;
+ *   — sa FAQ propre, et sa légende de recherche.
+ *
+ * LA LÉGENDE. Un plan porte une légende : la liste de ce que ses symboles
+ * veulent dire. Ici, la légende dit ce que veulent dire les recherches — « club
+ * de boxe X », « salle MMA X » — et y répond par un fait. C'est la seule forme
+ * sous laquelle une liste de requêtes a le droit d'exister sur une page : celle
+ * où chaque ligne rend un service au lecteur.
+ *
+ * Interdits, vérifiés au build : une adresse dans la commune, un LocalBusiness,
+ * un temps de trajet, l'accueil recopié avec le nom changé.
+ */
+import Base from '../layouts/Base.astro';
+import Photo from './Photo.astro';
+import { COMMUNES, type CommuneId, commune as communeParId } from '../data/communes';
+import { SITE, DESTINATION } from '../data/verite';
+import { OFFRES } from '../data/offres';
+import { route } from '../data/routes';
+import { motifs } from '../data/mots-cles';
+import { DEPARTS, itineraire } from '../data/transports';
+
+interface Props { id: CommuneId }
+const { id } = Astro.props;
+
+const c = communeParId(id);
+const r = route(id);
+const autres = COMMUNES.filter((x) => x.id !== id);
+
+/** Le trajet publié pour cette commune, quand il en existe un. */
+const depart = DEPARTS.find((d) => d.depuis === c.nom);
+const trajet = depart ? itineraire(depart.itineraire) : null;
+
+/**
+ * La légende : chaque recherche, et le fait qui y répond. Les réponses sont
+ * construites depuis le registre de CETTE commune — elles ne sont donc jamais
+ * les mêmes d'une page à l'autre.
+ */
+const voisinage = c.toucheLeClub
+  ? `${c.nom} touche ${DESTINATION.ville}`
+  : `${c.nom} est à une commune de ${DESTINATION.ville}`;
+
+const REPONSES: Record<string, string> = {
+  [`club de boxe ${c.nom}`]: `${DESTINATION.nom}, ${DESTINATION.adresse}, à côté de la sortie 33b « Lalande » du périphérique. 1 200 m² en trois espaces.`,
+  [`boxe anglaise ${c.nom}`]: `La boxe anglaise se travaille sur deux rings de compétition, dans l’espace boxe de 400 m².`,
+  [`club MMA ${c.nom}`]: `Le club publie le travail au sol — le grappling — sur 400 m² de tatamis, avec une cage surélevée officielle.`,
+  [`salle MMA ${c.nom}`]: `La cage est au 388 avenue des États-Unis, avec des panneaux de séparation pour travailler le cage control.`,
+  [`sport de combat ${c.nom}`]: `Cette salle réunit toutes les disciplines du réseau : boxe, pieds-poings, full contact, travail au sol, cours enfants et préparation physique.`,
+  [`club kick boxing ${c.nom}`]: `Le club publie la boxe pieds-poings et le full contact, sur les deux rings de compétition.`,
+  [`boxe pieds poings ${c.nom}`]: `C’est le nom exact du cours. Poings et jambes, en garde haute et sur appuis.`,
+  [`club boxe thaï ${c.nom}`]: `Cette salle publie la boxe pieds-poings et le full contact. Si tu cherches précisément le Muay Thaï, dis-le dans ton message : on te répond avec ce qui existe dans le réseau.`,
+};
+
+const LEGENDE = motifs(c.nom).map((m) => ({ motif: m, reponse: REPONSES[m] }));
+---
+
+<Base page={id} ogPhoto={c.photo} faq={c.faq}>
+  {/* ── 01 — L'ENTRÉE ── */}
+  <section class="section tete" aria-labelledby="t-page" data-sans-scene>
+    <div class="enveloppe tete__inner">
+      <div class="tete__texte">
+        <nav class="fil mono" aria-label="Fil d’Ariane">
+          <a href="/">Accueil</a><span aria-hidden="true">/</span>
+          <span aria-current="page">{c.nom}</span>
+        </nav>
+
+        <p class="cartouche">
+          <span class="cartouche__num">{c.codePostal}</span><span>{c.gentile}</span>
+        </p>
+
+        <h1 id="t-page">Club de boxe et MMA à proximité de {c.nom}</h1>
+
+        <p class="tete__chapeau">
+          {c.situation} Le club, c’est <strong>{DESTINATION.nom}</strong>, {DESTINATION.adresse},
+          ouvert {DESTINATION.horaires.valeur}.
+        </p>
+
+        <div class="tete__actions">
+          <a class="bouton bouton--signal" href={route('ta-seance').chemin}>
+            <span>Trouver ma séance</span><span class="fleche" aria-hidden="true">→</span>
+          </a>
+          <a class="bouton" href={route('transports').chemin}>
+            <span>Y aller en bus</span><span class="fleche" aria-hidden="true">→</span>
+          </a>
+          <a class="bouton" href={DESTINATION.plannings} rel="noopener">
+            <span>Le planning</span><span class="fleche" aria-hidden="true">↗</span>
+          </a>
+        </div>
+      </div>
+
+      <div class="tete__plaque">
+        <Photo
+          slug={c.photo}
+          prioritaire
+          sizes="(max-width: 62rem) 100vw, 40vw"
+          ratio="4 / 5"
+          legende
+          class="tete__photo"
+        />
+      </div>
+    </div>
+  </section>
+
+  {/* ── 02 — DEPUIS CETTE COMMUNE ── */}
+  <section class="section creuse depuis" aria-labelledby="t-depuis">
+    <div class="enveloppe">
+      <p class="cartouche"><span class="cartouche__num">02</span><span>Depuis {c.nom}</span></p>
+      <div class="depuis__tete">
+        <h2 id="t-depuis">Comment tu y vas.</h2>
+        <p class="lead faible">
+          {c.population}, {c.intercommunalite}. Voilà la route, les bus, et les
+          communes autour — de quoi savoir en trente secondes si c’est jouable
+          deux fois par semaine.
+        </p>
+      </div>
+
+      {/* Les cotes de la commune, dans la grammaire du plan. */}
+      <dl class="cotes">
+        {c.cotes.map((k, i) => (
+          <div class="reveler" style={`--retard:${i * 70}ms`}>
+            <dt class="mono">{k.cle}</dt>
+            <dd>{k.valeur}</dd>
+          </div>
+        ))}
+      </dl>
+
+      <div class="depuis__corps">
+        <article>
+          <h3>La route</h3>
+          <p>{c.route}</p>
+        </article>
+        <article>
+          <h3>Les transports</h3>
+          <p>{c.transport}</p>
+          {trajet && (
+            <ul class="desserte">
+              {trajet.etapes.map((e) => (
+                <li>
+                  <a href={`${route('transports').chemin}?trajet=${trajet.id}`}>
+                    <span class={`code code--${e.mode}`}>{e.code}</span>
+                    <span>{e.de} → {e.a}</span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          )}
+        </article>
+        <article>
+          <h3>Les communes voisines</h3>
+          <p class="depuis__limitrophes">
+            {c.limitrophes.map((n, i) => (
+              <>
+                {i > 0 && <span aria-hidden="true"> · </span>}
+                <span class={n === DESTINATION.ville || n === SITE.ville ? 'depuis__cle' : ''}>{n}</span>
+              </>
+            ))}
+          </p>
+        </article>
+      </div>
+
+      {/* L'info pratique qui décide, mise en évidence. */}
+      <div class="local">
+        <p class="mono local__cle">Bon à savoir</p>
+        <p class="local__fait">{c.faitLocal}</p>
+        <p class="local__suite">{c.faitLocalEcho}</p>
+      </div>
+    </div>
+  </section>
+
+  {/* ── 03 — LA LÉGENDE ── */}
+  <section class="section legende" aria-labelledby="t-legende">
+    <div class="enveloppe">
+      <p class="cartouche"><span class="cartouche__num">03</span><span>Légende</span></p>
+      <div class="legende__tete">
+        <h2 id="t-legende">Les questions qu’on nous pose le plus.</h2>
+        <p class="lead faible">
+          À gauche, ce que les gens cherchent. À droite, la réponse en une
+          phrase.
+        </p>
+      </div>
+      <dl class="legende__liste">
+        {LEGENDE.map((l, i) => (
+          <div class="reveler" style={`--retard:${i * 45}ms`}>
+            <dt>«&nbsp;{l.motif}&nbsp;»</dt>
+            <dd>{l.reponse}</dd>
+          </div>
+        ))}
+      </dl>
+    </div>
+  </section>
+
+  {/* ── 04 — CE QUE TU TROUVES AU CLUB ── */}
+  <section class="section encre auclub" aria-labelledby="t-auclub">
+    <div class="enveloppe">
+      <p class="cartouche"><span class="cartouche__num">04</span><span>Au club</span></p>
+      <div class="auclub__tete">
+        <h2 id="t-auclub">Les neuf cours du club.</h2>
+        <p class="lead faible">
+          Voilà tout ce qui se pratique, avec les noms exacts que tu verras sur
+          le planning. {DESTINATION.singularite}
+        </p>
+      </div>
+      <ul class="auclub__liste">
+        {OFFRES.map((o, i) => (
+          <li class="reveler" style={`--retard:${i * 40}ms`}>
+            <span class="mono auclub__num">{String(i + 1).padStart(2, '0')}</span>
+            <span class="auclub__nom">{o.intitule}</span>
+            <span class="auclub__detail">{o.detail}</span>
+          </li>
+        ))}
+      </ul>
+      <div class="auclub__portes">
+        <a class="bouton bouton--signal" href={DESTINATION.plannings} rel="noopener">
+          <span>Voir le planning du club</span><span class="fleche" aria-hidden="true">↗</span>
+        </a>
+        <a class="bouton" href={DESTINATION.tarifs} rel="noopener">
+          <span>Les tarifs</span><span class="fleche" aria-hidden="true">↗</span>
+        </a>
+        <a class="bouton" href={route('premiere-seance').chemin}>
+          <span>Ma première séance</span><span class="fleche" aria-hidden="true">→</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  {/* ── 05 — LES QUESTIONS ── */}
+  <section class="section creuse questions" aria-labelledby="t-questions">
+    <div class="enveloppe questions__inner">
+      <div>
+        <p class="cartouche"><span class="cartouche__num">05</span><span>Questions</span></p>
+        <h2 id="t-questions">Ce qu’on nous demande<br />depuis {c.nom}.</h2>
+        {c.pont && (
+          <p class="pont">
+            {c.pont.texte}
+            {' '}
+            <a class="lien" href={c.pont.href} rel="noopener">
+              {c.pont.ancre} <span aria-hidden="true">↗</span>
+            </a>
+          </p>
+        )}
+      </div>
+      <div class="questions__liste">
+        {c.faq.map((q, i) => (
+          <details class="qr" open={i === 0}>
+            <summary><span class="qr__q">{q.titre}</span><span class="qr__signe" aria-hidden="true"></span></summary>
+            <p class="qr__r">{q.texte}</p>
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  {/* ── 06 — LE RESTE DU SECTEUR ── */}
+  <section class="section voisines" aria-labelledby="t-voisines">
+    <div class="enveloppe">
+      <p class="cartouche"><span class="cartouche__num">06</span><span>Le secteur</span></p>
+      <h2 id="t-voisines">Tu pars d’une autre commune&nbsp;?</h2>
+      <ul class="voisines__liste">
+        <li class="reveler">
+          <a class="carte" href="/">
+            <span class="mono carte__cp">{SITE.codePostal}</span>
+            <span class="carte__nom">{SITE.ville}</span>
+            <span class="carte__note">La ville du site — {SITE.gentile}</span>
+          </a>
+        </li>
+        {autres.map((x, i) => (
+          <li class="reveler" style={`--retard:${(i + 1) * 70}ms`}>
+            <a class="carte" href={`/${x.id}/`}>
+              <span class="mono carte__cp">{x.codePostal}</span>
+              <span class="carte__nom">{x.nom}</span>
+              <span class="carte__note">
+                {x.toucheLeClub
+                  ? `Commune limitrophe de ${DESTINATION.ville}`
+                  : `À une commune de ${DESTINATION.ville}`}
+              </span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  {/* ── 07 — CONVERGENCE ── */}
+  <section class="section convergence" aria-labelledby="t-conv">
+    <div class="enveloppe convergence__inner">
+      <p class="cartouche"><span class="cartouche__num">07</span><span>Décider</span></p>
+      <h2 id="t-conv">
+        Tu sais où c’est.<br />
+        <span class="convergence__accent">Reste à choisir ton cours.</span>
+      </h2>
+      <p class="lead convergence__texte">
+        Réponds à deux questions et on te dit quoi viser et quand venir. Si tu
+        préfères demander, écris-nous en deux lignes&nbsp;: on te répond avec un
+        créneau.
+      </p>
+      <div class="convergence__actions">
+        <a class="bouton bouton--signal" href={route('contact').chemin}>
+          <span>Poser ma question</span><span class="fleche" aria-hidden="true">→</span>
+        </a>
+        <a class="bouton" href={route('ta-seance').chemin}>
+          <span>Trouver ma séance</span><span class="fleche" aria-hidden="true">→</span>
+        </a>
+        <a class="bouton" href={DESTINATION.site} rel="noopener">
+          <span>Le site du club</span><span class="fleche" aria-hidden="true">↗</span>
+        </a>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  /* ── 01 Tête ───────────────────────────────────────────────────────── */
+  .tete__inner {
+    display: grid;
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr);
+    gap: var(--e-8);
+    align-items: center;
+  }
+  @media (max-width: 62rem) { .tete__inner { grid-template-columns: 1fr; gap: var(--e-7); } }
+  .tete__texte { animation: poser-tete 720ms var(--e-sortie) both; }
+  .tete__plaque { position: relative; animation: poser-tete 720ms var(--e-sortie) 160ms both; }
+  @keyframes poser-tete {
+    from { opacity: 0; transform: translateY(1rem); }
+    to { opacity: 1; transform: none; }
+  }
+  .tete__plaque::before {
+    content: '';
+    position: absolute;
+    inset: var(--e-4) calc(-1 * var(--e-4)) calc(-1 * var(--e-4)) var(--e-4);
+    background: var(--signal-voile);
+    border: 1px solid var(--signal);
+    border-radius: var(--rayon-1);
+  }
+  .tete__photo { position: relative; }
+
+  .fil { display: flex; gap: var(--e-2); margin-bottom: var(--e-5); }
+  .fil a { color: var(--graphite); text-decoration: none; }
+  .fil a:hover { color: var(--signal-texte); }
+  .fil span[aria-current] { color: var(--encre-pale); }
+  .tete h1 { max-width: 16ch; margin: var(--e-4) 0 var(--e-5); }
+  .tete__chapeau {
+    max-width: 56ch;
+    padding-left: var(--e-5);
+    border-left: 2px solid var(--signal);
+    font-size: var(--t-lead);
+    line-height: 1.5;
+    color: var(--texte-faible);
+  }
+  .tete__chapeau strong { color: var(--encre); font-weight: 600; }
+  .tete__actions { display: flex; flex-wrap: wrap; gap: var(--e-3); margin-top: var(--e-6); }
+
+  /* ── 02 Depuis ─────────────────────────────────────────────────────── */
+  .depuis__tete {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--e-5) var(--e-8);
+    align-items: end;
+    margin-bottom: var(--e-6);
+  }
+  @media (max-width: 56rem) { .depuis__tete { grid-template-columns: 1fr; } }
+  .depuis__tete h2 { max-width: 18ch; }
+  .depuis__tete .lead { max-width: 46ch; }
+
+  .cotes {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+    gap: 0;
+    margin: 0 0 var(--e-7);
+    border-top: 1px solid var(--trait);
+    border-bottom: 1px solid var(--trait);
+  }
+  .cotes > div {
+    display: grid;
+    gap: 0.2rem;
+    padding: var(--e-4) var(--e-4) var(--e-4) 0;
+  }
+  .cotes dt { color: var(--graphite); }
+  .cotes dd { margin: 0; font-size: var(--t-petit); font-weight: 600; color: var(--signal-texte); }
+
+  .depuis__corps {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+    gap: var(--e-6);
+  }
+  .depuis__corps h3 {
+    font-size: var(--t-petit);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    font-family: var(--police-mono);
+    color: var(--graphite);
+    margin-bottom: var(--e-3);
+  }
+  .depuis__corps p { font-size: var(--t-petit); color: var(--texte-faible); }
+  .depuis__cle { color: var(--signal-texte); font-weight: 600; }
+
+  .desserte { list-style: none; display: grid; gap: var(--e-2); margin-top: var(--e-4); }
+  .desserte a {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--e-3);
+    text-decoration: none;
+    font-size: var(--t-micro);
+    color: var(--texte-faible);
+  }
+  .desserte a:hover { color: var(--signal-texte); }
+  .code {
+    display: grid;
+    place-items: center;
+    min-width: 2.6rem;
+    padding: 0.2rem 0.45rem;
+    border-radius: 0.3rem;
+    background: var(--encre);
+    color: var(--papier-vif);
+    font-family: var(--police-mono);
+    font-size: var(--t-micro);
+    font-weight: 700;
+  }
+  .code--metro { background: var(--signal-texte); }
+  .code--train { background: var(--encre-pale); }
+
+  .local {
+    margin: var(--e-7) 0 0;
+    padding: var(--e-5) var(--e-6);
+    border-left: 2px solid var(--signal);
+    background: var(--papier-vif);
+    max-width: 72ch;
+  }
+  .local__cle { color: var(--signal-texte); margin-bottom: var(--e-3); }
+  .local__fait { font-size: var(--t-lead); line-height: 1.5; }
+  .local__suite { margin-top: var(--e-3); font-size: var(--t-petit); color: var(--texte-faible); }
+
+  /* ── 03 Légende ────────────────────────────────────────────────────── */
+  .legende__tete {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--e-5) var(--e-8);
+    align-items: end;
+    margin-bottom: var(--e-6);
+  }
+  @media (max-width: 56rem) { .legende__tete { grid-template-columns: 1fr; } }
+  .legende__tete h2 { max-width: 18ch; }
+  .legende__tete .lead { max-width: 48ch; }
+
+  .legende__liste { margin: 0; border-top: 1px solid var(--trait); }
+  .legende__liste > div {
+    display: grid;
+    grid-template-columns: minmax(12rem, 0.85fr) minmax(0, 2fr);
+    gap: var(--e-3) var(--e-6);
+    padding: var(--e-4) 0;
+    border-bottom: 1px solid var(--trait);
+    transition: padding-left var(--d-normal) var(--e-sortie);
+  }
+  .legende__liste > div:hover { padding-left: var(--e-3); }
+  @media (max-width: 48rem) { .legende__liste > div { grid-template-columns: 1fr; } }
+  .legende__liste dt {
+    font-family: var(--police-mono);
+    font-size: var(--t-petit);
+    color: var(--signal-texte);
+  }
+  .legende__liste dd { margin: 0; font-size: var(--t-petit); color: var(--texte-faible); }
+
+  /* ── 04 Au club ────────────────────────────────────────────────────── */
+  .auclub__tete {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--e-5) var(--e-8);
+    align-items: end;
+    margin-bottom: var(--e-6);
+  }
+  @media (max-width: 56rem) { .auclub__tete { grid-template-columns: 1fr; } }
+  .auclub__tete h2 { max-width: 18ch; }
+  .auclub__tete .lead { max-width: 46ch; }
+
+  .auclub__liste { list-style: none; border-top: 1px solid var(--trait); }
+  .auclub__liste li {
+    display: grid;
+    grid-template-columns: 3rem minmax(11rem, 0.9fr) minmax(0, 2fr);
+    gap: var(--e-4);
+    align-items: baseline;
+    padding: var(--e-4) 0;
+    border-bottom: 1px solid var(--trait);
+  }
+  @media (max-width: 52rem) {
+    .auclub__liste li { grid-template-columns: 2.5rem 1fr; }
+    .auclub__detail { grid-column: 2 / -1; }
+  }
+  .auclub__num { color: var(--signal-texte); font-weight: 700; }
+  .auclub__nom { font-weight: 700; font-size: var(--t-base); }
+  .auclub__detail { font-size: var(--t-petit); color: var(--texte-faible); }
+  .auclub__portes { display: flex; flex-wrap: wrap; gap: var(--e-3); margin-top: var(--e-7); }
+
+  /* ── 05 Questions ──────────────────────────────────────────────────── */
+  .questions__inner {
+    display: grid;
+    grid-template-columns: 0.85fr 1.15fr;
+    gap: var(--e-8);
+    align-items: start;
+  }
+  @media (max-width: 62rem) { .questions__inner { grid-template-columns: 1fr; gap: var(--e-6); } }
+  .questions h2 { max-width: 16ch; margin-bottom: var(--e-4); }
+  .pont {
+    max-width: 40ch;
+    font-size: var(--t-petit);
+    color: var(--texte-faible);
+    padding-top: var(--e-4);
+    border-top: 1px solid var(--trait);
+  }
+
+  /* ── 06 Voisines ───────────────────────────────────────────────────── */
+  .voisines h2 { max-width: 24ch; margin-bottom: var(--e-6); }
+  .voisines__liste {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+    gap: var(--e-4);
+  }
+  .carte {
+    display: grid;
+    gap: 0.35rem;
+    height: 100%;
+    padding: var(--e-5);
+    border: 1px solid var(--trait);
+    border-radius: var(--rayon-1);
+    background: var(--papier-vif);
+    text-decoration: none;
+    transition:
+      border-color var(--d-rapide) var(--e-mecanique),
+      transform var(--d-normal) var(--e-sortie);
+  }
+  .carte:hover { border-color: var(--signal-texte); transform: translateY(-3px); }
+  .carte__cp { color: var(--graphite); }
+  .carte__nom {
+    font-family: var(--police-titre);
+    font-size: var(--t-h3);
+    font-weight: 700;
+    letter-spacing: -0.015em;
+  }
+  .carte__note { font-size: var(--t-petit); color: var(--texte-faible); }
+
+  /* ── 07 Convergence ────────────────────────────────────────────────── */
+  .convergence { background: var(--papier-creuse); }
+  .convergence__inner { max-width: 48rem; }
+  .convergence h2 { margin-bottom: var(--e-5); }
+  .convergence__accent { color: var(--signal-texte); }
+  .convergence__texte { max-width: 52ch; color: var(--texte-faible); }
+  .convergence__actions { display: flex; flex-wrap: wrap; gap: var(--e-3); margin-top: var(--e-7); }
+
+  @media (prefers-reduced-motion: reduce) {
+    .tete__texte,
+    .tete__plaque { animation: none; }
+  }
+</style>

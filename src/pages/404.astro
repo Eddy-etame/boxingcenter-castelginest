@@ -1,0 +1,93 @@
+---
+/**
+ * 404 — la page traitée avec la grammaire du site : le tracé s'interrompt.
+ * On propose la destination réelle plutôt qu'un « retour à l'accueil » sec.
+ */
+import Base from '../layouts/Base.astro';
+import { MENU, LIENS_CLUB } from '../data/routes';
+import { CONTACT, DESTINATION } from '../data/verite';
+---
+
+<Base page="introuvable">
+  <section class="section quatre" aria-labelledby="t-404">
+    <div class="enveloppe quatre__inner">
+      <svg class="quatre__plan" viewBox="0 0 420 60" aria-hidden="true">
+        <path class="quatre__trait" d="M 8 30 H 170" fill="none" />
+        <path class="quatre__trait quatre__trait--mort" d="M 250 30 H 412" fill="none" />
+        <circle class="quatre__fin" cx="170" cy="30" r="4" />
+        <text class="quatre__interruption" x="210" y="35" text-anchor="middle">?</text>
+      </svg>
+
+      <p class="cartouche"><span class="cartouche__num">404</span><span>Le tracé s’arrête ici</span></p>
+      <h1 id="t-404">Cette adresse ne mène nulle part.</h1>
+      <p class="lead quatre__texte">
+        La page n’existe pas, ou elle a changé d’adresse. Le club, lui, est
+        toujours au même endroit&nbsp;: {DESTINATION.adresse}.
+      </p>
+
+      <nav class="quatre__nav" aria-label="Pages du site">
+        <p class="mono quatre__cle">Reprendre le plan</p>
+        <ul>
+          {MENU.map((r) => (
+            <li>
+              <a href={r.chemin}>
+                <span class="quatre__nom">{r.nav}</span>
+                <span class="quatre__q">{r.question}</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+
+      <div class="quatre__portes">
+        {LIENS_CLUB.map((l) => (
+          <a class="bouton" href={l.href} rel="noopener">
+            <span>{l.nav} du club</span><span class="fleche" aria-hidden="true">↗</span>
+          </a>
+        ))}
+        <a class="bouton" href={`tel:${CONTACT.telephoneLien.valeur}`}>
+          <span>{CONTACT.telephone.valeur}</span><span class="fleche" aria-hidden="true">↗</span>
+        </a>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .quatre { min-height: 74svh; display: grid; align-items: center; }
+  .quatre__inner { max-width: 52rem; }
+
+  .quatre__plan { width: 100%; max-width: 26rem; height: auto; margin-bottom: var(--e-5); overflow: visible; }
+  .quatre__trait { stroke: var(--signal-texte); stroke-width: 2; vector-effect: non-scaling-stroke; }
+  .quatre__trait--mort { stroke: var(--graphite); stroke-dasharray: 5 5; opacity: 0.6; }
+  .quatre__fin { fill: var(--signal-texte); }
+  .quatre__interruption {
+    font-family: var(--police-mono);
+    font-size: 26px;
+    font-weight: 700;
+    fill: var(--graphite);
+  }
+
+  .quatre h1 { max-width: 16ch; margin-bottom: var(--e-4); }
+  .quatre__texte { max-width: 48ch; color: var(--texte-faible); }
+
+  .quatre__nav { margin-top: var(--e-7); }
+  .quatre__cle { color: var(--graphite); margin-bottom: var(--e-3); }
+  .quatre__nav ul { list-style: none; border-top: 1px solid var(--trait); }
+  .quatre__nav a {
+    display: grid;
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.4fr);
+    gap: var(--e-4);
+    align-items: baseline;
+    padding: var(--e-3) 0;
+    border-bottom: 1px solid var(--trait);
+    text-decoration: none;
+    transition: padding-left var(--d-normal) var(--e-sortie);
+  }
+  .quatre__nav a:hover { padding-left: var(--e-3); }
+  @media (max-width: 44rem) { .quatre__nav a { grid-template-columns: 1fr; gap: 0.15rem; } }
+  .quatre__nom { font-weight: 700; }
+  .quatre__q { font-size: var(--t-petit); color: var(--texte-faible); }
+
+  .quatre__portes { display: flex; flex-wrap: wrap; gap: var(--e-3); margin-top: var(--e-6); }
+</style>

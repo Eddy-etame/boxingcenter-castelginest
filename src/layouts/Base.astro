@@ -1,0 +1,209 @@
+---
+import '../styles/jetons.css';
+import '../styles/base.css';
+import Entete from '../components/Entete.astro';
+import PiedDePage from '../components/PiedDePage.astro';
+import Parcours from '../components/Parcours.astro';
+import { route, type RouteId } from '../data/routes';
+import { SITE, CONTACT, DESTINATION, LIMITROPHES } from '../data/verite';
+import { OFFRES } from '../data/offres';
+import { AIRE_SERVIE } from '../data/communes';
+import { ROLES } from '../data/medias';
+import { DOIT_BLOQUER_LES_ROBOTS } from '../lib/environnement';
+import { derniereModification, fichierDeRoute } from '../lib/dates';
+
+interface Props {
+  page: RouteId;
+  /** renseigne le parcours : visiter une page de discipline EST une décision */
+  discipline?: 'boxe-anglaise' | 'mma' | 'boxe-pieds-poings' | 'boxe-enfants' | 'preparation-physique';
+  /** image de partage social, dans /public/photos */
+  ogPhoto?: string;
+  /** questions RÉELLEMENT visibles sur la page — jamais de FAQ cachée */
+  faq?: readonly { titre: string; texte: string }[];
+}
+
+const { page, discipline, ogPhoto = ROLES.hero, faq } = Astro.props;
+const r = route(page);
+const canonique = new URL(r.chemin, SITE.origine).href;
+const og = new URL(`/photos/${ogPhoto}-1440.jpg`, SITE.origine).href;
+
+/**
+ * JSON-LD — il confirme le HTML visible, il n'ajoute jamais un fait que la
+ * page ne dit pas. Aucun `LocalBusiness` pour la ville du site : ce serait déclarer un
+ * établissement qui n'existe pas. Le club, lui, est une entité réelle, avec
+ * son adresse, ses horaires et ses disciplines publiées.
+ */
+const donnees = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'WebSite',
+      '@id': `${SITE.origine}/#site`,
+      url: SITE.origine + '/',
+      name: SITE.nom,
+      inLanguage: SITE.langue,
+      publisher: { '@id': `${SITE.origine}/#organisation` },
+    },
+    {
+      '@type': 'Organization',
+      '@id': `${SITE.origine}/#organisation`,
+      name: 'Boxing Center',
+      url: SITE.origine + '/',
+      telephone: CONTACT.telephone.valeur,
+      email: CONTACT.email.valeur,
+      sameAs: [DESTINATION.site],
+      subOrganization: [
+        {
+          '@type': 'SportsActivityLocation',
+          '@id': `${DESTINATION.site}#club`,
+          name: DESTINATION.nom,
+          url: DESTINATION.site,
+          telephone: DESTINATION.telephone,
+          address: {
+            '@type': 'PostalAddress',
+            streetAddress: DESTINATION.adresse.split(',')[0],
+            postalCode: DESTINATION.codePostal,
+            addressLocality: DESTINATION.ville,
+            addressRegion: SITE.departement,
+            addressCountry: 'FR',
+          },
+          /* Ce club publie des plannings, pas une amplitude d'ouverture. On
+             n'annonce donc aucune heure : une heure inventée enverrait
+             quelqu'un devant une porte fermée. */
+          ...(DESTINATION.ouverture && DESTINATION.fermeture
+            ? {
+                openingHoursSpecification: {
+                  '@type': 'OpeningHoursSpecification',
+                  dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+                  opens: DESTINATION.ouverture,
+                  closes: DESTINATION.fermeture,
+                },
+              }
+            : {}),
+          /* Les intitulés réellement publiés par le club, pas une liste type. */
+          sport: OFFRES.map((o) => o.intitule),
+        },
+      ],
+      /* Le territoire desservi : la ville, ses limitrophes, et chaque
+         commune qui a sa propre page sur ce site. */
+      areaServed: [
+        {
+          '@type': 'City',
+          name: SITE.ville,
+          postalCode: SITE.codePostal,
+          containedInPlace: { '@type': 'AdministrativeArea', name: SITE.departement },
+        },
+        ...[...new Set([...LIMITROPHES.map((c) => c.nom), ...AIRE_SERVIE])].map((nom) => ({
+          '@type': 'City',
+          name: nom,
+          containedInPlace: { '@type': 'AdministrativeArea', name: SITE.departement },
+        })),
+      ],
+    },
+    {
+      '@type': 'WebPage',
+      '@id': `${canonique}#page`,
+      url: canonique,
+      name: r.titre,
+      description: r.description,
+      isPartOf: { '@id': `${SITE.origine}/#site` },
+      inLanguage: SITE.langue,
+      about: { '@id': `${SITE.origine}/#organisation` },
+      primaryImageOfPage: og,
+      dateModified: derniereModification(fichierDeRoute(r.chemin)),
+    },
+    ...(page === 'accueil'
+      ? []
+      : [
+          {
+            '@type': 'BreadcrumbList',
+            '@id': `${canonique}#fil`,
+            itemListElement: [
+              { '@type': 'ListItem', position: 1, name: 'Accueil', item: `${SITE.origine}/` },
+              { '@type': 'ListItem', position: 2, name: r.nav, item: canonique },
+            ],
+          },
+        ]),
+    ...(faq?.length
+      ? [
+          {
+            '@type': 'FAQPage',
+            '@id': `${canonique}#faq`,
+            mainEntity: faq.map((q) => ({
+              '@type': 'Question',
+              name: q.titre,
+              acceptedAnswer: { '@type': 'Answer', text: q.texte },
+            })),
+          },
+        ]
+      : []),
+  ],
+};
+---
+
+<!doctype html>
+<html lang="fr" class="no-js">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>{r.titre}</title>
+    <meta name="description" content={r.description} />
+    <link rel="canonical" href={canonique} />
+
+    {/* Un aperçu Vercel ne doit jamais concurrencer le domaine réel. */}
+    {DOIT_BLOQUER_LES_ROBOTS ? (
+      <meta name="robots" content="noindex, nofollow" />
+    ) : (
+      !r.index && <meta name="robots" content="noindex, follow" />
+    )}
+
+    <meta name="geo.region" content="FR-31" />
+    <meta name="geo.placename" content={`${SITE.ville}, ${SITE.departement}`} />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={SITE.nom} />
+    <meta property="og:locale" content="fr_FR" />
+    <meta property="og:title" content={r.titre} />
+    <meta property="og:description" content={r.description} />
+    <meta property="og:url" content={canonique} />
+    <meta property="og:image" content={og} />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <meta name="theme-color" content="#f3efe6" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/logo.png" sizes="any" />
+
+    <!-- Les deux fontes du premier écran. Le mono suit. -->
+    <link rel="preload" href="/fonts/bricolage-grotesque-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/instrument-sans-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin />
+
+    <!-- Retire .no-js avant le premier rendu : pas de scintillement. -->
+    <script is:inline>
+      document.documentElement.classList.remove('no-js');
+    </script>
+
+    <script type="application/ld+json" set:html={JSON.stringify(donnees)} />
+  </head>
+
+  <body data-discipline={discipline}>
+    <a class="saut" href="#contenu">Aller au contenu</a>
+
+    <Entete actuelle={page} />
+    <Parcours />
+
+    <main id="contenu">
+      <slot />
+    </main>
+
+    <PiedDePage />
+
+    <script>
+      import { demarrer } from '../scripts/parcours';
+      import { demarrerMouvement } from '../scripts/mouvement';
+
+      demarrer();
+      demarrerMouvement();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,177 @@
+---
+/**
+ * PIED DE PAGE — la carte du site, et la fiche du club.
+ *
+ * Il porte trois choses qu'aucune autre surface ne porte : l'adresse réelle
+ * du club, les liens vers ses pages à jour, et le territoire desservi.
+ * Les ancres nomment leur destination — « Boxe anglaise près de Muret », pas
+ * « en savoir plus ».
+ */
+import { MENU, LIENS_CLUB, route } from '../data/routes';
+import { SITE, CONTACT, DESTINATION, LIMITROPHES, NOTE_SECTEUR } from '../data/verite';
+
+const annee = new Date().getFullYear();
+---
+
+<footer class="pied section encre" aria-labelledby="t-pied">
+  <div class="enveloppe">
+    <h2 id="t-pied" class="vh">Informations et plan du site</h2>
+
+    <div class="pied__haut">
+      <p class="pied__phrase">
+        <span class="pied__insiste">Boxing Center accueille les {SITE.gentile}</span>
+        dans son club de {DESTINATION.ville}&nbsp;: boxe anglaise, MMA, pieds-poings,
+        grappling et boxe enfants, {DESTINATION.horaires.valeur}.
+      </p>
+
+      <a class="pied__club" href={DESTINATION.site} rel="noopener">
+        <span class="pied__club-nom">{DESTINATION.nom}</span>
+        <span class="pied__club-adresse">{DESTINATION.adresse}</span>
+        <span class="mono pied__club-hote">{new URL(DESTINATION.site).hostname}<span aria-hidden="true"> ↗</span></span>
+      </a>
+    </div>
+
+    <div class="pied__grille">
+      <nav aria-label="Pages du site">
+        <p class="mono pied__cle">Le site</p>
+        <ul>
+          {MENU.map((r) => (
+            <li><a class="lien" href={r.chemin}>{r.nav}{r.id !== 'accueil' && r.id !== 'contact' && r.id !== 'ta-seance' ? ` près de ${SITE.ville}` : ''}</a></li>
+          ))}
+          <li><a class="lien" href={route('premiere-seance').chemin}>Première séance, débutants</a></li>
+        </ul>
+      </nav>
+
+      <nav aria-label="Chez le club">
+        <p class="mono pied__cle">Chez le club</p>
+        <ul>
+          {LIENS_CLUB.map((l) => (
+            <li><a class="lien" href={l.href} rel="noopener">{l.nav} {DESTINATION.nomCourt} ↗</a></li>
+          ))}
+          <li><a class="lien" href={DESTINATION.activites} rel="noopener">Les neuf disciplines ↗</a></li>
+          <li><a class="lien" href={DESTINATION.site} rel="noopener">Le club en entier ↗</a></li>
+        </ul>
+      </nav>
+
+      <div>
+        <p class="mono pied__cle">Nous joindre</p>
+        <ul>
+          <li><a class="lien" href={`tel:${CONTACT.telephoneLien.valeur}`}>{CONTACT.telephone.valeur}</a></li>
+          <li><a class="lien" href={`mailto:${CONTACT.email.valeur}`}>{CONTACT.email.valeur}</a></li>
+          <li><a class="lien" href={route('contact').chemin}>Le formulaire</a></li>
+        </ul>
+        <p class="mono pied__cle pied__cle--2">Le club</p>
+        <ul>
+          <li><a class="lien" href={`tel:${DESTINATION.telephoneLien}`}>{DESTINATION.telephone}</a></li>
+          <li class="pied__horaires">{DESTINATION.horairesCourt}</li>
+        </ul>
+      </div>
+    </div>
+
+    {/* Le territoire : la ville et ses limitrophes. Utile au lecteur, lu par
+          les robots, et vrai — ce sont les communes qui la touchent. */}
+    <div class="pied__secteur">
+      <p class="mono pied__cle">Depuis {SITE.ville} et ses communes voisines</p>
+      <p class="pied__communes">
+        {LIMITROPHES.map((c, i) => (
+          <>
+            {i > 0 && <span aria-hidden="true"> · </span>}
+            <span class={c.note ? 'pied__commune pied__commune--cle' : 'pied__commune'} title={c.note}>{c.nom}</span>
+          </>
+        ))}
+      </p>
+      {NOTE_SECTEUR && <p class="pied__note">{NOTE_SECTEUR}</p>}
+    </div>
+
+    <div class="pied__bas">
+      <p class="mono">© {annee} Boxing Center · {SITE.origine.replace('https://', '')}</p>
+      <ul class="pied__legal">
+        <li><a class="lien" href={route('mentions-legales').chemin}>Mentions légales</a></li>
+        <li><a class="lien" href={route('confidentialite').chemin}>Confidentialité</a></li>
+      </ul>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .pied { padding-block: var(--e-9) var(--e-6); }
+
+  .pied__haut {
+    display: grid;
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+    gap: var(--e-6) var(--e-8);
+    align-items: start;
+    padding-bottom: var(--e-7);
+    border-bottom: 1px solid var(--trait);
+  }
+  @media (max-width: 60rem) { .pied__haut { grid-template-columns: 1fr; } }
+
+  .pied__phrase {
+    font-size: var(--t-lead);
+    line-height: 1.45;
+    max-width: 46ch;
+    color: var(--texte-faible);
+  }
+  /* Le soulignement cuivre porte l'affirmation, jamais une absence. */
+  .pied__insiste {
+    color: var(--papier);
+    font-weight: 600;
+    box-shadow: inset 0 -0.35em 0 var(--signal-voile);
+  }
+
+  .pied__club {
+    display: grid;
+    gap: 0.3rem;
+    padding: var(--e-5);
+    border: 1px solid var(--trait);
+    border-radius: var(--rayon-1);
+    text-decoration: none;
+    transition: border-color var(--d-rapide) var(--e-mecanique),
+      transform var(--d-normal) var(--e-sortie);
+  }
+  .pied__club:hover { border-color: var(--signal-texte); transform: translateY(-2px); }
+  .pied__club-nom {
+    font-family: var(--police-titre);
+    font-size: var(--t-h3);
+    font-weight: 700;
+    letter-spacing: -0.015em;
+  }
+  .pied__club-adresse { font-size: var(--t-petit); color: var(--texte-faible); }
+  .pied__club-hote { color: var(--signal-texte); }
+
+  .pied__grille {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
+    gap: var(--e-7) var(--e-6);
+    padding-block: var(--e-7);
+  }
+  .pied__grille ul { list-style: none; display: grid; gap: var(--e-2); }
+  .pied__grille a, .pied__horaires { font-size: var(--t-petit); }
+  .pied__cle { color: var(--graphite); margin-bottom: var(--e-3); }
+  .pied__cle--2 { margin-top: var(--e-5); }
+  .pied__horaires { color: var(--texte-faible); }
+
+  .pied__secteur {
+    padding-block: var(--e-6);
+    border-top: 1px solid var(--trait);
+  }
+  .pied__communes {
+    max-width: 72ch;
+    font-size: var(--t-petit);
+    color: var(--texte-faible);
+    margin-bottom: var(--e-3);
+  }
+  .pied__commune--cle { color: var(--signal-texte); }
+  .pied__note { font-size: var(--t-micro); color: var(--graphite); max-width: 60ch; }
+
+  .pied__bas {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: var(--e-4);
+    padding-top: var(--e-5);
+    border-top: 1px solid var(--trait);
+    color: var(--graphite);
+  }
+  .pied__legal { display: flex; gap: var(--e-5); list-style: none; font-size: var(--t-petit); }
+</style>

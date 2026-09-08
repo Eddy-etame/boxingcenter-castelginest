@@ -1,0 +1,125 @@
+---
+import Base from '../layouts/Base.astro';
+import { CONTACT, SITE, DESTINATION } from '../data/verite';
+---
+
+<Base page="mentions-legales">
+  <section class="section legal" aria-labelledby="t-legal">
+    <div class="enveloppe legal__inner">
+      <nav class="fil mono" aria-label="Fil d’Ariane">
+        <a href="/">Accueil</a><span aria-hidden="true">/</span>
+        <span aria-current="page">Mentions légales</span>
+      </nav>
+
+      <h1 id="t-legal">Mentions légales</h1>
+
+      {/* Le SIRET et le directeur de publication ne figurent sur aucune source
+          publique du réseau. On ne les invente pas : un identifiant erroné dans
+          des mentions légales est pire que son absence. */}
+      <div class="avis mono" role="note">
+        Deux champs restent à renseigner avant la mise en ligne&nbsp;: le numéro
+        SIRET et le nom du directeur de la publication.
+      </div>
+
+      <h2>Éditeur du site</h2>
+      <p>
+        Le site <strong>{SITE.origine.replace('https://', '')}</strong> est édité par
+        Boxing Center, qui exploite le club de {DESTINATION.ville}.
+      </p>
+      <dl class="fiche">
+        <div><dt>Dénomination</dt><dd>Boxing Center</dd></div>
+        <div><dt>Établissement</dt><dd>{DESTINATION.adresse}</dd></div>
+        <div><dt>Téléphone</dt><dd><a class="lien" href={`tel:${CONTACT.telephoneLien.valeur}`}>{CONTACT.telephone.valeur}</a></dd></div>
+        <div><dt>Courriel</dt><dd><a class="lien" href={`mailto:${CONTACT.email.valeur}`}>{CONTACT.email.valeur}</a></dd></div>
+        <div><dt>SIRET</dt><dd class="attente">à renseigner</dd></div>
+        <div><dt>Directeur de la publication</dt><dd class="attente">à renseigner</dd></div>
+      </dl>
+
+      <h2>Le club</h2>
+      <dl class="fiche">
+        <div>
+          <dt>{DESTINATION.nomCourt}</dt>
+          <dd>
+            {DESTINATION.adresse}<br />
+            <a class="lien" href={`tel:${DESTINATION.telephoneLien}`}>{DESTINATION.telephone}</a> —
+            {' '}<a class="lien" href={DESTINATION.site} rel="noopener">{new URL(DESTINATION.site).hostname}</a>
+          </dd>
+        </div>
+        <div><dt>Horaires d’accueil</dt><dd>{DESTINATION.horaires.valeur}</dd></div>
+      </dl>
+
+      <h2>Hébergement</h2>
+      <p>
+        Le site est hébergé par <strong>Vercel Inc.</strong>, 340 S Lemon Ave #4133,
+        Walnut, CA 91789, États-Unis — <a class="lien" href="https://vercel.com" rel="noopener">vercel.com</a>.
+      </p>
+
+      <h2>Nature du site</h2>
+      <p>
+        Ce site est un point d’entrée éditorial destiné aux habitants de {SITE.ville}
+        et de ses environs. Les cours ont lieu dans l’établissement Boxing Center
+        indiqué ci-dessus, situé à proximité de {SITE.ville}, qui dispose de son
+        propre site.
+      </p>
+
+      <h2>Propriété intellectuelle</h2>
+      <p>
+        La marque, le logo et les éléments d’identité Boxing Center sont la propriété
+        de leurs titulaires. Les photographies présentées sur ce site sont la
+        propriété de Boxing Center&nbsp;; toute reproduction sans autorisation est
+        interdite.
+      </p>
+
+      <h2>Liens sortants</h2>
+      <p>
+        Ce site renvoie vers le site officiel du club Boxing Center de
+        {' '}{DESTINATION.ville}. Le contenu de ce site relève de son éditeur.
+      </p>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .legal__inner { max-width: 46rem; }
+  .fil { display: flex; gap: var(--e-2); margin-bottom: var(--e-5); }
+  .fil a { color: var(--graphite); text-decoration: none; }
+  .fil a:hover { color: var(--signal-texte); }
+  .fil span[aria-current] { color: var(--encre-pale); }
+
+  .legal h1 { margin-bottom: var(--e-6); }
+  .legal h2 {
+    font-size: var(--t-h3);
+    margin-top: var(--e-7);
+    margin-bottom: var(--e-3);
+    padding-top: var(--e-4);
+    border-top: 1px solid var(--trait);
+  }
+  .legal p { color: var(--texte-faible); max-width: 64ch; }
+  .legal strong { color: var(--encre); font-weight: 600; }
+
+  /* Ce qui manque est signalé, pas masqué. */
+  .avis {
+    padding: var(--e-4);
+    margin-bottom: var(--e-6);
+    border-left: 3px solid var(--signal-texte);
+    background: var(--signal-voile);
+    color: var(--encre);
+    text-transform: none;
+    letter-spacing: 0.03em;
+    line-height: 1.6;
+  }
+
+  .fiche { display: grid; margin: var(--e-4) 0 0; }
+  .fiche > div {
+    display: grid;
+    grid-template-columns: 14rem 1fr;
+    gap: var(--e-4);
+    padding: var(--e-3) 0;
+    border-top: 1px solid var(--trait-faible);
+    font-size: var(--t-petit);
+  }
+  @media (max-width: 40rem) { .fiche > div { grid-template-columns: 1fr; gap: 0.25rem; } }
+  .fiche dt { color: var(--graphite); }
+  .fiche dd { margin: 0; }
+  .attente { color: var(--signal-texte); font-style: italic; }
+</style>

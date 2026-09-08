@@ -1,0 +1,167 @@
+---
+/**
+ * TA SÉANCE — l'adresse à part entière du moteur.
+ *
+ * Sur l'accueil, le moteur est une section. Ici il est la page : c'est ce que
+ * quelqu'un cherche quand il tape « quel cours de boxe près de Muret » ou
+ * « planning boxe Muret » — il ne compare pas des clubs, il veut savoir quoi
+ * viser et à quel moment.
+ */
+import Base from '../layouts/Base.astro';
+import Seance from '../components/Seance.astro';
+import Photo from '../components/Photo.astro';
+import { DESTINATION, SITE } from '../data/verite';
+import { OFFRES } from '../data/offres';
+import { ROLES } from '../data/medias';
+import { route } from '../data/routes';
+
+const QUESTIONS = [
+  {
+    titre: `Quel créneau choisir quand on vient de ${SITE.ville} ?`,
+    texte:
+      "Celui que tu tiendras en novembre, pas celui qui t’arrange cette semaine. Le midi est le créneau le plus calme du club : c’est le plus simple pour débuter sans public. Le soir, il y a du monde, et c’est ce qui fait progresser. Le samedi convient aux semaines trop pleines.",
+  },
+  {
+    titre: 'Où sont les horaires exacts de chaque cours ?',
+    texte:
+      "Sur le planning du club, et nulle part ailleurs. On ne le recopie pas ici : une grille recopiée devient fausse à la première modification, et une information fausse sur un horaire fait perdre un déplacement pour rien. Ce site t’aide à savoir quoi chercher ; le club te dit quand.",
+  },
+  {
+    titre: 'Combien de séances par semaine pour progresser ?',
+    texte:
+      "Deux suffisent à sentir une différence sur le souffle en un mois, et sur le geste en deux. Une seule séance, tenue toute l’année, vaut mieux que trois abandonnées en mars — c’est la raison pour laquelle le choix du créneau compte plus que l’intensité qu’on se promet le premier jour.",
+  },
+  {
+    titre: 'Je peux changer de discipline en cours d’année ?',
+    texte:
+      "C’est une question d’abonnement, et elle appartient au club. Beaucoup de pratiquants combinent deux créneaux — une séance technique et une séance de préparation physique, par exemple. Pose la question au club avant de t’inscrire, il te dira ce que sa formule permet.",
+  },
+];
+---
+
+<Base page="ta-seance" ogPhoto={ROLES.calme} faq={QUESTIONS}>
+  <section class="section tete" aria-labelledby="t-page">
+    <div class="enveloppe tete__inner">
+      <nav class="fil mono" aria-label="Fil d’Ariane">
+        <a href="/">Accueil</a><span aria-hidden="true">/</span>
+        <span aria-current="page">Ta séance</span>
+      </nav>
+      <h1 id="t-page">Quelle séance viser, et quand y aller.</h1>
+      <p class="tete__chapeau">
+        Depuis {SITE.ville}, le club est connu d’avance&nbsp;: {DESTINATION.nom},
+        Ce qui reste à décider, c’est la discipline et le
+        créneau — et c’est exactement ce qui fait qu’on tient toute l’année ou
+        qu’on abandonne au premier mois difficile.
+      </p>
+    </div>
+  </section>
+
+  <Seance titre={'Deux réponses,\net tu sais quoi chercher.'} />
+
+  {/* Les neuf intitulés, en clair : c'est la page qui les porte tous. */}
+  <section class="section tout" aria-labelledby="t-tout">
+    <div class="enveloppe">
+      <p class="cartouche"><span class="cartouche__num">—</span><span>Tout ce qui se pratique</span></p>
+      <div class="tout__tete">
+        <h2 id="t-tout">Les neuf créneaux publiés par le club.</h2>
+        <p class="lead faible">
+          Quel que soit ton choix, c’est la même adresse et le même planning. Voilà
+          la liste complète, pour que tu saches ce qui existe avant de décider.
+        </p>
+      </div>
+      <ul class="tout__liste">
+        {OFFRES.map((o, i) => (
+          <li class="reveler" style={`--retard:${i * 40}ms`}>
+            <span class="mono tout__num">{String(i + 1).padStart(2, '0')}</span>
+            <span class="tout__nom">{o.intitule}</span>
+            <span class="tout__detail">{o.detail}</span>
+          </li>
+        ))}
+      </ul>
+      <div class="tout__portes">
+        <a class="bouton bouton--signal" href={DESTINATION.plannings} rel="noopener">
+          <span>Voir le planning du club</span><span class="fleche" aria-hidden="true">↗</span>
+        </a>
+        <a class="bouton" href={DESTINATION.tarifs} rel="noopener">
+          <span>Les tarifs</span><span class="fleche" aria-hidden="true">↗</span>
+        </a>
+        <a class="bouton" href={route('premiere-seance').chemin}>
+          <span>Ma première séance</span><span class="fleche" aria-hidden="true">→</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section creuse faq" aria-labelledby="t-faq">
+    <div class="enveloppe faq__inner">
+      <div>
+        <p class="cartouche"><span class="cartouche__num">—</span><span>Questions</span></p>
+        <h2 id="t-faq">Choisir son créneau, sans se tromper.</h2>
+        <Photo slug={ROLES.calme} sizes="(max-width: 62rem) 100vw, 30vw" ratio="4 / 3" class="faq__photo" />
+      </div>
+      <div class="faq__liste">
+        {QUESTIONS.map((q, i) => (
+          <details class="qr" open={i === 0}>
+            <summary><span class="qr__q">{q.titre}</span><span class="qr__signe" aria-hidden="true"></span></summary>
+            <p class="qr__r">{q.texte}</p>
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .tete__inner { max-width: 60rem; }
+  .fil { display: flex; gap: var(--e-2); margin-bottom: var(--e-5); }
+  .fil a { color: var(--graphite); text-decoration: none; }
+  .fil a:hover { color: var(--signal-texte); }
+  .fil span[aria-current] { color: var(--encre-pale); }
+  .tete h1 { max-width: 18ch; margin-bottom: var(--e-5); }
+  .tete__chapeau {
+    max-width: 62ch;
+    padding-left: var(--e-5);
+    border-left: 2px solid var(--signal);
+    font-size: var(--t-lead);
+    line-height: 1.5;
+    color: var(--texte-faible);
+  }
+
+  .tout__tete {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--e-5) var(--e-8);
+    align-items: end;
+    margin-bottom: var(--e-7);
+  }
+  @media (max-width: 56rem) { .tout__tete { grid-template-columns: 1fr; } }
+  .tout__tete h2 { max-width: 18ch; }
+  .tout__tete .lead { max-width: 46ch; }
+
+  .tout__liste { list-style: none; border-top: 1px solid var(--trait); }
+  .tout__liste li {
+    display: grid;
+    grid-template-columns: 3rem minmax(12rem, 0.9fr) minmax(0, 2fr);
+    gap: var(--e-4);
+    align-items: baseline;
+    padding: var(--e-4) 0;
+    border-bottom: 1px solid var(--trait);
+  }
+  @media (max-width: 52rem) {
+    .tout__liste li { grid-template-columns: 2.5rem 1fr; }
+    .tout__detail { grid-column: 2 / -1; }
+  }
+  .tout__num { color: var(--signal-texte); font-weight: 700; }
+  .tout__nom { font-weight: 700; font-size: var(--t-base); }
+  .tout__detail { font-size: var(--t-petit); color: var(--texte-faible); }
+  .tout__portes { display: flex; flex-wrap: wrap; gap: var(--e-3); margin-top: var(--e-7); }
+
+  .faq__inner {
+    display: grid;
+    grid-template-columns: 0.85fr 1.15fr;
+    gap: var(--e-8);
+    align-items: start;
+  }
+  @media (max-width: 62rem) { .faq__inner { grid-template-columns: 1fr; gap: var(--e-6); } }
+  .faq h2 { max-width: 16ch; margin-bottom: var(--e-6); }
+</style>

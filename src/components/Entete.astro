@@ -1,0 +1,363 @@
+---
+/**
+ * EN-TÊTE.
+ *
+ * Plannings et Tarifs ne sont pas des pages de ce site : ce sont des liens
+ * directs vers les pages réelles du club, marqués d'une flèche sortante. Un
+ * planning recopié devient faux à la première modification ; on envoie donc à
+ * la source, et on le dit.
+ */
+import { MENU, MENU_SIMPLE, PROMO, LIENS_CLUB, route, type RouteId } from '../data/routes';
+import { SITE, CONTACT, DESTINATION } from '../data/verite';
+
+interface Props { actuelle: RouteId }
+const { actuelle } = Astro.props;
+---
+
+<header class="entete" data-entete>
+  <div class="enveloppe entete__inner">
+    <a class="entete__marque" href="/" aria-label={`${SITE.nom} — accueil`}>
+      <img src="/logo-blanc.png" alt="" width="132" height="44" />
+      <span class="entete__depuis mono">depuis {SITE.ville}</span>
+    </a>
+
+    <nav class="entete__nav" aria-label="Navigation principale">
+      <ul>
+        {MENU_SIMPLE.filter((r) => r.id !== 'accueil').map((r) => (
+          <li>
+            <a
+              href={r.chemin}
+              aria-current={actuelle === r.id ? 'page' : undefined}
+              class="entete__lien"
+            >
+              {r.nav}
+            </a>
+          </li>
+        ))}
+        {LIENS_CLUB.map((l) => (
+          <li>
+            <a class="entete__lien entete__lien--sortant" href={l.href} rel="noopener" title={l.titre}>
+              {l.nav}<span class="entete__fleche" aria-hidden="true">↗</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+
+    {PROMO && (
+      <a
+        class="entete__pastille mono"
+        href={PROMO.chemin}
+        aria-current={actuelle === PROMO.id ? 'page' : undefined}
+      >
+        <span class="entete__bus" aria-hidden="true"></span>
+        <span>{PROMO.nav}</span>
+      </a>
+    )}
+
+    <a class="entete__tel mono" href={`tel:${CONTACT.telephoneLien.valeur}`}>
+      {CONTACT.telephone.valeur}
+    </a>
+
+    <button class="entete__bascule" type="button" data-menu aria-expanded="false" aria-controls="menu-mobile">
+      <span class="vh">Ouvrir le menu</span>
+      <span class="entete__barres" aria-hidden="true"></span>
+    </button>
+  </div>
+
+  {/* Le menu mobile : un <dialog> natif, fermable à l'échap sans script. */}
+  <div class="menu" id="menu-mobile" data-menu-panneau hidden>
+    <div class="enveloppe menu__inner">
+      <ul class="menu__liste">
+        {MENU.map((r) => (
+          <li>
+            <a href={r.chemin} aria-current={actuelle === r.id ? 'page' : undefined}>
+              <span class="menu__nom">{r.nav}</span>
+              <span class="menu__q mono">{r.question}</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+      <ul class="menu__club">
+        <li class="mono menu__cle">Chez le club</li>
+        {LIENS_CLUB.map((l) => (
+          <li><a class="lien" href={l.href} rel="noopener">{l.nav} {DESTINATION.nomCourt} ↗</a></li>
+        ))}
+        <li><a class="lien" href={DESTINATION.activites} rel="noopener">Toutes les activités ↗</a></li>
+      </ul>
+      <a class="bouton bouton--signal bouton--plein" href={route('contact').chemin}>
+        <span>Poser ma question</span>
+        <span class="fleche" aria-hidden="true">→</span>
+      </a>
+    </div>
+  </div>
+</header>
+
+<style>
+  /* L'en-tête est en encre : c'est la barre de titre de la planche, et elle
+     tranche franchement sur le papier. Le logo y passe en blanc. */
+  .entete {
+    position: sticky;
+    top: 0;
+    z-index: var(--z-entete);
+    background: color-mix(in srgb, var(--encre) 94%, transparent);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(243, 239, 230, 0.14);
+    color: var(--papier);
+    transition: box-shadow var(--d-normal) var(--e-mecanique);
+  }
+  .entete[data-compresse] { box-shadow: 0 10px 30px -22px var(--nav-ombre); }
+
+  .entete__inner {
+    display: flex;
+    align-items: center;
+    gap: var(--e-5);
+    min-height: 4.25rem;
+  }
+
+  .entete :focus-visible { outline-color: var(--nav-accent); }
+
+  .entete__marque {
+    display: flex;
+    align-items: baseline;
+    gap: var(--e-3);
+    text-decoration: none;
+    flex: none;
+  }
+  .entete__marque img { height: 1.85rem; width: auto; }
+  .entete__depuis {
+    /* Le fond de l'en-tête est de l'encre à 94 % sur du papier, soit un
+       navy légèrement éclairci : le graphite de la polarité encre y tombe à
+       4,28:1. Cette teinte-ci donne 5,04:1, mesuré sur le fond composé. */
+    color: #9a9dba;
+    letter-spacing: 0.14em;
+  }
+  @media (max-width: 30rem) { .entete__depuis { display: none; } }
+
+  .entete__nav { margin-left: auto; }
+  .entete__nav ul {
+    display: flex;
+    align-items: center;
+    gap: var(--e-5);
+    list-style: none;
+  }
+  @media (max-width: 68rem) { .entete__nav { display: none; } }
+
+  .entete__lien {
+    position: relative;
+    font-size: var(--t-petit);
+    font-weight: 500;
+    text-decoration: none;
+    padding-block: 0.35rem;
+    white-space: nowrap;
+  }
+  /* Le soulignement se trace de gauche à droite : la même grammaire que le plan. */
+  .entete__lien::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 1.5px;
+    background: var(--nav-accent);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform var(--d-normal) var(--e-sortie);
+  }
+  .entete__lien:hover::after,
+  .entete__lien[aria-current='page']::after { transform: scaleX(1); }
+  .entete__lien[aria-current='page'] { color: var(--nav-accent); }
+
+  .entete__lien--sortant { color: var(--nav-faible); }
+  .entete__fleche { font-size: 0.8em; margin-left: 0.25em; }
+
+  /* La pastille Transports : elle répond à l'objection « c'est loin » avant
+     qu'elle soit formulée, donc elle ne se range pas dans la liste. Le point
+     cuivre avance en boucle lente — un véhicule sur sa ligne. */
+  .entete__pastille {
+    flex: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.4rem 0.95rem;
+    border: 1px solid var(--nav-accent);
+    border-radius: 999px;
+    color: var(--nav-accent);
+    text-decoration: none;
+    font-size: var(--t-micro);
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    transition:
+      background var(--d-rapide) var(--e-mecanique),
+      color var(--d-rapide) var(--e-mecanique);
+  }
+  .entete__pastille:hover,
+  .entete__pastille[aria-current='page'] { background: var(--nav-accent); color: var(--nav-fonce); }
+
+  /* Le fil et le véhicule sont deux couches distinctes. L'opacité vivait
+     sur le parent : elle pâlissait le point en même temps que le fil, et le
+     véhicule ne se lisait plus. Le fil s'efface tout seul, le point reste
+     plein, et il traverse toute la largeur. */
+  .entete__bus {
+    position: relative;
+    flex: none;
+    width: 1.75rem;
+    height: 0.5rem;
+  }
+  .entete__bus::before {
+    content: '';
+    position: absolute;
+    inset-inline: 0;
+    top: calc(50% - 1px);
+    height: 2px;
+    border-radius: 1px;
+    background: currentColor;
+    opacity: 0.4;
+  }
+  .entete__bus::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    background: currentColor;
+    animation: rouler 5.2s var(--e-mecanique) infinite;
+  }
+  /* Le point ne disparaît jamais : à l'arrêt comme en mouvement, la pastille
+     doit se lire comme un arrêt posé sur une ligne. Il marque un temps à
+     chaque extrémité, puis repart. */
+  @keyframes rouler {
+    0%, 8% { transform: translateX(0); }
+    46%, 54% { transform: translateX(1.25rem); }
+    92%, 100% { transform: translateX(0); }
+  }
+  @media (prefers-reduced-motion: reduce) { .entete__bus::after { animation: none; } }
+  @media (max-width: 62rem) { .entete__pastille { display: none; } }
+
+  .entete__tel {
+    flex: none;
+    text-decoration: none;
+    color: var(--papier);
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    padding: 0.4rem 0.7rem;
+    border: 1px solid rgba(243, 239, 230, 0.22);
+    border-radius: var(--rayon-1);
+    transition: border-color var(--d-rapide) var(--e-mecanique), color var(--d-rapide) var(--e-mecanique);
+  }
+  .entete__tel:hover { border-color: var(--nav-accent); color: var(--nav-accent); }
+  @media (max-width: 52rem) { .entete__tel { display: none; } }
+
+  .entete__bascule {
+    display: none;
+    flex: none;
+    width: 2.75rem;
+    height: 2.75rem;
+    margin-left: auto;
+    padding: 0;
+    background: transparent;
+    border: 1px solid rgba(243, 239, 230, 0.22);
+    border-radius: var(--rayon-1);
+    cursor: pointer;
+    position: relative;
+  }
+  @media (max-width: 68rem) { .entete__bascule { display: block; } }
+
+  .entete__barres,
+  .entete__barres::before,
+  .entete__barres::after {
+    position: absolute;
+    left: 50%;
+    width: 1.05rem;
+    height: 1.5px;
+    background: var(--papier);
+    transform: translateX(-50%);
+    transition: transform var(--d-normal) var(--e-sortie), opacity var(--d-rapide);
+  }
+  .entete__barres { top: 50%; margin-top: -0.75px; }
+  .entete__barres::before { content: ''; top: -5px; }
+  .entete__barres::after { content: ''; top: 5px; }
+  [aria-expanded='true'] .entete__barres { background: transparent; }
+  [aria-expanded='true'] .entete__barres::before { top: 0; transform: translateX(-50%) rotate(45deg); }
+  [aria-expanded='true'] .entete__barres::after { top: 0; transform: translateX(-50%) rotate(-45deg); }
+
+  /* ── Menu mobile ───────────────────────────────────────────────────── */
+  .menu {
+    position: fixed;
+    inset: 4.25rem 0 0;
+    z-index: var(--z-menu);
+    background: var(--encre);
+    color: var(--papier);
+    overflow-y: auto;
+    animation: entrer var(--d-normal) var(--e-sortie);
+  }
+  @keyframes entrer { from { opacity: 0; transform: translateY(-0.5rem); } }
+
+  .menu__inner { padding-block: var(--e-6) var(--e-8); }
+  .menu__liste { list-style: none; }
+  .menu__liste a {
+    display: grid;
+    gap: 0.15rem;
+    padding: var(--e-4) 0;
+    border-bottom: 1px solid rgba(243, 239, 230, 0.14);
+    text-decoration: none;
+  }
+  .menu__nom {
+    font-family: var(--police-titre);
+    font-size: var(--t-h3);
+    font-weight: 700;
+    letter-spacing: -0.015em;
+  }
+  .menu__q { text-transform: none; letter-spacing: 0.03em; color: var(--nav-gris); }
+  .menu__liste a[aria-current='page'] .menu__nom { color: var(--nav-accent); }
+
+  .menu__club { list-style: none; display: grid; gap: var(--e-2); margin: var(--e-6) 0; }
+  .menu__cle { color: var(--nav-gris); margin-bottom: var(--e-1); }
+  .menu__club a { font-size: var(--t-petit); }
+  .menu .lien:hover { color: var(--nav-accent); }
+  /* Dans le menu, le bouton cuivre reste lisible sur l'encre. */
+  .menu .bouton--signal { background: var(--nav-accent); border-color: var(--nav-accent); color: var(--encre); }
+  .menu .bouton--signal::before { background: var(--papier); }
+  .menu .bouton--signal:hover { color: var(--encre); }
+</style>
+
+<script>
+  const bouton = document.querySelector<HTMLButtonElement>('[data-menu]');
+  const panneau = document.querySelector<HTMLElement>('[data-menu-panneau]');
+  const entete = document.querySelector<HTMLElement>('[data-entete]');
+
+  if (bouton && panneau) {
+    const basculer = (ouvert: boolean) => {
+      bouton.setAttribute('aria-expanded', String(ouvert));
+      panneau.hidden = !ouvert;
+      document.documentElement.style.overflow = ouvert ? 'hidden' : '';
+      bouton.querySelector('.vh')!.textContent = ouvert ? 'Fermer le menu' : 'Ouvrir le menu';
+    };
+    bouton.addEventListener('click', () =>
+      basculer(bouton.getAttribute('aria-expanded') !== 'true')
+    );
+    // Échap ferme, et la navigation aussi : on ne laisse jamais un menu ouvert
+    // derrière une page qui a changé.
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && !panneau.hidden) { basculer(false); bouton.focus(); }
+    });
+    panneau.addEventListener('click', (e) => {
+      if ((e.target as HTMLElement).closest('a')) basculer(false);
+    });
+  }
+
+  // L'en-tête prend une ombre dès qu'on quitte le haut : il se détache du
+  // papier au lieu de flotter dessus sans raison.
+  if (entete) {
+    const obs = new IntersectionObserver(
+      ([e]) => entete.toggleAttribute('data-compresse', !e.isIntersecting),
+      { rootMargin: '0px 0px -100% 0px' }
+    );
+    const sentinelle = document.createElement('div');
+    document.body.prepend(sentinelle);
+    obs.observe(sentinelle);
+  }
+</script>

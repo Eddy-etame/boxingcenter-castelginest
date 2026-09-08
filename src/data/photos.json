@@ -1,0 +1,74 @@
+{
+  "club-boxe-castelginest": {
+    "lqip": "data:image/webp;base64,UklGRlQAAABXRUJQVlA4IEgAAACwAwCdASoUAA0APxF0sFAsJySisAgBgCIJZwAARogh6LAl7Q7ZgAD+2fNuATCaYXmhhbYDASqIrSLpCV4SiDs/pXoJwSGAAAA=",
+    "w": 6016,
+    "h": 4016,
+    "ratio": 1.498
+  },
+  "sparring-boxe-castelginest": {
+    "lqip": "data:image/webp;base64,UklGRnYAAABXRUJQVlA4IGoAAADQBACdASoUAB4APxF0slAsJySisAgBgCIJZwDN/CHVQYHqhdEhnLRKNCbplV94AAD+b0i+C2xnIf2t3fytJSY2VW2GuNtd1l+Xer6bIQzT9ftdlf3hplmr0DUAnfC1PyZRefdIRo5yQAAA",
+    "w": 3351,
+    "h": 5020,
+    "ratio": 0.6675
+  },
+  "ring-de-boxe-castelginest": {
+    "lqip": "data:image/webp;base64,UklGRnoAAABXRUJQVlA4IG4AAAAwBQCdASoUAB4APwlwq1ArpqOisAwBcCEJZQDGQCHXe4KQ/UGrOJPaAS+ATjTThv+jcAD+wCgLkqOQml6VeSxXty4sAi1G3m64gfBH85wawmlAHrQlgJvQEHJhxDdEC9tS4Z7Z7xdr+xTNnSAgAA==",
+    "w": 3237,
+    "h": 4849,
+    "ratio": 0.6676
+  },
+  "preparation-physique-castelginest": {
+    "lqip": "data:image/webp;base64,UklGRnYAAABXRUJQVlA4IGoAAADQBACdASoUAB4APxF+s1IsKKSisBgIAYAiCWkAAHuom9Jaa9f4PNWb7OgcGnNNQAD+p7PtMXpGACxx3jzfih5bPBq/13/PFuZiqlUaXLpU88RxJK0XDs7pINvJJBsKTM+au30aH9olGAAA",
+    "w": 3042,
+    "h": 4557,
+    "ratio": 0.6675
+  },
+  "sac-de-frappe-castelginest": {
+    "lqip": "data:image/webp;base64,UklGRoYAAABXRUJQVlA4IHoAAAAwBQCdASoUAB4APvFgp1AppaOit+gBMB4JYwDKADOpVWnwSFUuzIyXUuVx3IhusvWZgAD+owLq+lyXdhgcnVPVALeG2q69u7PyAdDpn3mveSyZsRISNm6ePS3f5uPdZbSiTkrPXBK7Jrn9IysG1woBIFX/zM6hJZTAAA==",
+    "w": 4016,
+    "h": 6016,
+    "ratio": 0.6676
+  },
+  "boxe-anglaise-castelginest": {
+    "lqip": "data:image/webp;base64,UklGRmgAAABXRUJQVlA4IFwAAAAwBACdASoUABQAPwlurlArpqQit/VYAXAhCWcAABbQmrb+M1lP4yd3ZTgA/uNLYGkEhkOovel4iQO0wHDnFZQD15fAhB7z9y30n3D6xLbIvUbupwd/Gdaw8gAAAA==",
+    "w": 4016,
+    "h": 4016,
+    "ratio": 1
+  },
+  "travail-aux-pattes-castelginest": {
+    "lqip": "data:image/webp;base64,UklGRnAAAABXRUJQVlA4IGQAAABQBQCdASoUABQAPxFss1AsJaSisBgMAYAiCWcAw6wPYzr7FynYdeDx/nNODEFJX7tBGAAA/ujwPQ8UFis616uofCuC3T51y68twHCJLxDiGwUxYb3A9J0JJtoTWexLjM8wa+oA",
+    "w": 4016,
+    "h": 4016,
+    "ratio": 1
+  },
+  "premiere-seance-castelginest": {
+    "lqip": "data:image/webp;base64,UklGRmgAAABXRUJQVlA4IFwAAADQBACdASoUABQAPxF8tFUsJySjKAgBgCIJZQDG9BDyehFH/1Jc69bP/CWHZP4fAAD+uSLcUe0oTCiwKI4fQRPLVJQnuzUpaDUL7SZo8s7I6VCDwkLCRfcgmC+kAA==",
+    "w": 4016,
+    "h": 4016,
+    "ratio": 1
+  },
+  "recuperation-boxe-castelginest": {
+    "lqip": "data:image/webp;base64,UklGRnwAAABXRUJQVlA4IHAAAADQBACdASoUAB4APxF6s1GsKCSisBgIAYAiCWUAwCg0b1TssCjOR4bKMiIrLX7uAAD+3MmHeRndz4tKTOX9ALAWMOM/oQKC2RCr8vyH9H+5e9ZI51q4ymC8LflhtNOTt2tYB61sPtJBRnVWD8mIAAAA",
+    "w": 4016,
+    "h": 6016,
+    "ratio": 0.6676
+  },
+  "encadrement-boxe-castelginest": {
+    "lqip": "data:image/webp;base64,UklGRnIAAABXRUJQVlA4IGYAAADQBACdASoUAB4APxF8s1IsKCSisBgIAYAiCWkAAB/PBYzNGMaIqPxl6tOs5ZroAAD77tlYHbtdB3u6IcBuNwlOGa5hxLbS4PDTjhHKHOq2uET5aIf/ytELlYqWZ5naTnGYffnWAAA=",
+    "w": 2252,
+    "h": 3373,
+    "ratio": 0.6677
+  },
+  "entrainement-boxe-castelginest": {
+    "lqip": "data:image/webp;base64,UklGRlAAAABXRUJQVlA4IEQAAABwAwCdASoUAA0APxFyslAsJqSisAgBgCIJZwDG9BgepX8BdgAA/uNLXzRyvXazoVdvUpCLefOrPP4iUV/FS2cL4I0AAA==",
+    "w": 6016,
+    "h": 4016,
+    "ratio": 1.498
+  },
+  "garde-boxe-castelginest": {
+    "lqip": "data:image/webp;base64,UklGRkoAAABXRUJQVlA4ID4AAABwAwCdASoUAA0APxFyslAsJqSisAgBgCIJaQAAQrRy5ZXD3wAA/tlaLB83SZ9vt446yswBJlB6+WcAmvQAAA==",
+    "w": 6016,
+    "h": 4016,
+    "ratio": 1.498
+  }
+}

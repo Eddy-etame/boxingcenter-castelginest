@@ -1,0 +1,340 @@
+---
+/**
+ * LE MOTEUR — « ta séance ».
+ *
+ * À Muret, la destination est connue d'avance : il n'y a qu'un club. Le moteur
+ * ne résout donc pas *où*, il résout *quoi* et *quand*. Deux réponses, et le
+ * site dit quel intitulé du club viser et à quel moment regarder son planning.
+ *
+ * Ce qu'il ne fait jamais : inventer un horaire. Le club publie son planning,
+ * c'est lui la source. On oriente, on ne recopie pas.
+ *
+ * Ce sont de vrais `<input type="radio">` dans des `<fieldset>`. Au clavier,
+ * au lecteur d'écran et sans JavaScript, la section reste entièrement utile :
+ * elle affiche alors tous les intitulés du club et les trois portes.
+ */
+import { DESTINATION } from '../data/verite';
+import { OFFRES } from '../data/offres';
+import { route } from '../data/routes';
+
+interface Props { titre?: string; niveau?: 'h2' | 'h1' }
+const { titre = 'Dis-nous deux choses.\nOn te dit quoi viser.', niveau = 'h2' } = Astro.props;
+
+const DISCIPLINES = [
+  { id: 'boxe-anglaise', nom: 'Boxe anglaise', detail: 'Les poings, la garde, les déplacements' },
+  { id: 'mma', nom: 'MMA & grappling', detail: 'Debout, corps à corps et sol — en cage' },
+  { id: 'boxe-pieds-poings', nom: 'Boxe pieds-poings', detail: 'Les jambes en plus des poings' },
+  { id: 'preparation-physique', nom: 'Préparation physique', detail: 'Sacs, muscu, cardio, cross-training' },
+  { id: 'boxe-enfants', nom: 'Boxe enfants', detail: 'Baby boxe, éducative, ados' },
+] as const;
+
+const CRENEAUX = [
+  { id: 'midi', nom: 'Le midi', detail: 'Entre 12h et 14h' },
+  { id: 'apres-midi', nom: "L'après-midi", detail: 'Entre 14h et 18h' },
+  { id: 'soir', nom: 'Le soir', detail: 'À partir de 18h' },
+  { id: 'samedi', nom: 'Le samedi', detail: 'La journée' },
+] as const;
+
+/* Le nombre d'intitules se lit dans le registre, jamais dans la phrase : une
+   offre ajoutee chez le club ne doit pas laisser un chiffre faux en ligne. */
+const NOMBRES = [
+  'zéro', 'un', 'deux', 'trois', 'quatre', 'cinq', 'six', 'sept', 'huit', 'neuf', 'dix',
+  'onze', 'douze', 'treize', 'quatorze', 'quinze', 'seize', 'dix-sept', 'dix-huit', 'dix-neuf',
+  'vingt', 'vingt et un', 'vingt-deux', 'vingt-trois', 'vingt-quatre', 'vingt-cinq',
+  'vingt-six', 'vingt-sept', 'vingt-huit', 'vingt-neuf', 'trente',
+];
+const COMBIEN = NOMBRES[OFFRES.length] ?? String(OFFRES.length);
+
+const Titre = niveau;
+---
+
+<section class="section moteur" id="ta-seance" aria-labelledby="t-moteur">
+  <div class="enveloppe">
+    <p class="cartouche"><span class="cartouche__num">03</span><span>Ta séance</span></p>
+
+    <div class="moteur__tete">
+      <Titre id="t-moteur" class="moteur__titre" set:html={titre.replace('\n', '<br />')} />
+      <p class="lead faible moteur__intro">
+        Le club est connu&nbsp;: <strong>{DESTINATION.nom}</strong>.
+        Ce qui reste à décider, c’est <strong>quoi</strong> et <strong>quand</strong> —
+        et c’est précisément ce qui fait qu’on tient, ou qu’on abandonne en mars.
+      </p>
+    </div>
+
+    <form class="moteur__form" data-moteur novalidate>
+      <fieldset class="champ">
+        <legend class="champ__titre">
+          <span class="mono champ__num">01</span>
+          Qu’est-ce que tu cherches&nbsp;?
+        </legend>
+        <div class="options">
+          {DISCIPLINES.map((d) => (
+            <label class="option">
+              <input type="radio" name="discipline" value={d.id} data-choix={`discipline:${d.id}`} />
+              <span class="option__corps">
+                <span class="option__nom">{d.nom}</span>
+                <span class="option__detail">{d.detail}</span>
+              </span>
+              <span class="option__marque" aria-hidden="true"></span>
+            </label>
+          ))}
+        </div>
+      </fieldset>
+
+      <fieldset class="champ">
+        <legend class="champ__titre">
+          <span class="mono champ__num">02</span>
+          Quand est-ce que tu peux&nbsp;?
+        </legend>
+        <div class="options">
+          {CRENEAUX.map((c) => (
+            <label class="option">
+              <input type="radio" name="creneau" value={c.id} data-choix={`creneau:${c.id}`} />
+              <span class="option__corps">
+                <span class="option__nom">{c.nom}</span>
+                <span class="option__detail">{c.detail}</span>
+              </span>
+              <span class="option__marque" aria-hidden="true"></span>
+            </label>
+          ))}
+        </div>
+      </fieldset>
+    </form>
+
+    {/* Le résultat. aria-live : le lecteur d'écran l'entend changer. */}
+    <div class="resultat" data-resultat aria-live="polite">
+      <div class="resultat__latent" data-latent>
+        <p class="mono resultat__attente">En attente de tes deux réponses</p>
+        <p class="resultat__sansjs">
+          Quoi qu’il arrive, voilà les {COMBIEN} intitulés que
+          <a class="lien" href={DESTINATION.activites} rel="noopener">{DESTINATION.nom} publie</a>
+          aujourd’hui&nbsp;:
+          {OFFRES.map((o, i) => (
+            <>
+              {i > 0 && ' · '}
+              <b>{o.intitule}</b>
+            </>
+          ))}.
+        </p>
+      </div>
+
+      <div class="resultat__resolu" data-resolu hidden>
+        <p class="mono resultat__cle">Ta séance</p>
+        <p class="resultat__intitules" data-intitules></p>
+        <p class="resultat__pourquoi" data-pourquoi></p>
+        <div class="resultat__fait">
+          <span class="mono">Le club</span>
+          <p>{DESTINATION.singularite} {DESTINATION.horaires.valeur}.</p>
+        </div>
+        <div class="resultat__actions">
+          <a class="bouton bouton--signal" href={DESTINATION.plannings} rel="noopener">
+            <span>Voir le planning du club</span>
+            <span class="fleche" aria-hidden="true">↗</span>
+          </a>
+          <a class="bouton" href={route('premiere-seance').chemin}>
+            <span>Ma première séance</span>
+            <span class="fleche" aria-hidden="true">→</span>
+          </a>
+          <a class="bouton" href={route('contact').chemin}>
+            <span>Poser ma question</span>
+            <span class="fleche" aria-hidden="true">→</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .moteur { background: var(--papier-creuse); }
+
+  .moteur__tete {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--e-6) var(--e-8);
+    align-items: end;
+    margin-bottom: var(--e-8);
+  }
+  @media (max-width: 56rem) { .moteur__tete { grid-template-columns: 1fr; } }
+  .moteur__titre { max-width: 15ch; }
+  .moteur__intro { max-width: 48ch; }
+  .moteur__intro strong { color: var(--encre); font-weight: 600; }
+
+  .moteur__form {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--e-8);
+  }
+  @media (max-width: 56rem) { .moteur__form { grid-template-columns: 1fr; gap: var(--e-7); } }
+
+  .champ { border: 0; padding: 0; margin: 0; }
+  .champ__titre {
+    display: flex;
+    align-items: baseline;
+    gap: var(--e-3);
+    width: 100%;
+    padding: 0 0 var(--e-4);
+    margin-bottom: var(--e-4);
+    border-bottom: 1px solid var(--trait);
+    font-family: var(--police-titre);
+    font-size: var(--t-h3);
+    font-weight: 700;
+    letter-spacing: -0.015em;
+  }
+  .champ__num { color: var(--signal-texte); font-weight: 700; }
+
+  .options { display: grid; }
+
+  /* Une rangée de sélection, pas une carte : pas d'ombre, pas de rayon, pas
+     de boîte flottante. Une ligne, un état. */
+  .option {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    gap: var(--e-4);
+    padding: var(--e-4) var(--e-3);
+    border-bottom: 1px solid var(--trait-faible);
+    cursor: pointer;
+    transition: background var(--d-rapide) var(--e-mecanique),
+      padding-left var(--d-normal) var(--e-sortie);
+  }
+  .option:hover { background: color-mix(in srgb, var(--encre) 4%, transparent); }
+
+  /* Le trait cuivre se tend à gauche de la ligne choisie : la même grammaire
+     que le plan du hero, à une autre échelle. */
+  .option::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: var(--signal-texte);
+    transform: scaleY(0);
+    transition: transform var(--d-normal) var(--e-resolution);
+  }
+  .option:has(:checked)::before { transform: scaleY(1); }
+  .option:has(:checked) { padding-left: var(--e-5); }
+
+  .option input { position: absolute; opacity: 0; pointer-events: none; }
+  .option:has(:focus-visible) { outline: 2px solid var(--signal-texte); outline-offset: -2px; }
+
+  .option__corps { display: grid; gap: 0.15rem; }
+  .option__nom { font-size: var(--t-base); font-weight: 600; letter-spacing: -0.01em; }
+  .option__detail { font-size: var(--t-petit); color: var(--texte-faible); line-height: 1.4; }
+  .option:has(:checked) .option__nom { color: var(--signal-texte); }
+
+  .option__marque {
+    width: 1.125rem;
+    height: 1.125rem;
+    border: 1px solid var(--graphite);
+    border-radius: var(--rayon-rond);
+    display: grid;
+    place-items: center;
+    transition: border-color var(--d-rapide) var(--e-mecanique);
+  }
+  .option__marque::after {
+    content: '';
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: var(--rayon-rond);
+    background: var(--signal-texte);
+    transform: scale(0);
+    transition: transform var(--d-normal) var(--e-sortie);
+  }
+  .option:has(:checked) .option__marque { border-color: var(--signal-texte); }
+  .option:has(:checked) .option__marque::after { transform: scale(1); }
+
+  /* ── Le résultat ───────────────────────────────────────────────────── */
+  .resultat {
+    margin-top: var(--e-8);
+    padding-top: var(--e-6);
+    border-top: 2px solid var(--encre);
+  }
+  .resultat__attente { color: var(--graphite); margin-bottom: var(--e-3); }
+  .resultat__sansjs { max-width: 72ch; font-size: var(--t-petit); color: var(--texte-faible); }
+  .resultat__sansjs b { color: var(--encre); font-weight: 600; }
+
+  .resultat__cle { color: var(--graphite); margin-bottom: var(--e-2); }
+  .resultat__intitules {
+    font-family: var(--police-titre);
+    font-size: var(--t-h2);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.08;
+    max-width: 20ch;
+    margin-bottom: var(--e-4);
+    color: var(--signal-texte);
+    /* Le résultat arrive par un balayage, pas par un fondu : quelque chose
+       s'est décidé, ça ne « apparaît » pas, ça s'inscrit. */
+    animation: inscrire 520ms var(--e-resolution) both;
+  }
+  @keyframes inscrire {
+    from { clip-path: inset(0 100% 0 0); }
+    to { clip-path: inset(0 0 0 0); }
+  }
+  .resultat__pourquoi { max-width: 56ch; color: var(--texte-faible); }
+
+  .resultat__fait {
+    display: grid;
+    gap: 0.25rem;
+    margin-top: var(--e-5);
+    padding: var(--e-4) var(--e-5);
+    background: var(--papier-vif);
+    border-left: 2px solid var(--signal);
+  }
+  .resultat__fait .mono { color: var(--graphite); }
+  .resultat__fait p { font-size: var(--t-petit); }
+
+  .resultat__actions { display: flex; flex-wrap: wrap; gap: var(--e-3); margin-top: var(--e-6); }
+</style>
+
+<script>
+  import { parcours, seance, LIBELLE_CRENEAU } from '../scripts/parcours';
+
+  const bloc = document.querySelector<HTMLElement>('[data-resultat]');
+  const latent = document.querySelector<HTMLElement>('[data-latent]');
+  const resolu = document.querySelector<HTMLElement>('[data-resolu]');
+  const form = document.querySelector<HTMLFormElement>('[data-moteur]');
+
+  if (bloc && latent && resolu && form) {
+    function peindre() {
+      const p = parcours();
+      const s = seance(p);
+
+      if (!s) {
+        latent!.hidden = false;
+        resolu!.hidden = true;
+        return;
+      }
+
+      latent!.hidden = true;
+      resolu!.hidden = false;
+
+      const titre = resolu!.querySelector('[data-intitules]')!;
+      // On liste les intitulés RÉELS du club, jamais une reformulation.
+      titre.textContent = p.creneau
+        ? `${s.intitules.join(' · ')} — ${LIBELLE_CRENEAU[p.creneau].toLowerCase()}`
+        : s.intitules.join(' · ');
+      // On relance le balayage à chaque changement : la décision se réinscrit.
+      (titre as HTMLElement).style.animation = 'none';
+      void (titre as HTMLElement).offsetWidth;
+      (titre as HTMLElement).style.animation = '';
+
+      resolu!.querySelector('[data-pourquoi]')!.textContent = s.pourquoi;
+    }
+
+    // Restaure les choix d'une visite précédente : on ne recommence jamais.
+    const p = parcours();
+    for (const [cle, valeur] of Object.entries(p)) {
+      const input = form.querySelector<HTMLInputElement>(`input[name="${cle}"][value="${valeur}"]`);
+      if (input) input.checked = true;
+    }
+    peindre();
+
+    // Le clic est déjà capté par le moteur (data-choix) ; on ne fait que
+    // redessiner ce bloc quand l'état change, d'où qu'il vienne.
+    document.addEventListener('parcours:maj', peindre);
+  }
+</script>

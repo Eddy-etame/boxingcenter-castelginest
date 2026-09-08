@@ -1,0 +1,319 @@
+/* Base — remise à zéro, typographie, primitives partagées. */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
+  /* Le décalage d'ancre tient compte de l'entête ET du geste d'entrée :
+     un bloc arrive translaté de --mouv-y et remonte en se posant. Sans
+     cette marge, la cible d'une ancre finit sous la barre. */
+  scroll-padding-top: calc(6rem + var(--mouv-y, 0rem));
+}
+
+body {
+  margin: 0;
+  background: var(--papier);
+  color: var(--encre);
+  font-family: var(--police-texte);
+  font-size: var(--t-base);
+  line-height: 1.6;
+  font-synthesis-weight: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  margin: 0;
+  font-family: var(--police-titre);
+  font-weight: 700;
+  line-height: 1.02;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+h1 { font-size: var(--t-h1); font-weight: 800; letter-spacing: -0.03em; }
+h2 { font-size: var(--t-h2); }
+h3 { font-size: var(--t-h3); line-height: 1.15; letter-spacing: -0.012em; }
+
+p { margin: 0 0 1em; text-wrap: pretty; }
+p:last-child { margin-bottom: 0; }
+
+a { color: inherit; }
+
+img,
+svg,
+video {
+  display: block;
+  max-width: 100%;
+}
+
+ul, ol { margin: 0; padding: 0; }
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+  color: inherit;
+}
+
+/* ── Focus : jamais retiré, visible sur les deux polarités ────────────── */
+:focus-visible {
+  outline: 2px solid var(--signal-texte);
+  outline-offset: 3px;
+  border-radius: var(--rayon-1);
+}
+
+/* ── Primitives de mise en page ───────────────────────────────────────── */
+.enveloppe {
+  width: 100%;
+  max-width: var(--largeur-max);
+  margin-inline: auto;
+  padding-inline: var(--marge);
+}
+
+.section {
+  position: relative;
+  background: var(--fond);
+  color: var(--texte);
+  padding-block: var(--section-y);
+}
+
+.lecture { max-width: var(--largeur-lecture); }
+
+/* Étiquette de plan : numéro, cote, coordonnée. La langue du site. */
+.mono {
+  font-family: var(--police-mono);
+  font-size: var(--t-micro);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--texte-faible);
+}
+
+/* Le bandeau de section : un numéro, un mot, et le trait qui court. */
+.cartouche {
+  display: flex;
+  align-items: center;
+  gap: var(--e-3);
+  margin-bottom: var(--e-6);
+  font-family: var(--police-mono);
+  font-size: var(--t-micro);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--texte-faible);
+}
+.cartouche__num { color: var(--signal-texte); font-weight: 700; }
+.cartouche::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--trait);
+}
+
+.lead {
+  font-size: var(--t-lead);
+  line-height: 1.45;
+  letter-spacing: -0.008em;
+}
+
+.faible { color: var(--texte-faible); }
+
+/* ── Liens de texte : le soulignement s'épaissit, il ne clignote pas ─── */
+.lien {
+  color: inherit;
+  text-decoration: none;
+  background-image: linear-gradient(currentColor, currentColor);
+  background-size: 100% 1px;
+  background-repeat: no-repeat;
+  background-position: 0 100%;
+  padding-bottom: 0.08em;
+  transition: background-size var(--d-rapide) var(--e-mecanique),
+    color var(--d-rapide) var(--e-mecanique);
+}
+.lien:hover {
+  background-size: 100% 2px;
+  color: var(--signal-texte);
+}
+
+/* ── Boutons ──────────────────────────────────────────────────────────── */
+.bouton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--e-5);
+  min-height: 3.25rem;
+  padding: 0 var(--e-5);
+  border: 1px solid var(--texte);
+  border-radius: var(--rayon-1);
+  background: transparent;
+  color: var(--texte);
+  font-family: var(--police-mono);
+  font-size: var(--t-petit);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  text-decoration: none;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  transition: color var(--d-rapide) var(--e-mecanique);
+}
+/* Le remplissage monte depuis le bas : le bouton se charge. */
+.bouton::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--texte);
+  transform: scaleY(0);
+  transform-origin: bottom;
+  transition: transform var(--d-normal) var(--e-sortie);
+}
+.bouton:hover::before { transform: scaleY(1); }
+.bouton:hover { color: var(--fond); }
+.bouton:active { transform: translateY(1px); }
+
+.bouton .fleche {
+  flex: none;
+  transition: transform var(--d-normal) var(--e-sortie);
+}
+.bouton:hover .fleche { transform: translateX(4px); }
+
+/* Le bouton cuivre : réservé à l'action qui conclut une décision. */
+.bouton--signal {
+  background: var(--signal-texte);
+  border-color: var(--signal-texte);
+  color: var(--papier-vif);
+}
+.bouton--signal::before { background: var(--papier-vif); }
+.bouton--signal:hover { color: var(--signal-texte); }
+
+.bouton--plein { width: 100%; }
+
+/* ── Le mouvement ─────────────────────────────────────────────────────
+   Deux classes, une seule grammaire : rien n'arrive posé, tout monte.
+   `.reveler` se balise à la main sur les listes et les cartes ;
+   `.bloc-scene` est posée par `mouvement.ts` sur chaque bloc de section,
+   avec son rang `--i` — c'est ce qui donne le décalage sans qu'aucune page
+   n'ait à s'en occuper. Les deux se rejouent quand on remonte puis
+   redescend : voir `src/scripts/mouvement.ts`. */
+.reveler,
+.bloc-scene {
+  opacity: 0;
+  transform: translate3d(var(--mouv-x, 0), var(--mouv-y, 1.25rem), 0)
+    scale(var(--mouv-echelle, 1));
+  transition:
+    opacity var(--mouv-duree, var(--d-lent)) var(--mouv-courbe, var(--e-sortie)),
+    transform var(--mouv-duree, var(--d-lent)) var(--mouv-courbe, var(--e-sortie));
+  transition-delay: var(--retard, 0ms);
+  will-change: opacity, transform;
+}
+.bloc-scene {
+  transition-delay: calc(var(--i, 0) * var(--mouv-decalage, 90ms));
+}
+.reveler.vu,
+.bloc-scene.vu { opacity: 1; transform: none; }
+.no-js .reveler,
+.no-js .bloc-scene { opacity: 1; transform: none; }
+
+/* Une fois arrivé, le bloc rend la main : plus de couche de composition
+   inutile, et le texte retrouve son rendu sous-pixel. */
+.reveler.vu,
+.bloc-scene.vu { will-change: auto; }
+
+/* ── Lien d'évitement ─────────────────────────────────────────────────── */
+.saut {
+  position: absolute;
+  left: var(--marge);
+  top: 0;
+  z-index: var(--z-saut);
+  transform: translateY(-150%);
+  background: var(--signal-texte);
+  color: var(--papier-vif);
+  padding: var(--e-3) var(--e-4);
+  font-family: var(--police-mono);
+  font-size: var(--t-petit);
+  text-decoration: none;
+  transition: transform var(--d-rapide) var(--e-sortie);
+}
+.saut:focus { transform: translateY(0.5rem); }
+
+.vh {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* ── Questions dépliables — même grammaire partout ────────────────────── */
+.qr { border-top: 1px solid var(--trait); }
+.qr:last-child { border-bottom: 1px solid var(--trait); }
+.qr summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--e-4);
+  padding: var(--e-4) 0;
+  cursor: pointer;
+  list-style: none;
+}
+.qr summary::-webkit-details-marker { display: none; }
+.qr__q { font-weight: 600; max-width: 46ch; }
+.qr summary:hover .qr__q { color: var(--signal-texte); }
+.qr__signe { flex: none; position: relative; width: 14px; height: 14px; }
+.qr__signe::before,
+.qr__signe::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  background: var(--signal-texte);
+}
+.qr__signe::before { width: 14px; height: 1.5px; }
+.qr__signe::after {
+  width: 1.5px;
+  height: 14px;
+  transition: transform var(--d-normal) var(--e-mecanique);
+}
+.qr[open] .qr__signe::after { transform: scaleY(0); }
+.qr__r {
+  max-width: 64ch;
+  padding-bottom: var(--e-5);
+  color: var(--texte-faible);
+  font-size: var(--t-petit);
+  line-height: 1.65;
+}
+
+/* ── Mouvement réduit : un mode conçu, pas une amputation ─────────────── */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .reveler,
+  .bloc-scene { opacity: 1; transform: none; }
+}
+
+/* ── Couleurs forcées (Windows high contrast) ─────────────────────────── */
+@media (forced-colors: active) {
+  .bouton { border: 1px solid ButtonBorder; }
+  .plan__trait,
+  .plan__cote { stroke: CanvasText !important; }
+}

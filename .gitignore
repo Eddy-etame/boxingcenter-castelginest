@@ -8,7 +8,8 @@ dist/
 .env.*
 !.env.example
 
-# Photos brutes (WeTransfer) : jamais dans le dépôt
+# Photos brutes (WeTransfer) : jamais dans le dépôt, seules les versions web
+# générées dans public/photos y entrent.
 wetransfer_*/
 
 # Recherche et veille : reste en local
