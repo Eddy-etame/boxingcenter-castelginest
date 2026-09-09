@@ -27,7 +27,7 @@ export type Offre = {
 };
 
 const SOURCE =
-  'https://boxingcenter.fr/salle-de-sport-toulouse/boxing-center-salle-de-toulouse-etats-unis/';
+  'https://clubmma.fr/';
 
 export const OFFRES: readonly Offre[] = [
   {
