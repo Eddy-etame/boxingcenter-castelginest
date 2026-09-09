@@ -17,6 +17,8 @@ export type Source = 'site-club' | 'wikipedia' | 'tisseo' | 'cahier-des-charges'
 
 export type Fait<T = string> = { valeur: T; source: Source; verifie: string };
 
+/** Décidé par le client (Eddy, 2026-09-10) : le numéro et l'adresse que ce site affiche. */
+const CDC = (v: string): Fait => ({ valeur: v, source: 'cahier-des-charges', verifie: '2026-09-10' });
 const CLUB = (v: string): Fait => ({ valeur: v, source: 'site-club', verifie: '2026-09-09' });
 const WIKI = (v: string): Fait => ({ valeur: v, source: 'wikipedia', verifie: '2026-09-09' });
 const TISSEO = (v: string): Fait => ({ valeur: v, source: 'tisseo', verifie: '2026-09-09' });
@@ -43,9 +45,9 @@ export const SITE = {
 /* ─────────────────────────────  CONTACT  ───────────────────────────── */
 
 export const CONTACT = {
-  telephone: CLUB('05 62 24 46 82'),
-  telephoneLien: CLUB('+33562244682'),
-  email: CLUB('bc.combat31@gmail.com'),
+  telephone: CDC('09 39 03 67 48'),
+  telephoneLien: CDC('+33939036748'),
+  email: CDC('boxingcenter31@gmail.com'),
 } as const;
 
 /* ─────────────────────────────  LE CLUB  ───────────────────────────── */
@@ -86,8 +88,8 @@ export const CLUBS: readonly Club[] = [
     ville: 'Toulouse',
     codePostal: '31200',
     adresse: '388 avenue des États-Unis, 31200 Toulouse',
-    telephone: '05 62 24 46 82',
-    telephoneLien: '+33562244682',
+    telephone: '09 39 03 67 48',
+    telephoneLien: '+33939036748',
     site: 'https://boxingcenter.fr/salle-de-sport-toulouse/boxing-center-salle-de-toulouse-etats-unis/',
     activites:
       'https://boxingcenter.fr/salle-de-sport-toulouse/boxing-center-salle-de-toulouse-etats-unis/',
