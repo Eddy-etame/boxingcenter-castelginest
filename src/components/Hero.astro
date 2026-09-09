@@ -1,34 +1,35 @@
 ---
 /**
- * LE HERO — « la ligne 60 ».
+ * LE HERO — un écran, et la porte du club dedans.
  *
- * Le fait que ce site possède et qu'aucun autre du réseau ne possède : la
- * ligne 60 s'arrête six fois à Castelginest, puis finit au métro. Le dessin
- * est donc la ligne elle-même, dessinée comme une fiche de ligne : les six
- * arrêts nommés, la correspondance, la station de métro unique, puis le 59
- * jusqu'au 388.
+ * Ce qu'il fait, dans l'ordre où un Castelginestois se pose les questions :
+ * confirmer qu'il est au bon endroit (le H1), lui donner la raison de rester
+ * (les disciplines), nommer le club, dire la ligne en une phrase, et ouvrir la
+ * porte du club avant le premier défilement.
  *
- * Ce que le dessin dit sans l'écrire : le segment du milieu est le plus
- * court. C'est un argument de proximité, et il est vrai.
+ * Le dessin de la ligne 60 vit deux sections plus bas, sous le titre qu'il
+ * illustre : ici, il coûtait presque un écran avant le premier mot sur le
+ * club. Le second bouton y mène par une ancre.
  *
- * Arrêts relevés sur la fiche horaire Tisséo de la ligne 60, le 2026-09-09.
- *
- * Tout est en SVG inline — aucun canvas, aucune bibliothèque, aucune requête.
- * Sans JavaScript et en mouvement réduit, la ligne est déjà à son état final.
- * Deux tracés existent, horizontal et vertical.
+ * Le H1 est fixé par le cahier des charges : « accessibles depuis ».
  */
 import { SITE, DESTINATION } from '../data/verite';
-import { route } from '../data/routes';
+import { OFFRES, offresDeLaPage } from '../data/offres';
+import { ARRETS, enLettres } from '../data/transports';
 
-/** Les six arrêts de la 60 dans la commune, dans l'ordre de la fiche. */
-const ARRETS = [
-  'École Castelginest',
-  'Alphonse Daudet',
-  'Tour Totier',
-  'Pradelle',
-  'Mairie Castelginest',
-  'Pont Vieil',
-];
+/** Les disciplines telles que le club les publie, dans l'ordre des pages. */
+const DISCIPLINES = [
+  ...offresDeLaPage('boxe-anglaise').slice(0, 1),
+  ...offresDeLaPage('boxe-pieds-poings'),
+  ...offresDeLaPage('mma'),
+  ...offresDeLaPage('boxe-enfants'),
+]
+  .map((o) => o.intitule.toLowerCase())
+  .join(', ')
+  .replace(/, ([^,]+)$/, ' et $1');
+
+/** Les cotes du club, projetées telles quelles depuis le registre. */
+const COTES = DESTINATION.faits.filter((f) => ['Surface', 'Espaces', 'Équipement'].includes(f.cle));
 ---
 
 <section class="hero" aria-labelledby="t-hero">
@@ -39,217 +40,46 @@ const ARRETS = [
       <span>à proximité de {SITE.ville}</span>
     </p>
 
-    <div class="hero__haut">
-      <div class="hero__texte">
-        <h1 id="t-hero" class="hero__titre">
-          <span class="hero__ligne">Boxe, MMA et sports de combat</span>
-          <span class="hero__ligne hero__ligne--accent">accessibles depuis {SITE.ville}.</span>
-        </h1>
+    <div class="hero__texte">
+      <h1 id="t-hero" class="hero__titre">
+        <span class="hero__ligne">Boxe, MMA et sports de combat</span>
+        <span class="hero__ligne hero__ligne--accent">accessibles depuis {SITE.ville}.</span>
+      </h1>
 
-        <p class="hero__promesse">
-          <strong>Boxe anglaise, pieds-poings, full contact, travail au sol et cours enfants.</strong>
-          Le 60 s’arrête six fois dans la commune et finit au métro. Le 59 fait
-          le reste. Au bout&nbsp;: 1 200 m², deux rings, une cage surélevée et
-          seize sacs de frappe.
-        </p>
+      <p class="hero__promesse">
+        <strong>{DISCIPLINES.charAt(0).toUpperCase() + DISCIPLINES.slice(1)}, à {DESTINATION.nom}.</strong>
+        Le 60 s’arrête {enLettres(ARRETS.length)} fois dans la commune et finit au
+        métro&nbsp;; le 59 fait le reste.
+      </p>
 
-        <div class="hero__actions">
-          <a class="bouton bouton--signal" href={DESTINATION.tarifs} rel="noopener">
-            <span>Réserver ma séance d’essai</span>
-            <span class="fleche" aria-hidden="true">↗</span>
-          </a>
-          <a class="bouton" href={route('ta-seance').chemin}>
-            <span>Trouver ma séance</span>
-            <span class="fleche" aria-hidden="true">→</span>
-          </a>
-          <a class="bouton" href={route('transports').chemin}>
-            <span>Voir le trajet</span>
-            <span class="fleche" aria-hidden="true">→</span>
-          </a>
-        </div>
+      <p class="hero__cotes mono">
+        <span>{DESTINATION.adresse.split(',')[0]}</span>
+        {COTES.map((f) => (
+          <>
+            <span aria-hidden="true">·</span>
+            <span>{f.valeur}</span>
+          </>
+        ))}
+      </p>
+
+      <div class="hero__actions">
+        <a class="bouton bouton--signal" href={DESTINATION.tarifs} rel="noopener">
+          <span>Réserver ma séance d’essai</span>
+          <span class="fleche" aria-hidden="true">↗</span>
+        </a>
+        <a class="bouton" href="#trajet">
+          <span>Le trajet, arrêt par arrêt</span>
+          <span class="fleche" aria-hidden="true">↓</span>
+        </a>
       </div>
-
-      <dl class="hero__faits">
-        <div>
-          <dt class="mono">Le club</dt>
-          <dd>{DESTINATION.nomCourt}</dd>
-        </div>
-        <div>
-          <dt class="mono">La salle</dt>
-          <dd>1 200 m², 3 espaces</dd>
-        </div>
-        <div>
-          <dt class="mono">Depuis {SITE.ville}</dt>
-          <dd>
-            <a class="hero__fait-lien" href={route('transports').chemin}>
-              {SITE.accesCourt}<span class="fleche" aria-hidden="true">→</span>
-            </a>
-          </dd>
-        </div>
-      </dl>
     </div>
-  </div>
-
-  {/* ─────────────── LA LIGNE ─────────────── */}
-  <div class="enveloppe">
-    <figure class="ligne" data-ligne>
-      <figcaption class="vh">
-        Le trajet depuis Castelginest jusqu’à Boxing Center Toulouse États-Unis.
-        La ligne de bus 60 dessert six arrêts dans la commune — École
-        Castelginest, Alphonse Daudet, Tour Totier, Pradelle, Mairie
-        Castelginest et Pont Vieil — puis rejoint Trois Cocus. Le métro B
-        descend d’une station jusqu’à La Vache. La ligne de bus 59 y démarre et
-        longe l’avenue des États-Unis jusqu’à l’arrêt États-Unis Fondeyre, où se
-        trouve le club, au 388.
-      </figcaption>
-
-      {/* ── Tracé horizontal — écrans larges ── */}
-      <svg
-        class="ligne__svg ligne__svg--h"
-        viewBox="0 0 1200 340"
-        role="img"
-        aria-hidden="true"
-        preserveAspectRatio="xMidYMid meet"
-      >
-        {/* Le rail du 60 */}
-        <path class="ligne__rail ligne__rail--bus" d="M 60 230 H 690" style="--rang:0" />
-        {/* La station de métro, volontairement courte */}
-        <path class="ligne__rail ligne__rail--metro" d="M 690 230 H 800" style="--rang:1" />
-        {/* Le rail du 59 */}
-        <path class="ligne__rail ligne__rail--bus" d="M 800 230 H 1120" style="--rang:2" />
-
-        {/* La navette qui parcourt tout le trajet, sans arrêt */}
-        <path class="ligne__navette" d="M 60 230 H 1120" />
-
-        {/* Les six arrêts de Castelginest */}
-        {ARRETS.map((nom, i) => (
-          <g class="ligne__arret" style={`--n:${i}`}>
-            <circle class="ligne__point" cx={90 + i * 96} cy="230" r="8" />
-            <text
-              class="ligne__nom"
-              x={90 + i * 96}
-              y="230"
-              transform={`rotate(-42 ${90 + i * 96} 230)`}
-              dx="18"
-              dy="-6"
-            >
-              {nom.toUpperCase()}
-            </text>
-          </g>
-        ))}
-
-        {/* Badge 60 */}
-        <g class="ligne__badge" style="--n:6">
-          <rect x="292" y="256" width="46" height="26" rx="3" />
-          <text class="ligne__badge-num" x="315" y="274" text-anchor="middle">60</text>
-          <text class="ligne__badge-note" x="352" y="274" text-anchor="start">SIX ARRÊTS CHEZ TOI</text>
-        </g>
-
-        {/* Trois Cocus — correspondance */}
-        <g class="ligne__correspondance" style="--n:7">
-          <rect x="678" y="218" width="24" height="24" rx="2" transform="rotate(45 690 230)" />
-          <text class="ligne__nom-corresp" x="690" y="196" text-anchor="middle">TROIS COCUS</text>
-        </g>
-
-        {/* Le métro, une station */}
-        <g class="ligne__badge ligne__badge--metro" style="--n:8">
-          <rect x="722" y="256" width="46" height="26" rx="13" />
-          <text class="ligne__badge-num" x="745" y="274" text-anchor="middle">B</text>
-          <text class="ligne__badge-note" x="745" y="304" text-anchor="middle">1 STATION</text>
-        </g>
-
-        {/* La Vache — correspondance */}
-        <g class="ligne__correspondance" style="--n:9">
-          <rect x="788" y="218" width="24" height="24" rx="2" transform="rotate(45 800 230)" />
-          <text class="ligne__nom-corresp" x="800" y="196" text-anchor="middle">LA VACHE</text>
-        </g>
-
-        {/* Badge 59 */}
-        <g class="ligne__badge" style="--n:10">
-          <rect x="906" y="256" width="46" height="26" rx="3" />
-          <text class="ligne__badge-num" x="929" y="274" text-anchor="middle">59</text>
-          <text class="ligne__badge-note" x="966" y="274" text-anchor="start">AVENUE DES ÉTATS-UNIS</text>
-        </g>
-
-        {/* Le club */}
-        <g class="ligne__cible">
-          <circle class="ligne__halo" cx="1120" cy="230" r="22" />
-          <circle class="ligne__coeur" cx="1120" cy="230" r="10" />
-          <text class="ligne__num" x="1120" y="196" text-anchor="middle">388</text>
-          <text class="ligne__club" x="1120" y="278" text-anchor="middle">LE CLUB</text>
-        </g>
-      </svg>
-
-      {/* ── Tracé vertical — téléphones ── */}
-      <svg
-        class="ligne__svg ligne__svg--v"
-        viewBox="0 0 360 700"
-        role="img"
-        aria-hidden="true"
-        preserveAspectRatio="xMidYMid meet"
-      >
-        <path class="ligne__rail ligne__rail--bus" d="M 104 40 V 400" style="--rang:0" />
-        <path class="ligne__rail ligne__rail--metro" d="M 104 400 V 470" style="--rang:1" />
-        <path class="ligne__rail ligne__rail--bus" d="M 104 470 V 650" style="--rang:2" />
-        <path class="ligne__navette" d="M 104 40 V 650" />
-
-        {ARRETS.map((nom, i) => (
-          <g class="ligne__arret" style={`--n:${i}`}>
-            <circle class="ligne__point" cx="104" cy={56 + i * 62} r="7" />
-            <text class="ligne__nom ligne__nom--v" x="128" y={56 + i * 62} dy="4">
-              {nom.toUpperCase()}
-            </text>
-          </g>
-        ))}
-
-        <g class="ligne__badge" style="--n:6">
-          <rect x="26" y="180" width="44" height="26" rx="3" />
-          <text class="ligne__badge-num" x="48" y="199" text-anchor="middle">60</text>
-        </g>
-
-        <g class="ligne__correspondance" style="--n:7">
-          <rect x="92" y="388" width="24" height="24" rx="2" transform="rotate(45 104 400)" />
-          <text class="ligne__nom-corresp ligne__nom--v" x="132" y="405">TROIS COCUS</text>
-        </g>
-
-        <g class="ligne__badge ligne__badge--metro" style="--n:8">
-          <rect x="26" y="422" width="44" height="26" rx="13" />
-          <text class="ligne__badge-num" x="48" y="441" text-anchor="middle">B</text>
-          <text class="ligne__badge-note ligne__nom--v" x="132" y="441">1 STATION</text>
-        </g>
-
-        <g class="ligne__correspondance" style="--n:9">
-          <rect x="92" y="458" width="24" height="24" rx="2" transform="rotate(45 104 470)" />
-          <text class="ligne__nom-corresp ligne__nom--v" x="132" y="475">LA VACHE</text>
-        </g>
-
-        <g class="ligne__badge" style="--n:10">
-          <rect x="26" y="548" width="44" height="26" rx="3" />
-          <text class="ligne__badge-num" x="48" y="567" text-anchor="middle">59</text>
-          <text class="ligne__badge-note ligne__nom--v" x="132" y="567">AVENUE DES ÉTATS-UNIS</text>
-        </g>
-
-        <g class="ligne__cible">
-          <circle class="ligne__halo" cx="104" cy="650" r="20" />
-          <circle class="ligne__coeur" cx="104" cy="650" r="9" />
-          <text class="ligne__num ligne__nom--v" x="132" y="645">388</text>
-          <text class="ligne__club ligne__nom--v" x="132" y="667">LE CLUB</text>
-        </g>
-      </svg>
-
-      <div class="ligne__bloc mono">
-        <span><b>{SITE.ville}</b> → {DESTINATION.nomCourt}</span>
-        <span>60 · métro B · 59</span>
-        <span class="ligne__bloc-src">{DESTINATION.adresse}</span>
-      </div>
-    </figure>
   </div>
 </section>
 
 <style>
   .hero {
     position: relative;
-    padding-block: clamp(2rem, 1rem + 4vw, 4.5rem) clamp(3rem, 2rem + 4vw, 5rem);
+    padding-block: clamp(2rem, 1rem + 4vw, 4.5rem) clamp(2.5rem, 1.5rem + 4vw, 5rem);
     background: var(--papier);
     overflow: hidden;
   }
@@ -279,17 +109,9 @@ const ARRETS = [
   }
   .hero__planche { color: var(--signal-texte); font-weight: 700; }
 
-  .hero__haut {
-    display: grid;
-    grid-template-columns: minmax(0, 1.35fr) minmax(0, 0.65fr);
-    gap: var(--e-6) var(--e-8);
-    align-items: end;
-  }
-  @media (max-width: 62rem) {
-    .hero__haut { grid-template-columns: 1fr; align-items: start; }
-  }
+  .hero__texte { max-width: 60rem; }
 
-  .hero__titre { max-width: 15ch; margin-bottom: var(--e-5); }
+  .hero__titre { max-width: 16ch; margin-bottom: var(--e-5); }
   /* La signature du site : les lignes du titre montent, avec du retard entre
      elles. Le même geste que les blocs au scroll. */
   .hero__ligne {
@@ -299,7 +121,6 @@ const ARRETS = [
   }
   .hero__ligne:nth-child(1) { --i: 0; }
   .hero__ligne:nth-child(2) { --i: 1; }
-  .hero__ligne:nth-child(3) { --i: 2; }
   .hero__ligne--accent { color: var(--signal-texte); }
   @keyframes monter {
     from { opacity: 0; transform: translateY(1.1em) scale(1.03); }
@@ -313,212 +134,40 @@ const ARRETS = [
     color: var(--texte-faible);
     padding-left: var(--e-5);
     border-left: 2px solid var(--signal);
+    animation: monter 900ms cubic-bezier(0.13, 0.9, 0.2, 1) 300ms both;
   }
   .hero__promesse strong { color: var(--encre); font-weight: 600; }
 
-  .hero__actions { display: flex; flex-wrap: wrap; gap: var(--e-3); margin-top: var(--e-6); }
-
-  .hero__faits { display: grid; gap: 0; margin: 0; }
-  .hero__faits > div {
-    display: grid;
-    gap: 0.15rem;
-    padding: var(--e-3) 0;
-    border-top: 1px solid var(--trait);
-  }
-  .hero__faits > div:last-child { border-bottom: 1px solid var(--trait); }
-  .hero__faits dt { color: var(--graphite); }
-  .hero__faits dd { margin: 0; font-size: var(--t-petit); font-weight: 600; }
-  .hero__fait-lien {
-    display: inline-flex;
-    align-items: baseline;
-    gap: 0.4em;
-    color: var(--signal-texte);
-    text-decoration: none;
-    border-bottom: 1px solid transparent;
-    transition: border-color var(--d-rapide) var(--e-mecanique);
-  }
-  .hero__fait-lien:hover { border-color: currentColor; }
-
-  /* ── La ligne ──────────────────────────────────────────────────────── */
-  .ligne { position: relative; margin: var(--e-8) 0 0; }
-  .ligne__svg { width: 100%; height: auto; overflow: visible; }
-  .ligne__svg--v { display: none; }
-  @media (max-width: 52rem) {
-    .ligne__svg--h { display: none; }
-    .ligne__svg--v { display: block; max-width: 22rem; margin-inline: auto; }
-  }
-
-  /* Les trois rails se tracent l'un après l'autre, dans l'ordre du trajet. */
-  .ligne__rail {
-    fill: none;
-    stroke-linecap: round;
-    stroke-dasharray: var(--l, 1200);
-    stroke-dashoffset: var(--l, 1200);
-    animation: tracer 900ms var(--e-mecanique) forwards;
-    animation-delay: calc(260ms + var(--rang) * 420ms);
-  }
-  .ligne__rail--bus { stroke: var(--signal-texte); stroke-width: 6; }
-  .ligne__rail--metro {
-    stroke: var(--graphite);
-    stroke-width: 6;
-    stroke-dasharray: 3 7;
-    stroke-dashoffset: 0;
-    animation: apparaitre 420ms var(--e-sortie) 680ms both;
-  }
-  @keyframes tracer { to { stroke-dashoffset: 0; } }
-
-  /* La navette : un segment court qui parcourt tout le trajet, en boucle. */
-  .ligne__navette {
-    fill: none;
-    stroke: var(--signal);
-    stroke-width: 6;
-    stroke-linecap: round;
-    stroke-dasharray: 26 3000;
-    stroke-dashoffset: 3026;
-    opacity: 0;
-    animation: filer 4.2s linear 1.9s infinite;
-  }
-  @keyframes filer {
-    0% { stroke-dashoffset: 3026; opacity: 0; }
-    8% { opacity: 1; }
-    88% { opacity: 1; }
-    100% { stroke-dashoffset: 900; opacity: 0; }
-  }
-
-  .ligne__arret,
-  .ligne__badge,
-  .ligne__correspondance {
-    opacity: 0;
-    animation: poser-arret 480ms var(--e-sortie) forwards;
-    animation-delay: calc(420ms + var(--n) * 120ms);
-  }
-  @keyframes poser-arret {
-    from { opacity: 0; transform: translateY(0.7rem); }
-    to { opacity: 1; transform: none; }
-  }
-  @keyframes apparaitre { from { opacity: 0; } to { opacity: 1; } }
-
-  .ligne__point {
-    fill: var(--papier);
-    stroke: var(--encre);
-    stroke-width: 2.5;
-    vector-effect: non-scaling-stroke;
-  }
-  .ligne__nom {
-    font-family: var(--police-mono);
-    font-size: 12px;
-    letter-spacing: 0.1em;
-    fill: var(--encre);
-  }
-  .ligne__nom--v { text-anchor: start; }
-  .ligne__nom-corresp {
-    font-family: var(--police-mono);
-    font-size: 12px;
-    font-weight: 700;
-    letter-spacing: 0.12em;
-    fill: var(--encre);
-  }
-
-  .ligne__correspondance rect {
-    fill: var(--papier-vif);
-    stroke: var(--encre);
-    stroke-width: 2;
-    vector-effect: non-scaling-stroke;
-  }
-
-  .ligne__badge rect {
-    fill: var(--signal);
-    stroke: none;
-  }
-  .ligne__badge--metro rect { fill: var(--encre); }
-  .ligne__badge-num {
-    font-family: var(--police-mono);
-    font-size: 15px;
-    font-weight: 700;
-    letter-spacing: 0.06em;
-    fill: var(--papier);
-  }
-  .ligne__badge-note {
-    font-family: var(--police-mono);
-    font-size: 11px;
-    letter-spacing: 0.14em;
-    fill: var(--graphite);
-  }
-
-  .ligne__cible {
-    opacity: 0;
-    animation: apparaitre 520ms var(--e-sortie) 1750ms forwards;
-  }
-  .ligne__halo {
-    fill: none;
-    stroke: var(--signal-texte);
-    stroke-width: 1.5;
-    vector-effect: non-scaling-stroke;
-    transform-box: fill-box;
-    transform-origin: center;
-    animation: battre 3s var(--e-mecanique) 2.4s infinite;
-  }
-  @keyframes battre {
-    0%, 70%, 100% { transform: scale(1); opacity: 0.9; }
-    85% { transform: scale(1.45); opacity: 0.15; }
-  }
-  .ligne__coeur { fill: var(--signal-texte); }
-  .ligne__num {
-    font-family: var(--police-mono);
-    font-size: 17px;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    fill: var(--encre);
-  }
-  .ligne__club {
-    font-family: var(--police-mono);
-    font-size: 11px;
-    letter-spacing: 0.16em;
-    fill: var(--signal-texte);
-  }
-
-  .ligne__bloc {
+  .hero__cotes {
     display: flex;
     flex-wrap: wrap;
-    gap: var(--e-2) var(--e-5);
-    margin-top: var(--e-6);
-    padding-top: var(--e-3);
-    border-top: 1px solid var(--trait);
+    gap: var(--e-2) var(--e-3);
+    margin-top: var(--e-5);
+    padding-left: calc(var(--e-5) + 2px);
+    color: var(--graphite);
     text-transform: none;
     letter-spacing: 0.05em;
-    color: var(--graphite);
+    animation: monter 900ms cubic-bezier(0.13, 0.9, 0.2, 1) 450ms both;
   }
-  .ligne__bloc b { color: var(--encre); font-weight: 700; }
-  .ligne__bloc-src { margin-left: auto; }
-  @media (max-width: 62rem) { .ligne__bloc-src { margin-left: 0; } }
+  .hero__cotes span:first-child { color: var(--encre); font-weight: 700; }
 
-  /* ── Sans script, et en mouvement réduit : la ligne est déjà tracée. ── */
-  :global(.no-js) .ligne__rail,
-  :global(.no-js) .ligne__arret,
-  :global(.no-js) .ligne__badge,
-  :global(.no-js) .ligne__correspondance,
-  :global(.no-js) .ligne__cible,
-  :global(.no-js) .hero__ligne {
-    animation: none;
-    opacity: 1;
-    transform: none;
-    stroke-dashoffset: 0;
+  .hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--e-3);
+    margin-top: var(--e-6);
+    animation: monter 900ms cubic-bezier(0.13, 0.9, 0.2, 1) 600ms both;
   }
-  :global(.no-js) .ligne__navette { display: none; }
+
+  :global(.no-js) .hero__ligne,
+  :global(.no-js) .hero__promesse,
+  :global(.no-js) .hero__cotes,
+  :global(.no-js) .hero__actions { animation: none; opacity: 1; transform: none; }
 
   @media (prefers-reduced-motion: reduce) {
-    .ligne__rail,
-    .ligne__arret,
-    .ligne__badge,
-    .ligne__correspondance,
-    .ligne__cible,
-    .ligne__halo,
-    .hero__ligne {
-      animation: none !important;
-      opacity: 1;
-      transform: none;
-      stroke-dashoffset: 0;
-    }
-    .ligne__navette { display: none; }
+    .hero__ligne,
+    .hero__promesse,
+    .hero__cotes,
+    .hero__actions { animation: none !important; opacity: 1; transform: none; }
   }
 </style>

@@ -115,7 +115,7 @@ export const ITINERAIRES: readonly Itineraire[] = [
     onglet: 'Le 60, le métro, le 15',
     titre: 'La variante qui finit à l’arrêt du club.',
     resume:
-      'Même départ : le 60 jusqu’à Trois Cocus. Deux stations de métro cette fois, jusqu’à Barrière de Paris, où le 15 attend. Ce bus se termine à « États-Unis Fondeyre » — tu descends au terminus, tu ne peux pas le manquer. Il roule du lundi au samedi.',
+      'Même départ : le 60 jusqu’à Trois Cocus. Deux stations de métro cette fois, jusqu’à Barrière de Paris, puis le 15. Ce bus finit à « États-Unis Fondeyre » : tu descends au terminus. Il roule du lundi au samedi.',
     mode: 'bus',
     etapes: [
       LIGNE_60,
@@ -227,3 +227,24 @@ export const DEPARTS: readonly Depart[] = [
 
 export const AVERTISSEMENT =
   'Les horaires changent d’une saison à l’autre. On te dit quelles lignes prendre ; pour l’heure exacte, ouvre la fiche Tisséo — le lien est juste à côté de chaque étape.';
+
+/**
+ * Les six arrêts de la 60 dans la commune, dans l'ordre de la fiche horaire
+ * Tisséo (2026-09-09). Le héros les compte, le dessin les nomme, la FAQ les
+ * écrit : un seul registre pour les trois.
+ */
+export const ARRETS = [
+  'École Castelginest',
+  'Alphonse Daudet',
+  'Tour Totier',
+  'Pradelle',
+  'Mairie Castelginest',
+  'Pont Vieil',
+] as const;
+
+/** Les nombres en lettres, pour compter depuis les registres sans jamais écrire un chiffre à la main. */
+export const NOMBRES = [
+  'zéro', 'un', 'deux', 'trois', 'quatre', 'cinq', 'six', 'sept', 'huit', 'neuf', 'dix',
+  'onze', 'douze', 'treize', 'quatorze', 'quinze', 'seize', 'dix-sept', 'dix-huit', 'dix-neuf', 'vingt',
+] as const;
+export const enLettres = (n: number) => NOMBRES[n] ?? String(n);

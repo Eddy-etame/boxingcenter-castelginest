@@ -14,24 +14,34 @@
  * elle affiche alors tous les intitulés du club et les trois portes.
  */
 import { DESTINATION } from '../data/verite';
-import { OFFRES } from '../data/offres';
+import { OFFRES, offresDeLaPage } from '../data/offres';
 import { route } from '../data/routes';
 
-interface Props { titre?: string; niveau?: 'h2' | 'h1' }
-const { titre = 'Dis-nous deux choses.\nOn te dit quoi viser.', niveau = 'h2' } = Astro.props;
+interface Props { titre?: string; niveau?: 'h2' | 'h1'; numero?: string }
+const { titre = 'Dis-nous deux choses.\nOn te dit quoi viser.', niveau = 'h2', numero = '03' } = Astro.props;
 
-const DISCIPLINES = [
-  { id: 'boxe-anglaise', nom: 'Boxe anglaise', detail: 'Les poings, la garde, les déplacements' },
-  { id: 'mma', nom: 'MMA & grappling', detail: 'Debout, corps à corps et sol — en cage' },
-  { id: 'boxe-pieds-poings', nom: 'Boxe pieds-poings', detail: 'Les jambes en plus des poings' },
-  { id: 'preparation-physique', nom: 'Préparation physique', detail: 'Sacs, muscu, cardio, cross-training' },
-  { id: 'boxe-enfants', nom: 'Boxe enfants', detail: 'Baby boxe, éducative, ados' },
+/* Les cinq portes du site, et derrière chacune les intitulés exacts que le
+   club publie : le détail vient du registre, jamais d'une description écrite
+   à la main qui pourrait promettre un cours absent du planning. */
+const PAGES = [
+  { id: 'boxe-anglaise', nom: 'Boxe anglaise' },
+  { id: 'mma', nom: 'MMA et travail au sol' },
+  { id: 'boxe-pieds-poings', nom: 'Boxe pieds-poings' },
+  { id: 'preparation-physique', nom: 'Préparation physique' },
+  { id: 'boxe-enfants', nom: 'Cours enfants' },
 ] as const;
+const DISCIPLINES = PAGES.map((p) => ({
+  id: p.id,
+  nom: p.nom,
+  detail: offresDeLaPage(p.id).map((o) => o.intitule).join(' · '),
+}));
 
+/* Aucune heure ici : ce club publie trois plannings, pas une amplitude. Le
+   moment de la journée suffit pour savoir où regarder sur le planning. */
 const CRENEAUX = [
-  { id: 'midi', nom: 'Le midi', detail: 'Entre 12h et 14h' },
-  { id: 'apres-midi', nom: "L'après-midi", detail: 'Entre 14h et 18h' },
-  { id: 'soir', nom: 'Le soir', detail: 'À partir de 18h' },
+  { id: 'midi', nom: 'Le midi', detail: 'La pause du déjeuner' },
+  { id: 'apres-midi', nom: "L'après-midi", detail: 'En horaires décalés' },
+  { id: 'soir', nom: 'Le soir', detail: 'Après le travail' },
   { id: 'samedi', nom: 'Le samedi', detail: 'La journée' },
 ] as const;
 
@@ -50,7 +60,7 @@ const Titre = niveau;
 
 <section class="section moteur" id="ta-seance" aria-labelledby="t-moteur">
   <div class="enveloppe">
-    <p class="cartouche"><span class="cartouche__num">03</span><span>Ta séance</span></p>
+    <p class="cartouche"><span class="cartouche__num">{numero}</span><span>Ta séance</span></p>
 
     <div class="moteur__tete">
       <Titre id="t-moteur" class="moteur__titre" set:html={titre.replace('\n', '<br />')} />
@@ -128,7 +138,7 @@ const Titre = niveau;
         </div>
         <div class="resultat__actions">
           <a class="bouton bouton--signal" href={DESTINATION.plannings} rel="noopener">
-            <span>Voir le planning du club</span>
+            <span>Repérer ce cours sur le planning</span>
             <span class="fleche" aria-hidden="true">↗</span>
           </a>
           <a class="bouton" href={route('premiere-seance').chemin}>

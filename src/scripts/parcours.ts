@@ -35,16 +35,16 @@ const PEREMPTION = 30 * 24 * 60 * 60 * 1000;
 
 export const LIBELLE_DISCIPLINE: Record<PageDiscipline, string> = {
   'boxe-anglaise': 'Boxe anglaise',
-  mma: 'MMA & grappling',
+  mma: 'MMA et travail au sol',
   'boxe-pieds-poings': 'Boxe pieds-poings',
-  'boxe-enfants': 'Boxe enfants',
+  'boxe-enfants': 'Cours enfants',
   'preparation-physique': 'Préparation physique',
 };
 
 /** La même discipline ne s'écrit pas pareil dans un titre et dans une phrase. */
 const DANS_UNE_PHRASE: Record<PageDiscipline, string> = {
   'boxe-anglaise': 'de la boxe anglaise',
-  mma: 'du MMA',
+  mma: 'du MMA et du travail au sol',
   'boxe-pieds-poings': 'de la boxe pieds-poings',
   'boxe-enfants': 'un cours de boxe pour mon enfant',
   'preparation-physique': 'de la préparation physique',
@@ -124,14 +124,9 @@ export function seance(p: Parcours): Seance | null {
   }
 
   const quand = CRENEAU_PHRASE[p.creneau];
-  const pourquoi =
-    p.creneau === 'soir'
-      ? `C’est le moment le plus fréquenté, et le plus vivant : ${quand}, il y a du monde à qui se mesurer. Le planning du club donne l’heure exacte de chaque cours.`
-      : p.creneau === 'midi'
-        ? `${LIBELLE_CRENEAU.midi} est le créneau le plus calme du club — la meilleure façon de débuter sans public.`
-        : p.creneau === 'samedi'
-          ? 'Le samedi, c’est le créneau des familles et de ceux dont la semaine est trop pleine. Une séance tenue toute l’année vaut mieux que trois abandonnées en mars.'
-          : 'L’après-midi, la salle est disponible et les coachs sont là : idéal en horaires décalés, en étudiant ou en travail de nuit.';
+  // Une seule phrase, vraie pour chaque moment : le planning du club donne
+  // l'heure de chaque cours. Aucune ambiance inventée, aucune fréquentation.
+  const pourquoi = `Le planning du club donne l’heure de chaque cours ${quand}. C’est là que tu choisis ton jour.`;
 
   return { intitules, creneau: p.creneau, pourquoi };
 }

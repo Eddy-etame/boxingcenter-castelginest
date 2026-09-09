@@ -151,9 +151,9 @@ export const LIMITROPHES: readonly { nom: string; note?: string }[] = [
   { nom: 'Bruguières' },
   { nom: 'Fonbeauzard' },
   { nom: 'Gratentour' },
-  { nom: 'Launaguet', note: 'desservie par le 60, comme Castelginest' },
+  { nom: 'Launaguet', note: 'sur le trajet du 60' },
   { nom: 'Pechbonnieu' },
-  { nom: 'Saint-Alban', note: 'terminus du 60' },
+  { nom: 'Saint-Alban', note: 'au terminus du 60' },
   { nom: 'Saint-Loup-Cammas' },
 ] as const;
 

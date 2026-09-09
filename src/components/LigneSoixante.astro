@@ -1,0 +1,344 @@
+---
+/**
+ * LA LIGNE 60 — le dessin du trajet, dessiné comme une fiche de ligne.
+ *
+ * Le fait que ce site possède et qu'aucun autre du réseau ne possède : la
+ * ligne 60 s'arrête six fois à Castelginest, puis finit au métro. Les six
+ * arrêts sont nommés, puis la correspondance, la station de métro unique, puis
+ * le 59 jusqu'au 388. Ce que le dessin dit sans l'écrire : le tronçon du
+ * milieu est le plus court. C'est un argument de proximité, et il est vrai.
+ *
+ * Il vit dans la section « Y aller », sous le titre qu'il illustre — dans le
+ * héros, il coûtait presque un écran avant le premier mot sur le club.
+ *
+ * Deux tracés : horizontal pour les écrans larges, vertical pour les
+ * téléphones. Le vertical tient en un demi-écran : on voit d'un coup que le
+ * tronçon du milieu est le plus court, et c'est l'argument même du dessin.
+ *
+ * Tout est en SVG inline — aucun canvas, aucune bibliothèque, aucune requête.
+ * Sans JavaScript et en mouvement réduit, la ligne est déjà à son état final.
+ */
+import { SITE, DESTINATION } from '../data/verite';
+import { ARRETS, ARRIVEE } from '../data/transports';
+
+/** Le tracé vertical : un arrêt tous les 40, la correspondance à 280. */
+const Y = { premier: 40, pas: 40, troisCocus: 280, laVache: 330, club: 420 };
+---
+
+<figure class="ligne" data-calque>
+  <figcaption class="vh">
+    Le trajet depuis {SITE.ville} jusqu’à {DESTINATION.nom}. La ligne de bus 60
+    dessert {ARRETS.length} arrêts dans la commune — {ARRETS.join(', ')} — puis
+    rejoint Trois Cocus. Le métro B descend d’une station jusqu’à La Vache. La
+    ligne de bus 59 y démarre et longe l’avenue des États-Unis jusqu’à l’arrêt
+    {ARRIVEE.arret}, où se trouve le club, au 388.
+  </figcaption>
+
+  {/* ── Tracé horizontal — écrans larges ── */}
+  <svg
+    class="ligne__svg ligne__svg--h"
+    viewBox="0 0 1200 340"
+    role="img"
+    aria-hidden="true"
+    preserveAspectRatio="xMidYMid meet"
+  >
+    <path class="ligne__rail ligne__rail--bus" d="M 60 230 H 690" style="--rang:0" />
+    <path class="ligne__rail ligne__rail--metro" d="M 690 230 H 800" style="--rang:1" />
+    <path class="ligne__rail ligne__rail--bus" d="M 800 230 H 1120" style="--rang:2" />
+    <path class="ligne__navette" d="M 60 230 H 1120" />
+
+    {ARRETS.map((nom, i) => (
+      <g class="ligne__arret" style={`--n:${i}`}>
+        <circle class="ligne__point" cx={90 + i * 96} cy="230" r="8" />
+        <text
+          class="ligne__nom"
+          x={90 + i * 96}
+          y="230"
+          transform={`rotate(-42 ${90 + i * 96} 230)`}
+          dx="18"
+          dy="-6"
+        >
+          {nom.toUpperCase()}
+        </text>
+      </g>
+    ))}
+
+    <g class="ligne__badge" style="--n:6">
+      <rect x="292" y="256" width="46" height="26" rx="3" />
+      <text class="ligne__badge-num" x="315" y="274" text-anchor="middle">60</text>
+      <text class="ligne__badge-note" x="352" y="274" text-anchor="start">{ARRETS.length} ARRÊTS CHEZ TOI</text>
+    </g>
+
+    <g class="ligne__correspondance" style="--n:7">
+      <rect x="678" y="218" width="24" height="24" rx="2" transform="rotate(45 690 230)" />
+      <text class="ligne__nom-corresp" x="690" y="196" text-anchor="middle">TROIS COCUS</text>
+    </g>
+
+    <g class="ligne__badge ligne__badge--metro" style="--n:8">
+      <rect x="722" y="256" width="46" height="26" rx="13" />
+      <text class="ligne__badge-num" x="745" y="274" text-anchor="middle">B</text>
+      <text class="ligne__badge-note" x="745" y="304" text-anchor="middle">1 STATION</text>
+    </g>
+
+    <g class="ligne__correspondance" style="--n:9">
+      <rect x="788" y="218" width="24" height="24" rx="2" transform="rotate(45 800 230)" />
+      <text class="ligne__nom-corresp" x="800" y="196" text-anchor="middle">LA VACHE</text>
+    </g>
+
+    <g class="ligne__badge" style="--n:10">
+      <rect x="906" y="256" width="46" height="26" rx="3" />
+      <text class="ligne__badge-num" x="929" y="274" text-anchor="middle">59</text>
+      <text class="ligne__badge-note" x="966" y="274" text-anchor="start">AVENUE DES ÉTATS-UNIS</text>
+    </g>
+
+    <g class="ligne__cible">
+      <circle class="ligne__halo" cx="1120" cy="230" r="22" />
+      <circle class="ligne__coeur" cx="1120" cy="230" r="10" />
+      <text class="ligne__num" x="1120" y="196" text-anchor="middle">388</text>
+      <text class="ligne__club" x="1120" y="278" text-anchor="middle">LE CLUB</text>
+    </g>
+  </svg>
+
+  {/* ── Tracé vertical — téléphones, en un demi-écran ── */}
+  <svg
+    class="ligne__svg ligne__svg--v"
+    viewBox="0 0 360 440"
+    role="img"
+    aria-hidden="true"
+    preserveAspectRatio="xMidYMid meet"
+  >
+    <path class="ligne__rail ligne__rail--bus" d={`M 104 24 V ${Y.troisCocus}`} style="--rang:0" />
+    <path class="ligne__rail ligne__rail--metro" d={`M 104 ${Y.troisCocus} V ${Y.laVache}`} style="--rang:1" />
+    <path class="ligne__rail ligne__rail--bus" d={`M 104 ${Y.laVache} V ${Y.club}`} style="--rang:2" />
+    <path class="ligne__navette" d={`M 104 24 V ${Y.club}`} />
+
+    {ARRETS.map((nom, i) => (
+      <g class="ligne__arret" style={`--n:${i}`}>
+        <circle class="ligne__point" cx="104" cy={Y.premier + i * Y.pas} r="7" />
+        <text class="ligne__nom ligne__nom--v" x="128" y={Y.premier + i * Y.pas} dy="4">
+          {nom.toUpperCase()}
+        </text>
+      </g>
+    ))}
+
+    <g class="ligne__badge" style="--n:6">
+      <rect x="26" y="127" width="44" height="26" rx="3" />
+      <text class="ligne__badge-num" x="48" y="146" text-anchor="middle">60</text>
+    </g>
+
+    <g class="ligne__correspondance" style="--n:7">
+      <rect x="92" y={Y.troisCocus - 12} width="24" height="24" rx="2" transform={`rotate(45 104 ${Y.troisCocus})`} />
+      <text class="ligne__nom-corresp ligne__nom--v" x="132" y={Y.troisCocus + 5}>TROIS COCUS</text>
+    </g>
+
+    <g class="ligne__badge ligne__badge--metro" style="--n:8">
+      <rect x="26" y="292" width="44" height="26" rx="13" />
+      <text class="ligne__badge-num" x="48" y="311" text-anchor="middle">B</text>
+      <text class="ligne__badge-note ligne__nom--v" x="132" y="309">1 STATION</text>
+    </g>
+
+    <g class="ligne__correspondance" style="--n:9">
+      <rect x="92" y={Y.laVache - 12} width="24" height="24" rx="2" transform={`rotate(45 104 ${Y.laVache})`} />
+      <text class="ligne__nom-corresp ligne__nom--v" x="132" y={Y.laVache + 5}>LA VACHE</text>
+    </g>
+
+    <g class="ligne__badge" style="--n:10">
+      <rect x="26" y="362" width="44" height="26" rx="3" />
+      <text class="ligne__badge-num" x="48" y="381" text-anchor="middle">59</text>
+      <text class="ligne__badge-note ligne__nom--v" x="132" y="379">AVENUE DES ÉTATS-UNIS</text>
+    </g>
+
+    <g class="ligne__cible">
+      <circle class="ligne__halo" cx="104" cy={Y.club} r="20" />
+      <circle class="ligne__coeur" cx="104" cy={Y.club} r="9" />
+      <text class="ligne__num ligne__nom--v" x="132" y={Y.club - 5}>388</text>
+      <text class="ligne__club ligne__nom--v" x="132" y={Y.club + 16}>LE CLUB</text>
+    </g>
+  </svg>
+
+  <p class="ligne__cotes mono">
+    <span>60 · métro B · 59</span>
+    <span aria-hidden="true">—</span>
+    <span>Voiture&nbsp;: D820, périphérique, sortie 33b «&nbsp;Lalande&nbsp;»</span>
+  </p>
+</figure>
+
+<style>
+  .ligne { position: relative; margin: 0; }
+  .ligne__svg { width: 100%; height: auto; overflow: visible; }
+  .ligne__svg--v { display: none; }
+  @media (max-width: 52rem) {
+    .ligne__svg--h { display: none; }
+    .ligne__svg--v { display: block; max-width: 22rem; margin-inline: auto; }
+  }
+
+  /* Les trois rails se tracent l'un après l'autre, dans l'ordre du trajet —
+     et se retracent à chaque entrée dans l'écran, par la classe .vu. */
+  .ligne__rail {
+    fill: none;
+    stroke-linecap: round;
+    stroke-dasharray: var(--l, 1200);
+    stroke-dashoffset: var(--l, 1200);
+  }
+  .ligne.vu .ligne__rail {
+    animation: tracer 900ms var(--e-mecanique) forwards;
+    animation-delay: calc(120ms + var(--rang) * 420ms);
+  }
+  .ligne__rail--bus { stroke: var(--signal-texte); stroke-width: 6; }
+  .ligne__rail--metro {
+    stroke: var(--graphite);
+    stroke-width: 6;
+    stroke-dasharray: 3 7;
+    stroke-dashoffset: 0;
+    opacity: 0;
+  }
+  .ligne.vu .ligne__rail--metro { animation: apparaitre 420ms var(--e-sortie) 540ms both; }
+  @keyframes tracer { to { stroke-dashoffset: 0; } }
+
+  /* La navette : un segment court qui parcourt tout le trajet, en boucle. */
+  .ligne__navette {
+    fill: none;
+    stroke: var(--signal);
+    stroke-width: 6;
+    stroke-linecap: round;
+    stroke-dasharray: 26 3000;
+    stroke-dashoffset: 3026;
+    opacity: 0;
+  }
+  .ligne.vu .ligne__navette { animation: filer 4.2s linear 1.8s infinite; }
+  @keyframes filer {
+    0% { stroke-dashoffset: 3026; opacity: 0; }
+    8% { opacity: 1; }
+    88% { opacity: 1; }
+    100% { stroke-dashoffset: 900; opacity: 0; }
+  }
+
+  .ligne__arret,
+  .ligne__badge,
+  .ligne__correspondance,
+  .ligne__cible { opacity: 0; }
+  .ligne.vu .ligne__arret,
+  .ligne.vu .ligne__badge,
+  .ligne.vu .ligne__correspondance {
+    animation: poser-arret 480ms var(--e-sortie) forwards;
+    animation-delay: calc(300ms + var(--n) * 110ms);
+  }
+  .ligne.vu .ligne__cible { animation: apparaitre 520ms var(--e-sortie) 1650ms forwards; }
+  @keyframes poser-arret {
+    from { opacity: 0; transform: translateY(0.7rem); }
+    to { opacity: 1; transform: none; }
+  }
+  @keyframes apparaitre { from { opacity: 0; } to { opacity: 1; } }
+
+  .ligne__point {
+    fill: var(--papier);
+    stroke: var(--encre);
+    stroke-width: 2.5;
+    vector-effect: non-scaling-stroke;
+  }
+  .ligne__nom {
+    font-family: var(--police-mono);
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    fill: var(--encre);
+  }
+  .ligne__nom--v { text-anchor: start; }
+  .ligne__nom-corresp {
+    font-family: var(--police-mono);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    fill: var(--encre);
+  }
+  .ligne__correspondance rect {
+    fill: var(--papier-vif);
+    stroke: var(--encre);
+    stroke-width: 2;
+    vector-effect: non-scaling-stroke;
+  }
+  .ligne__badge rect { fill: var(--signal); }
+  .ligne__badge--metro rect { fill: var(--encre); }
+  .ligne__badge-num {
+    font-family: var(--police-mono);
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    fill: var(--papier);
+  }
+  .ligne__badge-note {
+    font-family: var(--police-mono);
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    fill: var(--graphite);
+  }
+  .ligne__halo {
+    fill: none;
+    stroke: var(--signal-texte);
+    stroke-width: 1.5;
+    vector-effect: non-scaling-stroke;
+    transform-box: fill-box;
+    transform-origin: center;
+  }
+  .ligne.vu .ligne__halo { animation: apparaitre 520ms var(--e-sortie) 1650ms forwards, battre 3s var(--e-mecanique) 2.3s infinite; }
+  @keyframes battre {
+    0%, 70%, 100% { transform: scale(1); opacity: 0.9; }
+    85% { transform: scale(1.45); opacity: 0.15; }
+  }
+  .ligne__coeur { fill: var(--signal-texte); }
+  .ligne__num {
+    font-family: var(--police-mono);
+    font-size: 17px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    fill: var(--encre);
+  }
+  .ligne__club {
+    font-family: var(--police-mono);
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    fill: var(--signal-texte);
+  }
+
+  .ligne__cotes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--e-2) var(--e-4);
+    margin-top: var(--e-5);
+    padding-top: var(--e-3);
+    border-top: 1px solid var(--trait);
+    text-transform: none;
+    letter-spacing: 0.05em;
+    color: var(--graphite);
+  }
+  .ligne__cotes span:first-child { color: var(--encre); font-weight: 700; }
+
+  /* ── Sans script, et en mouvement réduit : la ligne est déjà tracée. ── */
+  :global(.no-js) .ligne__rail,
+  :global(.no-js) .ligne__rail--metro,
+  :global(.no-js) .ligne__arret,
+  :global(.no-js) .ligne__badge,
+  :global(.no-js) .ligne__correspondance,
+  :global(.no-js) .ligne__cible {
+    animation: none;
+    opacity: 1;
+    transform: none;
+    stroke-dashoffset: 0;
+  }
+  :global(.no-js) .ligne__navette { display: none; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ligne__rail,
+    .ligne__rail--metro,
+    .ligne__arret,
+    .ligne__badge,
+    .ligne__correspondance,
+    .ligne__cible,
+    .ligne__halo {
+      animation: none !important;
+      opacity: 1;
+      transform: none;
+      stroke-dashoffset: 0;
+    }
+    .ligne__navette { display: none; }
+  }
+</style>

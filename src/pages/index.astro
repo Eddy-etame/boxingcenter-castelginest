@@ -1,60 +1,91 @@
 ---
+/**
+ * L'ACCUEIL — neuf sections, dans l'ordre des questions d'un Castelginestois.
+ *
+ * Le gabarit de la famille ouvre sur le moteur et range le trajet en bas. Le
+ * Castelginestois, lui, lit une adresse à Toulouse en section 2 et sa question
+ * suivante est « j'y vais comment ? » : alors le trajet est en 3, avec le
+ * dessin de la ligne 60 comme corps de la réponse, et le moteur descend en 6,
+ * après la liste des cours — on ne fait pas choisir un intitulé à quelqu'un
+ * qui ne connaît pas encore les noms.
+ *
+ * Chaque section se referme sur une porte du club dont le libellé n'a pas
+ * encore servi. Un fait s'écrit une fois par angle : le chiffre dans le héros,
+ * la sensation dans « le club », la preuve dans les questions. Aucun titre de
+ * section n'est un titre de la famille.
+ */
 import Base from '../layouts/Base.astro';
 import Hero from '../components/Hero.astro';
+import LigneSoixante from '../components/LigneSoixante.astro';
 import Seance from '../components/Seance.astro';
 import Photo from '../components/Photo.astro';
-import { SITE, DESTINATION, VILLE, LIMITROPHES, CONTACT } from '../data/verite';
+import { SITE, DESTINATION, LIMITROPHES, CONTACT } from '../data/verite';
 import { COMMUNES } from '../data/communes';
-import { OFFRES } from '../data/offres';
+import { OFFRES, offresDeLaPage } from '../data/offres';
 import { ROLES } from '../data/medias';
 import { route } from '../data/routes';
-import { ITINERAIRES, MEILLEUR } from '../data/transports';
+import { ITINERAIRES, MEILLEUR, ARRIVEE, ARRETS, enLettres } from '../data/transports';
+
+/** « a, b, c et d » depuis une liste, sans jamais l'écrire à la main. */
+const enumerer = (noms: readonly string[]) =>
+  noms.length > 1 ? `${noms.slice(0, -1).join(', ')} et ${noms[noms.length - 1]}` : noms[0] ?? '';
+
+/** Les cinq portes du site, avec les intitulés exacts du club derrière chacune. */
+const PORTES = [
+  { id: 'boxe-anglaise', nom: 'Boxe anglaise' },
+  { id: 'mma', nom: 'MMA et travail au sol' },
+  { id: 'boxe-pieds-poings', nom: 'Boxe pieds-poings' },
+  { id: 'preparation-physique', nom: 'Préparation physique' },
+  { id: 'boxe-enfants', nom: 'Cours enfants' },
+] as const;
+
+/** Les autres trajets qui partent par la même ligne que le meilleur. */
+const VARIANTES = ITINERAIRES.filter(
+  (i) => i !== MEILLEUR && i.etapes[0].code === MEILLEUR.etapes[0].code
+);
+
+const COMBIEN_COURS = enLettres(OFFRES.length);
+const COMBIEN_ARRETS = enLettres(ARRETS.length);
+/** Les arrêts tels qu'on les dit : « l'École », « la Mairie ». */
+const ARRETS_EN_TEXTE = enumerer(
+  ARRETS.map((a) => a.replace(`École ${SITE.ville}`, 'l’École').replace(`Mairie ${SITE.ville}`, 'la Mairie'))
+);
+
+const VOITURE = DESTINATION.acces.split('En voiture, ')[1] ?? '';
 
 /**
- * Les questions telles qu'on les pose, avec des réponses courtes. Elles
- * portent les recherches locales parce qu'elles y répondent, jamais pour les
- * placer.
+ * Les questions telles qu'on les pose. Chaque réponse s'ouvre sur ce qui est
+ * vrai, et c'est ici que vit la preuve : l'adresse, les arrêts en toutes
+ * lettres, la cage, la muscu, l'enfant.
  */
 const QUESTIONS = [
   {
-    titre: 'Où est le club de boxe le plus proche de Castelginest ?',
-    texte:
-      'Au 388 avenue des États-Unis, à Toulouse, à côté de la sortie 33b « Lalande » du périphérique. C’est la plus grande salle du réseau : 1 200 m² en trois espaces de 400 m².',
+    titre: 'C’est où, exactement ?',
+    texte: `Au ${DESTINATION.adresse.replace(', 31200 Toulouse', ', à Toulouse')}, à côté de la sortie 33b « Lalande » du périphérique. Pour les sports de combat à proximité de ${SITE.ville}, c’est l’adresse : ${DESTINATION.singularite.charAt(0).toLowerCase() + DESTINATION.singularite.slice(1)}`,
   },
   {
-    titre: 'Comment j’y vais sans voiture ?',
-    texte:
-      'Le 60 s’arrête six fois dans la commune et finit à Trois Cocus, sur le métro B. Une station plus loin, à La Vache, le 59 démarre et longe l’avenue des États-Unis. Descends à « États-Unis Fondeyre ».',
+    titre: 'Comment j’y vais, en bus ou en voiture ?',
+    texte: `Le 60 passe par ${ARRETS_EN_TEXTE}, puis finit à Trois Cocus. Une station de métro, et le 59 fait le reste : descends à « ${ARRIVEE.arret} ». En voiture, ${VOITURE}`,
   },
   {
-    titre: 'Qu’est-ce qu’on peut y pratiquer ?',
+    titre: 'C’est mon premier sport de combat. Je peux venir ?',
     texte:
-      'Tout ce que fait le réseau, au même endroit : boxe anglaise, boxe pieds-poings, full contact, travail au sol, cours enfants, Boxing Lady, Boxing Fitness, cross-training, Hyrox, street workout, musculation et cardio.',
-  },
-  {
-    titre: 'Je n’ai jamais fait de sport de combat. Je peux venir ?',
-    texte:
-      'Oui, c’est le cas de la plupart des gens qui s’inscrivent. L’entrée se fait sans test et sans niveau demandé. Une première séance, c’est de l’échauffement, un geste travaillé lentement, du sac et des pattes d’ours. Tu frappes, et c’est tout.',
+      'Oui. Tu commences par une séance d’essai, et le coach règle l’intensité à ton niveau. Une tenue de sport et de l’eau suffisent le premier jour.',
   },
   {
     titre: 'Il y a une cage ?',
     texte:
-      'Oui, une cage surélevée officielle, dans l’espace striking et travail au sol : 400 m² de tatamis, des protections murales, et des panneaux de séparation pour travailler le cage control.',
+      'Oui, une cage surélevée officielle, dans l’espace striking et travail au sol, avec 400 m² de tatamis. Sur le planning, ce cours s’appelle « Travail au Sol ».',
   },
   {
-    titre: 'Et si je viens pour la muscu ou le cardio ?',
+    titre: 'Je viens pour la muscu ou le cardio. C’est possible ?',
     texte:
-      'L’espace préparation physique fait 400 m² : seize sacs de frappe, musculation, cardio, cross-training, une cage de street workout et un coach spécialisé en callisthénie sur les entraînements en accès libre.',
+      'C’est prévu. L’espace préparation physique fait 400 m² : seize sacs de frappe, musculation, cardio, une cage de cross-training, et un coach spécialisé en callisthénie sur l’Accès Libre.',
   },
   {
     titre: 'Mon enfant peut s’inscrire ?',
     texte:
-      'Le club publie des cours enfants, en touché contrôlé. Les jours et les tranches d’âge figurent sur ses plannings hebdomadaires.',
-  },
-  {
-    titre: 'J’habite Saint-Alban, Launaguet, Aucamville ou Fenouillet.',
-    texte:
-      'Chaque commune a sa page ici, avec son propre trajet. Le 60 démarre à Saint-Alban et passe par Launaguet ; depuis Aucamville, le 69 rejoint La Vache ; depuis Fenouillet, le 59 fait tout le trajet sans changement.',
+      'Le club publie un cours « Cours Enfants », en touché contrôlé. Les jours et les tranches d’âge sont sur ses plannings hebdomadaires.',
   },
 ];
 ---
@@ -63,32 +94,33 @@ const QUESTIONS = [
   <Hero />
 
   {/* ─────────── 02 — LE CLUB ─────────── */}
-  <section class="section proximite" aria-labelledby="t-proximite">
-    <div class="enveloppe proximite__inner">
-      <div class="proximite__texte">
+  <section class="section club" aria-labelledby="t-club">
+    <div class="enveloppe club__inner">
+      <div class="club__texte">
         <p class="cartouche"><span class="cartouche__num">02</span><span>Le club</span></p>
-        <h2 id="t-proximite">
-          Deux rings, une cage,<br />
-          <span class="proximite__accent">seize sacs de frappe.</span>
+        <h2 id="t-club">
+          Le club de boxe proche de {SITE.ville} est au
+          <span class="club__accent">{DESTINATION.adresse.split(',')[0]}, à Toulouse.</span>
         </h2>
         <p class="lead">
-          <strong>Boxing Center accueille les {SITE.gentile}</strong> avenue des
-          États-Unis, à l’arrêt du 59.
+          <strong>{DESTINATION.nom}</strong> est à côté de la sortie 33b
+          «&nbsp;Lalande&nbsp;» du périphérique. Le 59 marque l’arrêt
+          «&nbsp;{ARRIVEE.arret}&nbsp;» dans le quartier.
         </p>
         <p class="faible">
-          Un espace pour le striking et le travail au sol, avec une cage
-          surélevée officielle et 400 m² de tatamis. Un espace boxe, avec deux
-          rings de compétition. Un espace préparation physique, avec seize sacs
-          de frappe, de la musculation, du cardio et une cage de cross-training.
+          Pendant qu’un cours de boxe occupe les deux rings, un autre groupe
+          travaille au sol sur les tatamis et un troisième enchaîne aux sacs.
+          Chacun garde sa place du début à la fin de la séance. Le club publie
+          trois plannings, Boxe, Fitness et Sol, et l’heure de chaque cours est
+          dessus.
         </p>
-        <dl class="proximite__faits">
+        <dl class="club__faits">
           <div><dt class="mono">Adresse</dt><dd>{DESTINATION.adresse}</dd></div>
-          <div><dt class="mono">Depuis {SITE.ville}</dt><dd>{DESTINATION.acces}</dd></div>
-          <div><dt class="mono">Plannings</dt><dd>{DESTINATION.horaires.valeur}</dd></div>
+          <div><dt class="mono">Plannings</dt><dd>{DESTINATION.horairesCourt}</dd></div>
           <div><dt class="mono">Téléphone</dt><dd><a class="lien" href={`tel:${DESTINATION.telephoneLien}`}>{DESTINATION.telephone}</a></dd></div>
         </dl>
-        <a class="bouton proximite__lien" href={DESTINATION.site} rel="noopener">
-          <span>Ouvrir le site du club</span>
+        <a class="bouton club__lien" href={DESTINATION.site} rel="noopener">
+          <span>Ouvrir la page du club</span>
           <span class="fleche" aria-hidden="true">↗</span>
         </a>
       </div>
@@ -98,174 +130,142 @@ const QUESTIONS = [
         sizes="(max-width: 62rem) 100vw, 46vw"
         ratio="4 / 5"
         legende
-        class="proximite__image"
+        class="club__image"
       />
     </div>
   </section>
 
-  {/* ─────────── 03 — LE MOTEUR ─────────── */}
-  <Seance />
-
-  {/* ─────────── 04 — LES HUIT COURS ─────────── */}
-  <section class="section encre disciplines" aria-labelledby="t-disciplines">
+  {/* ─────────── 03 — Y ALLER ─────────── */}
+  <section class="section creuse trajet" id="trajet" aria-labelledby="t-trajet">
     <div class="enveloppe">
-      <p class="cartouche"><span class="cartouche__num">04</span><span>Tout au même endroit</span></p>
-      <div class="disciplines__tete">
-        <h2 id="t-disciplines">Les cours, avec les noms<br />que tu verras sur le planning.</h2>
-        <p class="lead faible disciplines__intro">
-          Les autres salles du réseau ont chacune leur discipline phare. Celle-ci
-          les réunit toutes, sur 1 200 m². Voilà la liste complète, avec les
-          intitulés exacts du planning.
+      <p class="cartouche"><span class="cartouche__num">03</span><span>Y aller</span></p>
+      <div class="trajet__tete">
+        <h2 id="t-trajet">
+          Le 60 s’arrête {COMBIEN_ARRETS} fois dans ta commune,<br />
+          <span class="trajet__accent">puis finit au métro.</span>
+        </h2>
+        <p class="lead faible trajet__intro">
+          La ligne 60 finit à Trois Cocus, sur le métro B. Une seule station
+          jusqu’à La Vache, et le 59 part de là&nbsp;: tu descends au troisième
+          arrêt, «&nbsp;{ARRIVEE.arret}&nbsp;». Le club est au 388 de cette avenue.
         </p>
       </div>
 
-      <ol class="disciplines__liste">
-        {OFFRES.map((o, i) => (
-          <li class="reveler" style={`--retard:${i * 45}ms`}>
-            <span class="mono disc__num">{String(i + 1).padStart(2, '0')}</span>
-            <div class="disc__corps">
-              <h3 class="disc__nom">{o.intitule}</h3>
-              <p class="disc__detail">{o.detail}</p>
-            </div>
-            {o.ages && <span class="mono disc__age">{o.ages}</span>}
-          </li>
-        ))}
-      </ol>
+      <LigneSoixante />
 
-      <p class="disciplines__source mono">
-        <a class="lien" href={DESTINATION.activites} rel="noopener">Toutes les activités du club ↗</a>
-      </p>
+      {VARIANTES.map((v) => {
+        const [, metro, bus] = v.etapes;
+        return (
+          <p class="trajet__variante faible">
+            Autre possibilité&nbsp;: le métro {metro.code} jusqu’à {metro.a}, puis le {bus.code},
+            qui finit à «&nbsp;{bus.a}&nbsp;», {bus.jours}.
+          </p>
+        );
+      })}
+
+      <div class="trajet__actions">
+        <a class="bouton" href={route('transports').chemin}>
+          <span>Toutes les variantes du trajet</span><span class="fleche" aria-hidden="true">→</span>
+        </a>
+        <a class="bouton bouton--signal" href={DESTINATION.plannings} rel="noopener">
+          <span>Le planning, pour choisir ton jour</span><span class="fleche" aria-hidden="true">↗</span>
+        </a>
+      </div>
     </div>
   </section>
 
-  {/* ─────────── 05 — LA SALLE ─────────── */}
-  <section class="section preuve" aria-labelledby="t-preuve">
-    <div class="enveloppe preuve__tete">
-      <p class="cartouche"><span class="cartouche__num">05</span><span>Sur place</span></p>
-      <h2 id="t-preuve">Un soir d’entraînement.</h2>
-      <p class="lead faible">
-        Un coach, un boxeur, une série aux pattes d’ours. Toutes les photos de
-        ce site viennent du réseau Boxing Center.
-      </p>
-    </div>
-    <div class="enveloppe">
-      <Photo slug={ROLES.signature} sizes="100vw" ratio="16 / 9" legende class="preuve__image" />
-    </div>
-  </section>
-
-  {/* ─────────── 06 — LA PREMIÈRE SÉANCE ─────────── */}
-  <section class="section creuse premiere" aria-labelledby="t-premiere">
+  {/* ─────────── 04 — LA PREMIÈRE SÉANCE ─────────── */}
+  <section class="section premiere" aria-labelledby="t-premiere">
     <div class="enveloppe premiere__inner">
       <div class="premiere__image">
         <Photo slug={ROLES.premiereSeance} sizes="(max-width: 62rem) 100vw, 40vw" ratio="3 / 4" />
       </div>
       <div class="premiere__texte">
-        <p class="cartouche"><span class="cartouche__num">06</span><span>La première fois</span></p>
-        <h2 id="t-premiere">Tout le monde a commencé par une première séance.</h2>
-        <ol class="premiere__etapes">
-          <li>
-            <span class="mono">01</span>
-            <p><strong>Tu apportes une tenue de sport et de l’eau.</strong> Rien de technique. Pour les gants et les bandes, demande au club en arrivant.</p>
-          </li>
-          <li>
-            <span class="mono">02</span>
-            <p><strong>Tu frappes, et c’est tout.</strong> Une première séance, c’est de la corde, un geste décomposé, du sac et des pattes d’ours.</p>
-          </li>
-          <li>
-            <span class="mono">03</span>
-            <p><strong>Chacun est occupé à sa propre séance.</strong> Le coach te suit, le reste de la salle a la tête dans son travail.</p>
-          </li>
-          <li>
-            <span class="mono">04</span>
-            <p><strong>Tu repars essoufflé, et content d’être venu.</strong> C’est le seul objectif d’une première séance.</p>
-          </li>
-        </ol>
-        <a class="lien premiere__lien" href={route('premiere-seance').chemin}>
-          Le déroulé complet, minute par minute →
-        </a>
-      </div>
-    </div>
-  </section>
-
-  {/* ─────────── 07 — LES TROIS ESPACES ─────────── */}
-  <section class="section amplitude" aria-labelledby="t-amplitude">
-    <div class="enveloppe amplitude__inner">
-      <div>
-        <p class="cartouche"><span class="cartouche__num">07</span><span>La salle</span></p>
-        <p class="amplitude__grand">
-          <span>3</span>
-          <span class="amplitude__fleche" aria-hidden="true">×</span>
-          <span>400</span>
-        </p>
-        <p class="mono amplitude__jours">mètres carrés</p>
-      </div>
-      <div class="amplitude__texte">
-        <h2 id="t-amplitude">Trois espaces qui tournent en même temps.</h2>
+        <p class="cartouche"><span class="cartouche__num">04</span><span>La première fois</span></p>
+        <h2 id="t-premiere">Ta première séance se passe au sac et aux pattes d’ours.</h2>
         <p class="lead faible">
-          C’est ce que change la place : un cours de boxe occupe les deux rings
-          pendant qu’un autre travaille au sol et qu’un troisième enchaîne au
-          sac. Chacun garde son mètre carré du début à la fin de la séance.
+          Une tenue de sport et de l’eau suffisent. Pour les gants et les bandes,
+          demande au club en arrivant.
         </p>
-        <ul class="amplitude__args">
-          <li><span class="amplitude__tiret" aria-hidden="true"></span>Une cage surélevée et 400 m² de tatamis</li>
-          <li><span class="amplitude__tiret" aria-hidden="true"></span>Deux rings de compétition</li>
-          <li><span class="amplitude__tiret" aria-hidden="true"></span>Seize sacs de frappe et une cage de cross-training</li>
-        </ul>
-        <a class="bouton" href={DESTINATION.plannings} rel="noopener">
-          <span>Voir les plannings</span>
-          <span class="fleche" aria-hidden="true">↗</span>
-        </a>
-      </div>
-    </div>
-  </section>
-
-  {/* ─────────── 08 — Y ALLER ─────────── */}
-  <section class="section trajet" aria-labelledby="t-trajet">
-    <div class="enveloppe trajet__inner">
-      <div class="trajet__texte">
-        <p class="cartouche"><span class="cartouche__num">08</span><span>Y aller</span></p>
-        <h2 id="t-trajet">
-          Le 60 t’amène au métro,<br />
-          <span class="trajet__accent">le 59 finit le trajet.</span>
-        </h2>
-        <p class="lead faible">{MEILLEUR.resume}</p>
-        <div class="trajet__actions">
-          <a class="bouton bouton--signal" href={route('transports').chemin}>
-            <span>Le trajet, arrêt par arrêt</span><span class="fleche" aria-hidden="true">→</span>
+        <ol class="premiere__etapes">
+          <li><span class="mono">01</span><p><strong>Tu t’échauffes à la corde.</strong></p></li>
+          <li><span class="mono">02</span><p><strong>Le coach décompose un geste, lentement,</strong> et tu le répètes au sac.</p></li>
+          <li><span class="mono">03</span><p><strong>Tu finis aux pattes d’ours, avec le coach en face.</strong> Le reste de la salle est occupé à sa propre séance.</p></li>
+          <li><span class="mono">04</span><p><strong>Tu repars essoufflé, et content d’être venu.</strong></p></li>
+        </ol>
+        <div class="premiere__actions">
+          <a class="bouton bouton--signal" href={DESTINATION.tarifs} rel="noopener">
+            <span>Réserver cette première séance</span><span class="fleche" aria-hidden="true">↗</span>
           </a>
-          <a class="bouton" href={DESTINATION.plannings} rel="noopener">
-            <span>Le planning du club</span><span class="fleche" aria-hidden="true">↗</span>
+          <a class="lien premiere__lien" href={route('premiere-seance').chemin}>
+            Le déroulé complet, minute par minute →
           </a>
         </div>
       </div>
-
-      {/* Une ligne par itinéraire : la première étape peut être la même pour
-          les trajets, alors c'est le trajet entier qu'on nomme. */}
-      <ol class="trajet__lignes">
-        {ITINERAIRES.map((it, i) => (
-          <li class="reveler" style={`--retard:${i * 80}ms`}>
-            <a href={`${route('transports').chemin}?trajet=${it.id}`}>
-              <span class={`trajet__code trajet__code--${it.etapes[0].mode}`}>{it.etapes[0].code}</span>
-              <span class="trajet__parcours">{it.onglet}</span>
-              <span class="mono trajet__jours">
-                {it.etapes.length === 1 ? 'direct' : `${it.etapes.length} étapes`} · {it.etapes[0].jours}
-              </span>
-            </a>
-          </li>
-        ))}
-      </ol>
     </div>
   </section>
 
-  {/* ─────────── 09 — LES QUESTIONS ─────────── */}
+  {/* ─────────── 05 — LES COURS ─────────── */}
+  <section class="section encre cours" aria-labelledby="t-cours">
+    <div class="enveloppe">
+      <p class="cartouche"><span class="cartouche__num">05</span><span>Les cours</span></p>
+      <div class="cours__tete">
+        <h2 id="t-cours">{enumerer(PORTES.map((p, i) => (i ? p.nom.replace(/^([A-ZÉ])(?![A-Z])/, (c) => c.toLowerCase()) : p.nom)))}.</h2>
+        <p class="lead faible cours__intro">
+          Cette salle est la seule du réseau à réunir toutes les disciplines en
+          un lieu, et chaque cours porte l’intitulé exact de son planning. Si tu
+          cherches un club de MMA près de {SITE.ville}, l’intitulé à viser
+          s’appelle «&nbsp;Travail au Sol&nbsp;». Voilà les {COMBIEN_COURS}
+          intitulés, rangés par page.
+        </p>
+      </div>
+
+      <ol class="cours__liste">
+        {PORTES.map((p, i) => {
+          const offres = offresDeLaPage(p.id);
+          return (
+            <li class="reveler" style={`--retard:${i * 60}ms`}>
+              <a class="cours__page" href={route(p.id).chemin}>
+                <span class="mono cours__num">{String(i + 1).padStart(2, '0')}</span>
+                <span class="cours__nom">{p.nom}</span>
+                <span class="fleche" aria-hidden="true">→</span>
+              </a>
+              <ul class="cours__intitules">
+                {offres.map((o) => (
+                  <li>
+                    <b>{o.intitule}</b>
+                    {(offres.length === 1 || o.ages) && (
+                      <span class="cours__detail"> — {o.ages ?? o.detail}</span>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            </li>
+          );
+        })}
+      </ol>
+
+      <p class="cours__source">
+        <a class="bouton bouton--signal" href={DESTINATION.activites} rel="noopener">
+          <span>Les {COMBIEN_COURS} activités, sur le site du club</span><span class="fleche" aria-hidden="true">↗</span>
+        </a>
+      </p>
+    </div>
+  </section>
+
+  {/* ─────────── 06 — LE MOTEUR ─────────── */}
+  <Seance titre={'Tu sais où aller.\nChoisis quoi, et quand.'} numero="06" />
+
+  {/* ─────────── 07 — LES QUESTIONS ─────────── */}
   <section class="section creuse questions" aria-labelledby="t-questions">
     <div class="enveloppe questions__inner">
       <div class="questions__tete">
-        <p class="cartouche"><span class="cartouche__num">09</span><span>Ce qu’on nous demande</span></p>
-        <h2 id="t-questions">Les questions qu’on nous pose<br />le plus souvent.</h2>
+        <p class="cartouche"><span class="cartouche__num">07</span><span>Tes dernières questions</span></p>
+        <h2 id="t-questions">Ce qu’il te reste à demander,<br />en réponses courtes.</h2>
         <p class="lead faible">
-          Les réponses sont courtes. Si la tienne n’y est pas, écris-nous&nbsp;:
-          on répond vite.
+          Si la tienne manque, appelle le club au
+          {' '}<a class="lien" href={`tel:${CONTACT.telephoneLien.valeur}`}>{CONTACT.telephone.valeur}</a>,
+          ou <a class="lien" href={route('contact').chemin}>écris-nous en deux lignes</a>.
         </p>
       </div>
       <div class="questions__liste">
@@ -278,23 +278,29 @@ const QUESTIONS = [
             <p class="qr__r">{q.texte}</p>
           </details>
         ))}
+        <p class="questions__pied mono">
+          Les jours, les âges et les heures sont sur
+          {' '}<a class="lien" href={DESTINATION.plannings} rel="noopener">les plannings du club ↗</a>.
+        </p>
       </div>
     </div>
   </section>
 
-  {/* ─────────── 10 — LE SECTEUR ─────────── */}
+  {/* ─────────── 08 — LE SECTEUR ─────────── */}
   <section class="section secteur" aria-labelledby="t-secteur">
     <div class="enveloppe">
-      <p class="cartouche"><span class="cartouche__num">10</span><span>Le secteur</span></p>
+      <p class="cartouche">
+        <span class="cartouche__num">08</span>
+        <span>Pour les {SITE.gentile} et le {SITE.secteur}</span>
+      </p>
       <div class="secteur__tete">
         <h2 id="t-secteur">
-          Tu habites une commune à côté&nbsp;?<br />
-          <span class="secteur__accent">On a prévu ça aussi.</span>
+          Le même club depuis<br />
+          <span class="secteur__accent">{enumerer(COMMUNES.map((c) => c.nom))}.</span>
         </h2>
         <p class="lead faible secteur__intro">
-          Saint-Alban, Launaguet, Aucamville et Fenouillet ont chacune sa
-          page&nbsp;: la ligne à prendre, la route en voiture, et l’arrêt où
-          descendre. Parce que depuis chez toi, le trajet commence ailleurs.
+          Chaque commune a sa page&nbsp;: la ligne à prendre, la route en
+          voiture, et l’arrêt où descendre.
         </p>
       </div>
 
@@ -315,64 +321,34 @@ const QUESTIONS = [
         ))}
       </ul>
 
-      <p class="mono secteur__cle">Les sept communes limitrophes de {SITE.ville}</p>
-      <ul class="secteur__liste">
-        {LIMITROPHES.map((c) => (
-          <li class={c.note ? 'secteur__item secteur__item--cle' : 'secteur__item'}>
-            <span class="secteur__nom">{c.nom}</span>
-            {c.note && <span class="secteur__note">{c.note}</span>}
-          </li>
-        ))}
-      </ul>
       <p class="secteur__pied">
-        Boxing Center accueille les habitants de {SITE.ville} et du {SITE.secteur}
-        {' '}dans son club de {DESTINATION.ville}. Accès par {VILLE.routes.valeur}&nbsp;;
-        en transports, {VILLE.bus.valeur}.
+        Boxing Center accueille les habitants de {SITE.ville} et des communes
+        voisines dans son club de {DESTINATION.nomCourt}. {SITE.ville} touche
+        {' '}{enLettres(LIMITROPHES.length)} communes&nbsp;: {enumerer(LIMITROPHES.map((c) => c.nom))}&nbsp;;
+        {' '}{enumerer(LIMITROPHES.filter((c) => c.note).map((c) => `${c.nom} est ${c.note}`))}.
       </p>
     </div>
   </section>
 
-  {/* ─────────── 11 — DEUX VISAGES ─────────── */}
-  <section class="section encre local" aria-labelledby="t-local">
-    <div class="enveloppe local__inner">
-      <div>
-        <p class="cartouche"><span class="cartouche__num">11</span><span>{SITE.ville}</span></p>
-        <h2 id="t-local">Castelginest, et le club au bout de la ligne.</h2>
-        <p class="lead">
-          {VILLE.figure.valeur.charAt(0).toUpperCase() + VILLE.figure.valeur.slice(1)}.
-        </p>
-        <p class="faible">
-          Le fort du village naît d’un accord de 1368 entre les habitants et
-          l’abbé de Saint-Sernin. L’église Saint-Étienne date de 1542 et a été
-          restaurée entre 2010 et 2013. La commune tient sur l’axe de la D820,
-          et c’est ce même axe qui mène au club.
-        </p>
-      </div>
-      <div class="local__photo">
-        <Photo slug={ROLES.calme} sizes="(max-width: 62rem) 100vw, 38vw" ratio="4 / 5" legende />
-      </div>
-    </div>
-  </section>
-
-  {/* ─────────── 12 — CONVERGENCE ─────────── */}
-  <section class="section convergence" aria-labelledby="t-convergence">
+  {/* ─────────── 09 — DÉCIDER ─────────── */}
+  <section class="section creuse convergence" aria-labelledby="t-convergence">
     <div class="enveloppe convergence__inner">
-      <p class="cartouche"><span class="cartouche__num">12</span><span>Décider</span></p>
+      <p class="cartouche"><span class="cartouche__num">09</span><span>Décider</span></p>
       <h2 id="t-convergence">
-        Un bus, une station,<br />
-        <span class="convergence__accent">un bus, et tu y es.</span>
+        Réserve ta séance d’essai,<br />
+        <span class="convergence__accent">ou pose ta question.</span>
       </h2>
       <p class="lead convergence__texte">
-        Réponds à deux questions et on te dit quel cours viser et à quel moment
-        venir. Si tu préfères demander, écris-nous en deux lignes&nbsp;: on te
-        répond avec un créneau.
+        La séance d’essai se réserve sur le site du club. Si tu préfères
+        demander d’abord, appelle le club ou écris-nous en deux lignes&nbsp;: on
+        te répond.
       </p>
       <div class="convergence__actions">
-        <a class="bouton bouton--signal" href={route('contact').chemin}>
-          <span>Poser ma question</span><span class="fleche" aria-hidden="true">→</span>
+        <a class="bouton bouton--signal" href={DESTINATION.tarifs} rel="noopener">
+          <span>Ma séance d’essai, sur le site du club</span><span class="fleche" aria-hidden="true">↗</span>
         </a>
-        <a class="bouton" href={DESTINATION.plannings} rel="noopener">
-          <span>Voir le planning</span><span class="fleche" aria-hidden="true">↗</span>
+        <a class="bouton" href={route('contact').chemin}>
+          <span>Poser ma question</span><span class="fleche" aria-hidden="true">→</span>
         </a>
         <a class="bouton" href={`tel:${CONTACT.telephoneLien.valeur}`}>
           <span>{CONTACT.telephone.valeur}</span><span class="fleche" aria-hidden="true">↗</span>
@@ -384,20 +360,20 @@ const QUESTIONS = [
 
 <style>
   /* ── 02 Le club ────────────────────────────────────────────────────── */
-  .proximite__inner {
+  .club__inner {
     display: grid;
     grid-template-columns: minmax(0, 1fr) minmax(0, 0.85fr);
     gap: var(--e-8);
     align-items: center;
   }
-  @media (max-width: 62rem) { .proximite__inner { grid-template-columns: 1fr; gap: var(--e-7); } }
-  .proximite h2 { max-width: 14ch; margin-bottom: var(--e-5); }
-  .proximite__accent { color: var(--signal-texte); }
-  .proximite .lead { max-width: 46ch; margin-bottom: var(--e-4); }
-  .proximite .faible { max-width: 52ch; }
+  @media (max-width: 62rem) { .club__inner { grid-template-columns: 1fr; gap: var(--e-7); } }
+  .club h2 { max-width: 20ch; margin-bottom: var(--e-5); }
+  .club__accent { display: block; color: var(--signal-texte); }
+  .club .lead { max-width: 46ch; margin-bottom: var(--e-4); }
+  .club .faible { max-width: 54ch; }
 
-  .proximite__faits { margin: var(--e-6) 0; }
-  .proximite__faits > div {
+  .club__faits { margin: var(--e-6) 0; }
+  .club__faits > div {
     display: grid;
     grid-template-columns: 9rem 1fr;
     gap: var(--e-3);
@@ -405,46 +381,27 @@ const QUESTIONS = [
     border-top: 1px solid var(--trait);
     font-size: var(--t-petit);
   }
-  .proximite__faits > div:last-child { border-bottom: 1px solid var(--trait); }
-  @media (max-width: 34rem) { .proximite__faits > div { grid-template-columns: 1fr; gap: 0.2rem; } }
-  .proximite__faits dt { color: var(--graphite); padding-top: 0.15em; }
-  .proximite__faits dd { margin: 0; }
+  .club__faits > div:last-child { border-bottom: 1px solid var(--trait); }
+  @media (max-width: 34rem) { .club__faits > div { grid-template-columns: 1fr; gap: 0.2rem; } }
+  .club__faits dt { color: var(--graphite); padding-top: 0.15em; }
+  .club__faits dd { margin: 0; }
 
-  /* ── 04 Disciplines ────────────────────────────────────────────────── */
-  .disciplines__tete {
+  /* ── 03 Y aller ────────────────────────────────────────────────────── */
+  .trajet__tete {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: var(--e-5) var(--e-8);
     align-items: end;
     margin-bottom: var(--e-7);
   }
-  @media (max-width: 56rem) { .disciplines__tete { grid-template-columns: 1fr; } }
-  .disciplines__intro { max-width: 46ch; }
+  @media (max-width: 62rem) { .trajet__tete { grid-template-columns: 1fr; } }
+  .trajet h2 { max-width: 18ch; }
+  .trajet__accent { color: var(--signal-texte); }
+  .trajet__intro { max-width: 50ch; }
+  .trajet__variante { max-width: 60ch; margin-top: var(--e-5); font-size: var(--t-petit); }
+  .trajet__actions { display: flex; flex-wrap: wrap; gap: var(--e-3); margin-top: var(--e-6); }
 
-  .disciplines__liste { list-style: none; }
-  .disciplines__liste li {
-    display: grid;
-    grid-template-columns: 3rem 1fr auto;
-    gap: var(--e-4);
-    align-items: baseline;
-    padding: var(--e-4) 0;
-    border-top: 1px solid var(--trait);
-    transition: padding-left var(--d-normal) var(--e-sortie);
-  }
-  .disciplines__liste li:last-child { border-bottom: 1px solid var(--trait); }
-  .disciplines__liste li:hover { padding-left: var(--e-3); }
-  @media (max-width: 44rem) { .disciplines__liste li { grid-template-columns: 2.25rem 1fr; } }
-  .disc__num { color: var(--signal-texte); font-weight: 700; }
-  .disc__nom { font-size: var(--t-h3); margin-bottom: 0.2rem; }
-  .disc__detail { font-size: var(--t-petit); color: var(--texte-faible); max-width: 56ch; }
-  .disc__age { color: var(--graphite); }
-  .disciplines__source { margin-top: var(--e-5); color: var(--graphite); text-transform: none; letter-spacing: 0.04em; }
-
-  /* ── 05 Preuve ─────────────────────────────────────────────────────── */
-  .preuve__tete { max-width: 56rem; margin-bottom: var(--e-7); }
-  .preuve h2 { max-width: 18ch; margin-bottom: var(--e-4); }
-
-  /* ── 06 Première séance ────────────────────────────────────────────── */
+  /* ── 04 Première séance ────────────────────────────────────────────── */
   .premiere__inner {
     display: grid;
     grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
@@ -452,7 +409,8 @@ const QUESTIONS = [
     align-items: center;
   }
   @media (max-width: 62rem) { .premiere__inner { grid-template-columns: 1fr; } }
-  .premiere h2 { max-width: 16ch; margin-bottom: var(--e-6); }
+  .premiere h2 { max-width: 18ch; margin-bottom: var(--e-4); }
+  .premiere .lead { max-width: 46ch; margin-bottom: var(--e-5); }
   .premiere__etapes { list-style: none; display: grid; }
   .premiere__etapes li {
     display: grid;
@@ -461,87 +419,54 @@ const QUESTIONS = [
     padding: var(--e-4) 0;
     border-top: 1px solid var(--trait);
   }
+  .premiere__etapes li:last-child { border-bottom: 1px solid var(--trait); }
   .premiere__etapes .mono { color: var(--signal-texte); padding-top: 0.3em; font-weight: 700; }
   .premiere__etapes p { font-size: var(--t-petit); color: var(--texte-faible); max-width: 56ch; }
   .premiere__etapes strong { color: var(--encre); font-weight: 600; }
-  .premiere__lien { display: inline-block; margin-top: var(--e-5); font-size: var(--t-petit); }
+  .premiere__actions { display: flex; flex-wrap: wrap; align-items: center; gap: var(--e-4); margin-top: var(--e-6); }
+  .premiere__lien { font-size: var(--t-petit); }
 
-  /* ── 07 Amplitude ──────────────────────────────────────────────────── */
-  .amplitude__inner {
+  /* ── 05 Les cours ──────────────────────────────────────────────────── */
+  .cours__tete {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: var(--e-7) var(--e-8);
-    align-items: center;
+    gap: var(--e-5) var(--e-8);
+    align-items: end;
+    margin-bottom: var(--e-7);
   }
-  @media (max-width: 62rem) { .amplitude__inner { grid-template-columns: 1fr; } }
-  .amplitude__grand {
+  @media (max-width: 56rem) { .cours__tete { grid-template-columns: 1fr; } }
+  .cours h2 { max-width: 22ch; }
+  .cours__intro { max-width: 48ch; }
+
+  .cours__liste { list-style: none; }
+  .cours__liste > li {
+    display: grid;
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    gap: var(--e-3) var(--e-6);
+    align-items: baseline;
+    padding: var(--e-4) 0;
+    border-top: 1px solid var(--trait);
+  }
+  .cours__liste > li:last-child { border-bottom: 1px solid var(--trait); }
+  @media (max-width: 48rem) { .cours__liste > li { grid-template-columns: 1fr; gap: var(--e-2); } }
+  .cours__page {
     display: flex;
     align-items: baseline;
-    gap: 0.3em;
-    font-family: var(--police-titre);
-    font-size: var(--t-display);
-    font-weight: 800;
-    line-height: 0.9;
-    letter-spacing: -0.05em;
-    font-variant-numeric: tabular-nums;
-    margin: 0;
-  }
-  .amplitude__fleche { color: var(--signal-texte); font-size: 0.45em; }
-  .amplitude__jours { margin-top: var(--e-3); color: var(--signal-texte); letter-spacing: 0.18em; }
-  .amplitude__texte h2 { max-width: 18ch; margin-bottom: var(--e-4); }
-  .amplitude__texte .lead { max-width: 48ch; }
-  .amplitude__args { list-style: none; display: grid; gap: var(--e-3); margin: var(--e-6) 0; }
-  .amplitude__args li { display: flex; align-items: baseline; gap: var(--e-3); font-size: var(--t-petit); }
-  .amplitude__tiret { flex: none; width: 1.25rem; height: 1px; background: var(--signal-texte); }
-
-  /* ── 08 Y aller ────────────────────────────────────────────────────── */
-  .trajet__inner {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(0, 0.9fr);
-    gap: var(--e-8);
-    align-items: center;
-  }
-  @media (max-width: 62rem) { .trajet__inner { grid-template-columns: 1fr; gap: var(--e-6); } }
-  .trajet h2 { max-width: 16ch; margin-bottom: var(--e-4); }
-  .trajet__accent { color: var(--signal-texte); }
-  .trajet .lead { max-width: 50ch; }
-  .trajet__actions { display: flex; flex-wrap: wrap; gap: var(--e-3); margin-top: var(--e-6); }
-
-  .trajet__lignes { list-style: none; display: grid; gap: var(--e-3); }
-  .trajet__lignes a {
-    display: grid;
-    grid-template-columns: auto 1fr;
-    grid-template-areas: 'code parcours' 'code jours';
-    gap: 0.15rem var(--e-4);
-    align-items: center;
-    padding: var(--e-4) var(--e-5);
-    border: 1px solid var(--trait);
-    border-radius: var(--rayon-1);
-    background: var(--papier-vif);
+    gap: var(--e-3);
     text-decoration: none;
-    transition:
-      border-color var(--d-rapide) var(--e-mecanique),
-      transform var(--d-normal) var(--e-sortie);
+    color: inherit;
+    transition: transform var(--d-normal) var(--e-sortie);
   }
-  .trajet__lignes a:hover { border-color: var(--signal-texte); transform: translateX(4px); }
-  .trajet__code {
-    grid-area: code;
-    display: grid;
-    place-items: center;
-    min-width: 3.2rem;
-    padding: 0.4rem 0.6rem;
-    border-radius: 0.35rem;
-    background: var(--encre);
-    color: var(--papier-vif);
-    font-family: var(--police-mono);
-    font-size: var(--t-petit);
-    font-weight: 700;
-  }
-  .trajet__code--metro { background: var(--signal-texte); }
-  .trajet__parcours { grid-area: parcours; font-weight: 600; font-size: var(--t-petit); }
-  .trajet__jours { grid-area: jours; color: var(--graphite); text-transform: none; letter-spacing: 0.05em; }
+  .cours__page:hover { transform: translateX(4px); }
+  .cours__page .fleche { color: var(--signal-texte); }
+  .cours__num { color: var(--signal-texte); font-weight: 700; }
+  .cours__nom { font-family: var(--police-titre); font-size: var(--t-h3); font-weight: 700; letter-spacing: -0.015em; }
+  .cours__intitules { list-style: none; display: flex; flex-wrap: wrap; gap: var(--e-2) var(--e-4); font-size: var(--t-petit); color: var(--texte-faible); }
+  .cours__intitules b { color: var(--texte); font-weight: 600; }
+  .cours__detail { color: var(--texte-faible); }
+  .cours__source { margin-top: var(--e-6); }
 
-  /* ── 09 Questions ──────────────────────────────────────────────────── */
+  /* ── 07 Questions ──────────────────────────────────────────────────── */
   .questions__inner {
     display: grid;
     grid-template-columns: 0.85fr 1.15fr;
@@ -551,8 +476,9 @@ const QUESTIONS = [
   @media (max-width: 62rem) { .questions__inner { grid-template-columns: 1fr; gap: var(--e-6); } }
   .questions__tete h2 { max-width: 16ch; margin-bottom: var(--e-4); }
   .questions__tete .lead { max-width: 40ch; }
+  .questions__pied { margin-top: var(--e-5); color: var(--graphite); text-transform: none; letter-spacing: 0.04em; }
 
-  /* ── 10 Secteur ────────────────────────────────────────────────────── */
+  /* ── 08 Secteur ────────────────────────────────────────────────────── */
   .secteur__tete {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -569,7 +495,6 @@ const QUESTIONS = [
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
     gap: var(--e-4);
-    margin-bottom: var(--e-8);
   }
   .carte {
     display: grid;
@@ -592,7 +517,6 @@ const QUESTIONS = [
     font-weight: 700;
     letter-spacing: -0.015em;
   }
-  .carte__note { font-size: var(--t-petit); color: var(--texte-faible); }
   .carte__trajet {
     display: flex;
     flex-wrap: wrap;
@@ -608,42 +532,13 @@ const QUESTIONS = [
     color: var(--papier-vif);
     font-weight: 700;
     letter-spacing: 0.04em;
+    white-space: nowrap;
   }
   .carte__club { font-weight: 600; color: var(--encre); }
   .carte__aller { margin-top: var(--e-3); color: var(--signal-texte); text-transform: none; letter-spacing: 0.04em; }
+  .secteur__pied { margin-top: var(--e-7); max-width: 70ch; font-size: var(--t-petit); color: var(--texte-faible); }
 
-  .secteur__cle { color: var(--graphite); margin-bottom: var(--e-3); }
-  .secteur__liste {
-    list-style: none;
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(13rem, 1fr));
-    border-top: 1px solid var(--trait);
-  }
-  .secteur__item {
-    display: grid;
-    gap: 0.15rem;
-    padding: var(--e-4) var(--e-4) var(--e-4) 0;
-    border-bottom: 1px solid var(--trait);
-  }
-  .secteur__nom { font-weight: 600; font-size: var(--t-petit); }
-  .secteur__item--cle .secteur__nom { color: var(--signal-texte); }
-  .secteur__note { font-size: var(--t-micro); color: var(--graphite); }
-  .secteur__pied { margin-top: var(--e-6); max-width: 68ch; font-size: var(--t-petit); color: var(--texte-faible); }
-
-  /* ── 11 Deux visages ───────────────────────────────────────────────── */
-  .local__inner {
-    display: grid;
-    grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
-    gap: var(--e-8);
-    align-items: center;
-  }
-  @media (max-width: 62rem) { .local__inner { grid-template-columns: 1fr; } }
-  .local h2 { max-width: 18ch; margin-bottom: var(--e-5); }
-  .local .lead { max-width: 48ch; margin-bottom: var(--e-4); }
-  .local .faible { max-width: 56ch; }
-
-  /* ── 12 Convergence ────────────────────────────────────────────────── */
-  .convergence { background: var(--papier-creuse); }
+  /* ── 09 Décider ────────────────────────────────────────────────────── */
   .convergence__inner { max-width: 48rem; }
   .convergence h2 { margin-bottom: var(--e-5); }
   .convergence__accent { color: var(--signal-texte); }
