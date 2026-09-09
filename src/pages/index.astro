@@ -161,7 +161,7 @@ const QUESTIONS = [
       </div>
       <div class="premiere__texte">
         <p class="cartouche"><span class="cartouche__num">06</span><span>La première fois</span></p>
-        <h2 id="t-premiere">Personne n’est arrivé en sachant boxer.</h2>
+        <h2 id="t-premiere">Tout le monde a commencé par une première séance.</h2>
         <ol class="premiere__etapes">
           <li>
             <span class="mono">01</span>
@@ -169,15 +169,15 @@ const QUESTIONS = [
           </li>
           <li>
             <span class="mono">02</span>
-            <p><strong>Tu ne combats pas.</strong> Une première séance, c’est de la corde, un geste décomposé, du sac et des pattes d’ours.</p>
+            <p><strong>Tu frappes, et c’est tout.</strong> Une première séance, c’est de la corde, un geste décomposé, du sac et des pattes d’ours.</p>
           </li>
           <li>
             <span class="mono">03</span>
-            <p><strong>Personne ne te regarde.</strong> Tout le monde a été débutant, et chacun est occupé à sa propre séance.</p>
+            <p><strong>Chacun est occupé à sa propre séance.</strong> Le coach te suit, le reste de la salle a la tête dans son travail.</p>
           </li>
           <li>
             <span class="mono">04</span>
-            <p><strong>Tu repars courbaturé, pas humilié.</strong> C’est le seul objectif d’une première séance.</p>
+            <p><strong>Tu repars essoufflé, et content d’être venu.</strong> C’est le seul objectif d’une première séance.</p>
           </li>
         </ol>
         <a class="lien premiere__lien" href={route('premiere-seance').chemin}>
@@ -239,13 +239,17 @@ const QUESTIONS = [
         </div>
       </div>
 
+      {/* Une ligne par itinéraire : la première étape peut être la même pour
+          les trajets, alors c'est le trajet entier qu'on nomme. */}
       <ol class="trajet__lignes">
         {ITINERAIRES.map((it, i) => (
           <li class="reveler" style={`--retard:${i * 80}ms`}>
             <a href={`${route('transports').chemin}?trajet=${it.id}`}>
               <span class={`trajet__code trajet__code--${it.etapes[0].mode}`}>{it.etapes[0].code}</span>
-              <span class="trajet__parcours">{it.etapes[0].de} → {it.etapes[0].a}</span>
-              <span class="mono trajet__jours">{it.etapes[0].jours}</span>
+              <span class="trajet__parcours">{it.onglet}</span>
+              <span class="mono trajet__jours">
+                {it.etapes.length === 1 ? 'direct' : `${it.etapes.length} étapes`} · {it.etapes[0].jours}
+              </span>
             </a>
           </li>
         ))}

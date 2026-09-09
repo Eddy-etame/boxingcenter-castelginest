@@ -66,32 +66,33 @@ const { actuelle } = Astro.props;
   </div>
 
   {/* Le menu mobile : un <dialog> natif, fermable à l'échap sans script. */}
-  <div class="menu" id="menu-mobile" data-menu-panneau hidden>
-    <div class="enveloppe menu__inner">
-      <ul class="menu__liste">
-        {MENU.map((r) => (
-          <li>
-            <a href={r.chemin} aria-current={actuelle === r.id ? 'page' : undefined}>
-              <span class="menu__nom">{r.nav}</span>
-              <span class="menu__q mono">{r.question}</span>
-            </a>
-          </li>
-        ))}
-      </ul>
-      <ul class="menu__club">
-        <li class="mono menu__cle">Chez le club</li>
-        {LIENS_CLUB.map((l) => (
-          <li><a class="lien" href={l.href} rel="noopener">{l.nav} {DESTINATION.nomCourt} ↗</a></li>
-        ))}
-        <li><a class="lien" href={DESTINATION.activites} rel="noopener">Toutes les activités ↗</a></li>
-      </ul>
-      <a class="bouton bouton--signal bouton--plein" href={route('contact').chemin}>
-        <span>Poser ma question</span>
-        <span class="fleche" aria-hidden="true">→</span>
-      </a>
-    </div>
-  </div>
 </header>
+
+<div class="menu" id="menu-mobile" data-menu-panneau hidden>
+  <div class="enveloppe menu__inner">
+    <ul class="menu__liste">
+      {MENU.map((r) => (
+        <li>
+          <a href={r.chemin} aria-current={actuelle === r.id ? 'page' : undefined}>
+            <span class="menu__nom">{r.nav}</span>
+            <span class="menu__q mono">{r.question}</span>
+          </a>
+        </li>
+      ))}
+    </ul>
+    <ul class="menu__club">
+      <li class="mono menu__cle">Chez le club</li>
+      {LIENS_CLUB.map((l) => (
+        <li><a class="lien" href={l.href} rel="noopener">{l.nav} {DESTINATION.nomCourt} ↗</a></li>
+      ))}
+      <li><a class="lien" href={DESTINATION.activites} rel="noopener">Toutes les activités ↗</a></li>
+    </ul>
+    <a class="bouton bouton--signal bouton--plein" href={route('contact').chemin}>
+      <span>Poser ma question</span>
+      <span class="fleche" aria-hidden="true">→</span>
+    </a>
+  </div>
+</div>
 
 <style>
   /* L'en-tête est en encre : c'est la barre de titre de la planche, et elle
@@ -138,7 +139,7 @@ const { actuelle } = Astro.props;
   }
   @media (max-width: 30rem) { .entete__depuis { display: none; } }
 
-  .entete__nav { margin-left: auto; min-width: 0; }
+  .entete__nav { margin-left: auto; }
   .entete__nav ul {
     display: flex;
     align-items: center;
@@ -148,12 +149,7 @@ const { actuelle } = Astro.props;
   /* La liste ne s'affiche qu'à partir de la largeur où elle tient en entier.
      En dessous, le menu prend le relais : mieux vaut un bouton qu'une barre
      qui pousse la page vers la droite. */
-  @media (max-width: 78rem) { .entete__nav { display: none; } }
-  /* Entre les deux, la mention « depuis … » cède sa place aux liens. Le logo
-     et le titre de la page disent déjà d'où l'on part. */
-  @media (min-width: 78.01rem) and (max-width: 86rem) {
-    .entete__depuis { display: none; }
-  }
+  @media (max-width: 88rem) { .entete__nav { display: none; } }
 
   .entete__lien {
     position: relative;
@@ -281,7 +277,11 @@ const { actuelle } = Astro.props;
   }
   /* Le bouton menu prend le relais exactement là où la liste s'arrête :
      entre les deux seuils, la barre n'offrirait plus rien. */
-  @media (max-width: 78rem) { .entete__bascule { display: block; } }
+  @media (max-width: 88rem) { .entete__bascule { display: block; } }
+  /* Quand la barre a mesuré qu'elle déborde, la liste cède au bouton menu,
+     quelle que soit la largeur. Le seuil en rem est le plancher sans script. */
+  .entete[data-serre] .entete__nav { display: none; }
+  .entete[data-serre] .entete__bascule { display: block; }
 
   .entete__barres,
   .entete__barres::before,
@@ -345,6 +345,21 @@ const { actuelle } = Astro.props;
   const bouton = document.querySelector<HTMLButtonElement>('[data-menu]');
   const panneau = document.querySelector<HTMLElement>('[data-menu-panneau]');
   const entete = document.querySelector<HTMLElement>('[data-entete]');
+
+  // La barre mesure si sa liste tient. On la montre le temps d'une mesure
+  // (aucun rendu entre les deux : pas de clignotement), puis on tranche.
+  const inner = entete?.querySelector<HTMLElement>('.entete__inner');
+  const mesurer = () => {
+    if (!entete || !inner) return;
+    entete.removeAttribute('data-serre');
+    if (inner.scrollWidth > inner.clientWidth + 1) entete.setAttribute('data-serre', '');
+  };
+  mesurer();
+  let attente = 0;
+  addEventListener('resize', () => {
+    cancelAnimationFrame(attente);
+    attente = requestAnimationFrame(mesurer);
+  }, { passive: true });
 
   if (bouton && panneau) {
     const basculer = (ouvert: boolean) => {
