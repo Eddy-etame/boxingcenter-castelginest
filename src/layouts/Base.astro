@@ -8,6 +8,7 @@ import { route, type RouteId } from '../data/routes';
 import { SITE, CONTACT, DESTINATION, LIMITROPHES } from '../data/verite';
 import { OFFRES } from '../data/offres';
 import { AIRE_SERVIE } from '../data/communes';
+import { TEINTE } from '../data/teinte';
 import { ROLES } from '../data/medias';
 import { DOIT_BLOQUER_LES_ROBOTS } from '../lib/environnement';
 import { derniereModification, fichierDeRoute } from '../lib/dates';
@@ -25,7 +26,10 @@ interface Props {
 const { page, discipline, ogPhoto = ROLES.hero, faq } = Astro.props;
 const r = route(page);
 const canonique = new URL(r.chemin, SITE.origine).href;
-const og = new URL(`/photos/${ogPhoto}-1440.jpg`, SITE.origine).href;
+/** La vignette de partage : composée pour cette page au build (voir pages/og/). */
+const og = new URL(`/og/${r.id}.png`, SITE.origine).href;
+/** La photo de la page, pour le JSON-LD. */
+const photo = new URL(`/photos/${ogPhoto}-1440.jpg`, SITE.origine).href;
 
 /**
  * JSON-LD — il confirme le HTML visible, il n'ajoute jamais un fait que la
@@ -109,7 +113,7 @@ const donnees = {
       isPartOf: { '@id': `${SITE.origine}/#site` },
       inLanguage: SITE.langue,
       about: { '@id': `${SITE.origine}/#organisation` },
-      primaryImageOfPage: og,
+      primaryImageOfPage: photo,
       dateModified: derniereModification(fichierDeRoute(r.chemin)),
     },
     ...(page === 'accueil'
@@ -168,9 +172,13 @@ const donnees = {
     <meta property="og:description" content={r.description} />
     <meta property="og:url" content={canonique} />
     <meta property="og:image" content={og} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={r.titre} />
     <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content={og} />
 
-    <meta name="theme-color" content="#f3efe6" />
+    <meta name="theme-color" content={TEINTE.papier} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="icon" href="/logo.png" sizes="any" />
 
