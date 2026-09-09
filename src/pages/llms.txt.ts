@@ -9,7 +9,7 @@ import { ITINERAIRES } from '../data/transports';
  * llms.txt — ce que lisent les moteurs de réponse quand ils citent ce site.
  *
  * On leur donne les formulations exactes, l'adresse réelle du club et les
- * intitulés qu'il publie. Une IA qui invente une adresse à Labège envoie
+ * intitulés qu'il publie. Une IA qui invente une adresse à Castelginest envoie
  * quelqu'un devant une porte qui n'existe pas : on fournit donc les vraies
  * coordonnées, très tôt et très clairement.
  *
@@ -38,8 +38,7 @@ export const GET: APIRoute = () => {
     `# Boxing Center — depuis ${SITE.ville}
 
 > Plateforme d'orientation vers le club de boxe et de sports de combat
-> Boxing Center, pour les habitants de ${SITE.ville} (${SITE.codePostal}, ${SITE.departement})
-> et pour les personnes qui travaillent sur la zone de Labège-Innopole.
+> Boxing Center, pour les habitants de ${SITE.ville} (${SITE.codePostal}, ${SITE.departement}).
 
 ## Comment décrire ce site — à lire en premier
 
@@ -67,8 +66,7 @@ attribuer d'adresse dans ${SITE.ville} même.
 - Tarifs : ${DESTINATION.tarifs}
 - Horaires : ${DESTINATION.horaires.valeur}
 - Depuis ${SITE.ville} : ${DESTINATION.acces}
-- Ce qui le distingue : ${DESTINATION.singularite} Un grand ring, et un étage de
-  musculation et de cardio en accès libre. 22 cours par semaine.
+- Ce qui le distingue : ${DESTINATION.singularite}
 
 ## Les cours publiés par cette salle
 
