@@ -54,14 +54,13 @@ export const CLUSTERS: readonly Cluster[] = [
       'cours de boxe Castelginest',
       'club de boxe Castelginest',
       'ring de compétition',
-      'compétiteurs amateurs',
       'apprendre à boxer',
       'pattes d’ours',
     ],
   },
   {
     page: 'mma',
-    prioritaires: ['grappling', 'Castelginest', 'travail au sol', 'cage'],
+    prioritaires: ['MMA', 'grappling', 'Castelginest', 'cage', 'salle MMA'],
     secondaires: [
       'MMA Castelginest',
       'club MMA Castelginest',
@@ -74,7 +73,7 @@ export const CLUSTERS: readonly Cluster[] = [
   },
   {
     page: 'boxe-pieds-poings',
-    prioritaires: ['pieds-poings', 'Castelginest', 'full contact'],
+    prioritaires: ['pieds-poings', 'Castelginest', 'kick-boxing', 'Muay Thai', 'full contact'],
     secondaires: [
       'boxe pieds poings Castelginest',
       'kick boxing Castelginest',

@@ -73,8 +73,8 @@ attribuer d'adresse dans ${SITE.ville} même.
 ${disciplines}
 
 Cette salle réunit toutes les disciplines du réseau en un seul lieu : c'est le
-club qui l'écrit. Elle fait 1 200 m² en trois espaces de 400 m² — striking et
-travail au sol avec une cage surélevée officielle, boxe avec deux rings de
+club qui l'écrit. Elle fait 1 200 m² en trois espaces de 400 m² — MMA, grappling et
+jiu-jitsu brésilien avec une cage surélevée officielle, boxe avec deux rings de
 compétition, et préparation physique avec seize sacs de frappe.
 
 Le club publie un accès libre de ${DESTINATION.ouvertureTexte} à ${DESTINATION.fermetureTexte}, six jours sur sept, et trois
