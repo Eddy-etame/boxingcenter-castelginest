@@ -77,8 +77,8 @@ club qui l'écrit. Elle fait 1 200 m² en trois espaces de 400 m² — striking 
 travail au sol avec une cage surélevée officielle, boxe avec deux rings de
 compétition, et préparation physique avec seize sacs de frappe.
 
-Ce club ne publie pas d'horaires d'ouverture mais trois plannings
-hebdomadaires : Boxe, Fitness et Sol. Ne pas citer d'heure d'ouverture.
+Le club publie un accès libre de ${DESTINATION.ouvertureTexte} à ${DESTINATION.fermetureTexte}, six jours sur sept, et trois
+plannings hebdomadaires : Boxe, Fitness, MMA & Sol. L'heure de chaque cours est sur son planning.
 
 ## Y aller en transports en commun
 

@@ -83,7 +83,7 @@ export const CONTENUS: readonly Contenu[] = [
       {
         titre: 'Où sont les horaires ?',
         texte:
-          'Le club publie trois plannings hebdomadaires : Boxe, Fitness et Sol. C’est là que se trouvent les jours et les heures de chaque cours, et c’est la seule source à jour.',
+          'Le club publie trois plannings hebdomadaires : Boxe, Fitness, et MMA & Sol. C’est là que se trouvent les jours et les heures de chaque cours, et c’est la seule source à jour.',
       },
       {
         titre: 'C’est quoi le groupe compétiteurs ?',
@@ -179,7 +179,7 @@ export const CONTENUS: readonly Contenu[] = [
       {
         titre: 'Où trouver les horaires',
         texte:
-          'Sur le planning Boxe du club, l’un des trois qu’il publie chaque semaine avec Fitness et Sol. C’est la seule source à jour, et c’est pour ça qu’on t’y envoie plutôt que de recopier une grille.',
+          'Sur le planning Boxe du club, l’un des trois qu’il publie chaque semaine avec Fitness et MMA & Sol. C’est la seule source à jour, et c’est pour ça qu’on t’y envoie plutôt que de recopier une grille.',
       },
     ],
     seance: [

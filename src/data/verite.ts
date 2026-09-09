@@ -69,7 +69,7 @@ export type Club = {
   /** ce que le club publie à la place d'une amplitude : trois plannings */
   horaires: Fait;
   horairesCourt: string;
-  /** vides : le club ne publie pas d'heures d'ouverture. On n'en invente pas. */
+  /** l'accès libre publié par clubmma.fr (relevé le 2026-09-10) ; chaque cours a son heure sur les plannings */
   ouverture: string;
   fermeture: string;
   ouvertureTexte: string;
@@ -95,22 +95,22 @@ export const CLUBS: readonly Club[] = [
       'https://clubmma.fr/disciplines/',
     plannings: 'https://clubmma.fr/planning/',
     tarifs: 'https://clubmma.fr/abonnements/',
-    horaires: CLUB('sur trois plannings hebdomadaires — Boxe, Fitness et Sol'),
-    horairesCourt: '3 plannings : Boxe · Fitness · Sol',
-    ouverture: '',
-    fermeture: '',
-    ouvertureTexte: '',
-    fermetureTexte: '',
+    horaires: CLUB('en accès libre de 10h à 21h15, six jours sur sept ; les cours aux heures des trois plannings'),
+    horairesCourt: 'accès libre 10h–21h15, 6 j/7',
+    ouverture: '10:00',
+    fermeture: '21:15',
+    ouvertureTexte: '10h',
+    fermetureTexte: '21h15',
     acces:
       'En bus, le 60 rejoint le métro à Trois Cocus ; une station plus loin, à La Vache, le 59 démarre et longe l’avenue des États-Unis jusqu’à l’arrêt « États-Unis Fondeyre ». En voiture, la D820 puis le périphérique, sortie 33b « Lalande ».',
     singularite:
       'La plus grande salle de France dédiée aux sports de combat, selon le club : 1 200 m² d’entraînement en trois zones de 400 m².',
     faits: [
       { cle: 'Bus', valeur: '60 puis 59', source: 'Tisséo' },
-      { cle: 'Surface', valeur: '1 200 m²', source: 'boxingcenter.fr' },
-      { cle: 'Espaces', valeur: '3 zones de 400 m²', source: 'boxingcenter.fr' },
-      { cle: 'Équipement', valeur: '2 rings, 1 cage, 16 sacs', source: 'boxingcenter.fr' },
-      { cle: 'Plannings', valeur: '3 publiés', source: 'boxingcenter.fr' },
+      { cle: 'Surface', valeur: '1 200 m²', source: 'clubmma.fr' },
+      { cle: 'Espaces', valeur: '3 zones de 400 m²', source: 'clubmma.fr' },
+      { cle: 'Équipement', valeur: '2 rings, 1 cage, 16 sacs', source: 'clubmma.fr' },
+      { cle: 'Plannings', valeur: '3 publiés', source: 'clubmma.fr' },
     ],
     angle:
       'Le club qui réunit toutes les disciplines du réseau en un seul lieu : un espace striking et sol avec cage surélevée, un espace boxe à deux rings, un espace préparation physique à seize sacs.',
