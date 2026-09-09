@@ -110,6 +110,10 @@ const { actuelle } = Astro.props;
     transition: box-shadow var(--d-normal) var(--e-mecanique);
   }
   .entete[data-compresse] { box-shadow: 0 10px 30px -22px var(--nav-ombre); }
+  /* Menu ouvert : la barre se fixe. Le verrou de défilement posé sur la racine
+     empêche Chrome de coller une barre `sticky` ; `fixed` y est insensible, et
+     la croix reste sous le pouce. */
+  .entete[data-menu-ouvert] { position: fixed; top: 0; inset-inline: 0; }
 
   .entete__inner {
     /* La barre est la seule chose du site qui ne se replie pas : sa grille
@@ -369,6 +373,7 @@ const { actuelle } = Astro.props;
     const basculer = (ouvert: boolean) => {
       bouton.setAttribute('aria-expanded', String(ouvert));
       panneau.hidden = !ouvert;
+      entete?.toggleAttribute('data-menu-ouvert', ouvert);
       document.documentElement.style.overflow = ouvert ? 'hidden' : '';
       bouton.querySelector('.vh')!.textContent = ouvert ? 'Fermer le menu' : 'Ouvrir le menu';
     };
