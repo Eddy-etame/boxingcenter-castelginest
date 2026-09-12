@@ -54,7 +54,7 @@ export const CONTENUS: readonly Contenu[] = [
       {
         titre: 'Une séance se compte en rounds',
         texte:
-          'Le cours alterne l’effort et la récupération, comme un combat. Le souffle se construit ainsi, round après round, au sac, à la corde et aux pattes d’ours avec un coach. L’opposition reste un choix : tu la découvres quand le coach et toi le décidez.',
+          'Le cours alterne des phases d’effort et de récupération. Le souffle se construit ainsi, round après round, au sac, à la corde et aux pattes d’ours avec un coach. L’opposition reste un choix : tu la découvres quand le coach et toi le décidez.',
       },
       {
         titre: 'Du 60 jusqu’au ring',
