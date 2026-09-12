@@ -1,19 +1,19 @@
 /**
- * CONTENU ÉDITORIAL des pages disciplines.
+ * CONTENU ÉDITORIAL des pages disciplines — Castelginest.
  *
- * Comment on écrit ici : des phrases courtes, adressées au lecteur, dans
- * l'ordre où il se pose les questions. Ce que c'est, où c'est, ce qui va lui
- * arriver, comment il y va. Pas d'images, pas de formules — de l'information.
+ * Ces pages visent le même club que celles de L'Union (Boxing Center Toulouse
+ * États-Unis). Écrites avec les mêmes phrases, Google les replie l'une sur
+ * l'autre et n'en classe qu'une : c'est ce qui arrivait, 82 à 91 % de phrases
+ * communes. Chaque page est donc écrite ici depuis Castelginest — la ligne 60,
+ * la seconde route par le 15, le collège — et chaque discipline y est prise
+ * par d'autres facettes que sur le site frère. Un fait reste un fait : les
+ * noms de cours, les âges, les surfaces viennent de clubmma.fr (relevé du
+ * 2026-09-10).
  *
  * Deux règles de la loi commune s'appliquent ligne à ligne : aucune figure de
- * style, et aucune réponse qui s'ouvre sur une négation. Une réponse commence
- * par ce qui est vrai.
- *
- * Aucun fait volatil dans ce fichier. Et aucune heure : ce club publie trois
- * plannings hebdomadaires, pas une amplitude d'ouverture. On renvoie donc
- * toujours au planning.
+ * style, et aucune réponse qui s'ouvre sur une négation. Aucune heure, aucun
+ * prix, aucune durée de trajet : le planning et Tisséo font foi.
  */
-
 import type { MediaSlug } from './medias';
 import type { PageDiscipline } from './offres';
 
@@ -34,306 +34,301 @@ export type Contenu = {
 export const CONTENUS: readonly Contenu[] = [
   {
     id: 'boxe-anglaise',
-    h1: 'Cours de boxe anglaise à proximité de Castelginest',
+    h1: 'Boxe anglaise près de Castelginest, sur deux rings de compétition',
     chapeau:
-      'La boxe anglaise se pratique aux poings, avec des gants, encadré. Aucun niveau n’est demandé pour commencer. Depuis Castelginest, le 60 t’amène au métro et le 59 finit avenue des États-Unis, dans un espace boxe de 400 m² équipé de deux rings de compétition.',
+      'Depuis Castelginest, la boxe anglaise se pratique au 388 avenue des États-Unis, dans l’espace Boxe du club : 400 m², deux rings de compétition, du tapis autour. Le club l’écrit sur sa page des disciplines : sans réservation, tous niveaux, coachs diplômés.',
     photoHero: 'boxe-anglaise-castelginest',
     photoSecondaire: 'encadrement-boxe-castelginest',
-    promesse: 'Apprendre à boxer, encadré, sans rien avoir à prouver à personne.',
+    promesse: 'La garde, les jambes, puis les poings : la boxe anglaise dans l’ordre où elle s’apprend.',
     blocs: [
       {
-        titre: 'Quatre coups à apprendre',
+        titre: 'La garde vient avant le coup',
         texte:
-          'Le direct, le crochet, l’uppercut, et le jab qui prépare tout le reste. Ça paraît peu, et c’est ce qui rend la boxe dense : avec quatre coups, tout se joue dans les appuis, la distance et la garde. C’est un sport de placement plus que de puissance.',
+          'Les mains à hauteur du menton, les coudes près du corps, le menton rentré. Les premières semaines, le coach corrige surtout ça : une garde qui tient pendant tout un round permet ensuite de frapper sans s’ouvrir.',
       },
       {
-        titre: 'Le premier jour, tu frappes et c’est tout',
+        titre: 'Les jambes font la moitié du travail',
         texte:
-          'L’opposition arrive plus tard, et seulement si tu la veux. Un débutant travaille au sac, à la corde, aux pattes d’ours avec un coach, et sur le déplacement à vide. Beaucoup s’entraînent des mois en restant sur ce format.',
+          'Le pas chassé, le pivot, la sortie en diagonale. Sur un ring de compétition, on apprend à régler la distance avec les pieds avant de la régler avec les bras. C’est ce travail qui fatigue le plus au début, et c’est lui qui fait progresser le plus vite.',
       },
       {
-        titre: 'Deux rings de compétition',
+        titre: 'Une séance se compte en rounds',
         texte:
-          'L’espace boxe fait 400 m², avec deux rings et du tapis d’entraînement autour. Deux rings, ça veut dire que le cours avance sans file d’attente : un groupe travaille au ring pendant que le reste de la salle enchaîne aux sacs.',
+          'Le cours alterne l’effort et la récupération, comme un combat. Le souffle se construit ainsi, round après round, au sac, à la corde et aux pattes d’ours avec un coach. L’opposition reste un choix : tu la découvres quand le coach et toi le décidez.',
       },
       {
-        titre: 'Comment tu y vas',
+        titre: 'Du 60 jusqu’au ring',
         texte:
-          'En bus, le 60 rejoint Trois Cocus. Une station de métro plus loin, à La Vache, le 59 démarre et longe l’avenue des États-Unis jusqu’à « États-Unis Fondeyre ». En voiture, la D820 puis le périphérique, sortie 33b « Lalande ».',
+          'Le 60 s’arrête six fois à Castelginest, de l’École jusqu’à Pont Vieil, puis finit à Trois Cocus. Une station de métro B jusqu’à La Vache, et le 59 s’arrête à « États-Unis Fondeyre », l’arrêt du club. En voiture, la D820 puis le périphérique, sortie 33b « Lalande ».',
       },
     ],
     seance: [
-      'Échauffement : corde, mobilité, déplacements à vide',
-      'Technique : un geste, décomposé, répété lentement puis en rythme',
-      'Sac ou pattes d’ours : l’application, avec correction du coach',
-      'Renforcement : gainage, abdominaux, poids du corps',
-      'Retour au calme et étirements',
+      'Corde et déplacements, pour chauffer les chevilles et le souffle',
+      'La garde et le pas, travaillés à vide face au coach',
+      'Un enchaînement de deux ou trois coups, décomposé puis accéléré',
+      'Rounds au sac, puis aux pattes d’ours avec le coach',
+      'Gainage, puis étirements du dos et des épaules',
     ],
     faq: [
       {
-        titre: 'Où ça se passe exactement ?',
+        titre: 'Où faire de la boxe anglaise près de Castelginest ?',
         texte:
-          'Au 388 avenue des États-Unis, à Toulouse, à côté de la sortie 33b « Lalande » du périphérique. La salle fait 1 200 m² répartis en trois espaces de 400 m².',
+          'Au 388 avenue des États-Unis, à Toulouse, dans l’espace Boxe de Boxing Center : 400 m² et deux rings de compétition. Depuis Castelginest, le 60, une station de métro B, puis le 59.',
       },
       {
-        titre: 'Je suis débutant complet, à 40 ans passés. C’est trop tard ?',
+        titre: 'Mon ado sort du collège de Castelginest : il y a un groupe pour lui ?',
         texte:
-          'C’est le profil le plus fréquent chez les nouveaux inscrits. La même séance existe à trois intensités, et c’est le coach qui règle la tienne. Ce qui compte, c’est le nombre de fois où tu reviens.',
+          'Oui : l’école de boxe du club a un groupe 12/16 ans au planning de la salle Boxe, à côté des groupes 3/6 et 7/11 ans.',
       },
       {
-        titre: 'Où sont les horaires ?',
+        titre: 'Faut-il réserver son cours ?',
         texte:
-          'Le club publie trois plannings hebdomadaires : Boxe, Fitness, et MMA & Sol. C’est là que se trouvent les jours et les heures de chaque cours, et c’est la seule source à jour.',
+          'Le club indique « sans réservation » sur sa page des disciplines : tu viens au créneau publié sur le planning Boxe. Pour une toute première fois, la séance d’essai se réserve sur son site.',
       },
       {
-        titre: 'Il y a une école de boxe pour les enfants ?',
+        titre: 'Boxe anglaise ou full contact ?',
         texte:
-          'Oui : trois groupes, 3/6, 7/11 et 12/16 ans, au planning de la salle Boxe, et un créneau MMA jeunes 10/16 ans dans la salle MMA.',
+          'La boxe anglaise se pratique aux poings seuls. Le full contact, nouveau dans l’espace Boxe, ajoute les jambes, avec des coups portés au-dessus de la ceinture. Beaucoup commencent par les poings et ajoutent les jambes ensuite.',
       },
     ],
   },
   {
     id: 'mma',
-    h1: 'Club MMA et grappling à proximité de Castelginest',
+    h1: 'Club MMA près de Castelginest : une cage officielle et 400 m² de tatamis',
     chapeau:
-      'Le MMA combine le combat debout, les projections et le travail au sol. Depuis Castelginest, il s’entraîne avenue des États-Unis, dans une cage officielle et sur 400 m² de tatamis, avec le grappling et le jiu-jitsu brésilien à côté, et un créneau MMA jeunes 10/16 ans.',
+      'Le MMA réunit la boxe debout, les projections et le sol. Depuis Castelginest, il se pratique au 388 avenue des États-Unis, dans la salle MMA du club : une cage surélevée officielle, 400 m² de tatamis, des protections murales. Les cours s’adressent aux débutants comme aux confirmés, et un créneau MMA jeunes 10/16 ans figure au planning.',
     photoHero: 'sparring-boxe-castelginest',
     photoSecondaire: 'ring-de-boxe-castelginest',
-    promesse: 'Le combat complet : debout, projections, sol, dans la cage officielle.',
+    promesse: 'Debout, en projection, au sol : le MMA se construit dans cet ordre, dans une vraie cage.',
     blocs: [
       {
-        titre: 'Le MMA, dans la cage officielle',
+        titre: 'Une salle MMA à proximité de Castelginest',
         texte:
-          'Debout avec la boxe et le Muay Thai, puis les projections, puis le sol. Les cours de MMA accueillent les débutants comme les confirmés, et un créneau MMA jeunes 10/16 ans est au planning de la salle MMA.',
+          'La salle MMA est l’un des trois espaces de 400 m² du club. La cage y est surélevée et officielle, les murs sont protégés, et des panneaux de séparation permettent de travailler le cage control sans occuper toute la cage.',
       },
       {
-        titre: 'Le grappling, coups exclus',
+        titre: 'Le cours suit l’ordre du combat',
         texte:
-          'Contrôle, projections, soumissions. Le règlement exclut la frappe, du début à la fin. C’est la porte d’entrée de beaucoup de gens qui veulent le combat sans l’impact — et c’est aussi ce qui décide la majorité des combats de MMA.',
+          'On commence debout, avec les coups de la boxe et du Muay Thai, puis on travaille la projection, puis le sol. Un débutant apprend d’abord à tomber et à se relever, avant d’apprendre à amener l’autre au sol.',
       },
       {
-        titre: 'À quoi sert la cage',
+        titre: 'Grappling et jiu-jitsu brésilien',
         texte:
-          'La paroi fait partie du jeu. On y travaille les appuis contre le grillage, les relevés, les sorties de contrôle. La salle est équipée d’une cage surélevée officielle et de panneaux de séparation, pour travailler ces situations sans mobiliser toute la cage.',
+          'Deux cours publiés à part au planning de la salle MMA, où le sol se travaille sans frappe : contrôles, renversements, soumissions. Beaucoup de pratiquants de MMA les suivent en plus de leur cours, pour le travail au sol.',
       },
       {
-        titre: '400 m² de tatamis',
+        titre: 'La seconde route : le 15',
         texte:
-          'C’est ce qui change tout sur un cours au sol : la place. Plusieurs binômes travaillent en même temps avec de la marge autour, et le coach circule vraiment. L’espace est aussi protégé aux murs.',
-      },
-      {
-        titre: 'Comment tu y vas',
-        texte:
-          'Le 60 depuis Castelginest, le métro B sur une station, puis le 59 jusqu’à « États-Unis Fondeyre ». En voiture, la D820 et le périphérique, sortie 33b « Lalande ».',
+          'Depuis Castelginest, le 60 rejoint le métro à Trois Cocus. La première route continue d’une station jusqu’à La Vache, où le 59 prend le relais. La seconde descend de deux stations jusqu’à Barrière de Paris, où le 15 finit sa ligne à « États-Unis Fondeyre », du lundi au samedi.',
       },
     ],
     seance: [
-      'Échauffement spécifique : nuque, hanches, déplacements au sol',
-      'Chutes et relevés, décomposés',
-      'Un contrôle : la position, les appuis, la sortie',
-      'Une soumission, montrée puis répétée par deux',
-      'Mise en situation encadrée, puis retour au calme',
+      'Échauffement au sol : roulades, sorties de hanche, relevés',
+      'Debout : un enchaînement pieds-poings, travaillé à deux',
+      'Une projection, décomposée, puis la chute qui va avec',
+      'Au sol : une position, et la façon d’en sortir',
+      'Mise en situation encadrée contre la paroi de la cage',
     ],
     faq: [
       {
-        titre: 'Où est la salle de MMA la plus proche de Castelginest ?',
+        titre: 'Où est le club de MMA le plus proche de Castelginest ?',
         texte:
-          'Au 388 avenue des États-Unis, à Toulouse : une cage officielle et 400 m² de tatamis, pour le MMA, le grappling et le jiu-jitsu brésilien.',
+          'Au 388 avenue des États-Unis, à Toulouse : Boxing Center y a une cage surélevée officielle et 400 m² de tatamis. Depuis Castelginest, le 60, le métro B, puis le 59 ou le 15.',
       },
       {
-        titre: 'On peut débuter sans rien connaître ?',
+        titre: 'À partir de quel âge pour le MMA ?',
         texte:
-          'Oui. Un débutant apprend à chuter, à se relever, à tenir une position. L’intensité se règle, et le règlement exclut la frappe. C’est le cours le plus simple à essayer quand on arrive d’un autre sport.',
+          'Le club publie un créneau MMA jeunes 10/16 ans au planning de la salle MMA. Les cours adultes accueillent les débutants comme les confirmés.',
       },
       {
-        titre: 'Grappling ou boxe : par lequel commencer ?',
+        titre: 'Il faut savoir boxer avant de faire du MMA ?',
         texte:
-          'Si l’idée de recevoir un coup te bloque, commence par le sol. Si c’est la frappe qui t’attire, va sur l’espace boxe. La salle réunit les deux, tu peux changer d’avis en restant dans le même club.',
+          'Tu peux commencer directement : le cours reprend les bases debout à chaque séance. Certains ajoutent un cours de boxe anglaise ou de pieds-poings dans l’espace Boxe, à côté.',
       },
       {
-        titre: 'C’est quoi le cage control ?',
+        titre: 'Quelle tenue pour le premier cours ?',
         texte:
-          'Tout ce qui se joue contre la paroi : plaquer, tenir, se relever, sortir. La salle a des panneaux de séparation pour travailler ces situations en dehors de la cage.',
+          'Une tenue de sport près du corps, sans fermeture ni bijou, et une bouteille d’eau. Pour les protections, le club t’indique quoi prendre après la séance d’essai.',
       },
     ],
   },
   {
     id: 'boxe-pieds-poings',
-    h1: 'Club de kick-boxing et de boxe thaï à proximité de Castelginest',
+    h1: 'Kick-boxing, boxe thaï et boxe pieds-poings près de Castelginest',
     chapeau:
-      'Le club publie le pieds-poings « Kick » au planning de la salle Boxe, le Muay Thai sur sa page des disciplines, et le full contact, nouveau dans l’espace Boxe. Les trois se pratiquent avenue des États-Unis, sur deux rings de compétition.',
+      'Au planning de la salle Boxe, le club publie « Pieds-Poings / Kick ». Sur sa page des disciplines, il présente aussi le Muay Thai, la boxe thaïlandaise, et le full contact, nouveau dans l’espace Boxe. Depuis Castelginest, les trois se pratiquent au 388 avenue des États-Unis, sur deux rings de compétition.',
     photoHero: 'sac-de-frappe-castelginest',
     photoSecondaire: 'club-boxe-castelginest',
-    promesse: 'Ajouter les jambes, en gardant la garde. Le travail debout le plus complet.',
+    promesse: 'Chaque règlement ajoute des coups : les jambes au kick-boxing, les coudes et les genoux au Muay Thai.',
     blocs: [
       {
-        titre: 'Les jambes en plus des poings',
+        titre: 'Le club de kick-boxing le plus proche de Castelginest',
         texte:
-          'Ajouter les jambes multiplie la difficulté. La distance change, la garde doit descendre en restant fermée, et l’appui devient un problème permanent puisqu’on frappe sur une jambe. C’est ce qui rend le pieds-poings si fatigant la première fois.',
+          'Le kick-boxing ajoute les coups de pied aux coups de poing, en garde haute. Au club, il figure au planning de la salle Boxe sous le nom « Pieds-Poings / Kick », à côté de la boxe anglaise et de l’école de boxe.',
       },
       {
-        titre: 'Le full contact, en quelques mots',
+        titre: 'Un club de boxe thaï près de Castelginest',
         texte:
-          'C’est un règlement pieds-poings où les coups restent au-dessus de la ceinture : le low kick en sort. Le club l’a ajouté avec l’ouverture de cette salle. À l’entraînement, la différence tient à quelques consignes ; au sac et à la technique, le travail est le même.',
+          'Le club présente le Muay Thai comme l’art des huit membres : les poings, les pieds, les coudes, les genoux, avec le clinch et les projections. C’est la discipline la plus exigeante pour les jambes et le gainage.',
       },
       {
-        titre: 'Il faut être souple ?',
+        titre: 'Le full contact vise le haut du corps',
         texte:
-          'La souplesse vient avec les séances. Les premières semaines, les coups de pied restent bas, et la hauteur arrive toute seule avec les étirements de fin de séance.',
+          'Dans ce règlement, les coups de pied visent le haut du corps, jamais les jambes. Il vient d’arriver dans l’espace Boxe du club, et il se travaille avec les mêmes bases que le kick-boxing : la garde, l’appui, la distance.',
       },
       {
-        titre: 'Où trouver les horaires',
+        titre: 'Les hanches et les tibias travaillent',
         texte:
-          'Sur le planning Boxe du club, l’un des trois qu’il publie chaque semaine avec Fitness et MMA & Sol. C’est la seule source à jour, et c’est pour ça qu’on t’y envoie plutôt que de recopier une grille.',
+          'Un coup de pied part de la hanche et se porte avec le tibia. Les premières séances insistent sur la mobilité, l’équilibre sur une jambe et le retour en garde. La souplesse vient avec les étirements de fin de cours.',
       },
     ],
     seance: [
-      'Échauffement : corde, mobilité de hanche, chevilles',
-      'Technique : une combinaison poings-jambes, décomposée puis enchaînée',
-      'Sac et paos : puissance et placement, avec correction',
-      'Renforcement du bas du corps et gainage',
-      'Étirements longs — indispensables quand on frappe avec les jambes',
+      'Corde, puis mobilité des hanches et des chevilles',
+      'Un coup de pied, travaillé lentement, puis enchaîné derrière un direct',
+      'Rounds au sac, poings et jambes',
+      'Pattes d’ours et paos avec le coach, pour la précision',
+      'Gainage, et étirements longs des jambes',
     ],
     faq: [
       {
-        titre: 'Où faire du pieds-poings près de Castelginest ?',
+        titre: 'Où faire du kick-boxing près de Castelginest ?',
         texte:
-          'Au 388 avenue des États-Unis, dans l’espace boxe de 400 m². Deux rings de compétition, et du tapis d’entraînement autour. Le 60 puis le 59 t’y amènent.',
+          'Au 388 avenue des États-Unis, dans l’espace Boxe : le cours s’appelle « Pieds-Poings / Kick » au planning. Depuis Castelginest, le 60 jusqu’au métro, puis le 59.',
       },
       {
-        titre: 'C’est réservé aux jeunes ?',
+        titre: 'Et la boxe thaï ?',
         texte:
-          'Le cours accueille tous les âges d’adultes et tous les niveaux. Beaucoup y arrivent après quelques mois de boxe anglaise, d’autres commencent directement là.',
+          'Le club la publie sous le nom « Muay Thai (Boxe Thaïlandaise) ». Ses créneaux figurent sur les plannings, à consulter sur le site du club.',
       },
       {
-        titre: 'Il faut acheter des protège-tibias ?',
+        titre: 'Je commence à trente ou quarante ans, c’est possible ?',
         texte:
-          'Pour découvrir, une tenue de sport suffit. Si tu continues, le club te dira quel matériel prendre et à quelle taille.',
+          'Oui : le club accueille tous les niveaux, et le coach adapte les exercices. La plupart des adultes commencent au sac et aux paos, et l’opposition vient plus tard, s’ils la veulent.',
       },
       {
-        titre: 'Et la boxe thaï, ou Muay Thai ?',
+        titre: 'Quel matériel pour les jambes ?',
         texte:
-          'Le club la publie : « Muay Thai (Boxe Thaïlandaise) », l’art des huit membres, avec les poings, les pieds, les coudes, les genoux et le clinch. Les créneaux pieds-poings sont sur le planning de la salle Boxe.',
+          'Pour découvrir, une tenue de sport suffit. Si tu continues, des protège-tibias et des gants : le club te dira quels modèles prendre.',
       },
     ],
   },
   {
     id: 'boxe-enfants',
-    h1: 'Boxe enfant à proximité de Castelginest',
+    h1: 'Boxe enfant près de Castelginest : l’école de boxe, de 3 à 16 ans',
     chapeau:
-      'Le club publie des cours enfants, en touché contrôlé. Ils ont lieu avenue des États-Unis, dans la plus grande salle de sports de combat du réseau. Les jours et les tranches d’âge figurent sur les plannings hebdomadaires du club.',
+      'L’école de boxe du club accueille trois groupes : 3/6 ans, 7/11 ans et 12/16 ans, au planning de la salle Boxe. Dans la salle MMA, un créneau MMA jeunes réunit les 10/16 ans. Tout se passe au 388 avenue des États-Unis, en touché contrôlé.',
     photoHero: 'entrainement-boxe-castelginest',
     photoSecondaire: 'garde-boxe-castelginest',
-    promesse: 'Un cadre, une règle, et un enfant qui apprend à se contenir avant de frapper.',
+    promesse: 'Un groupe par âge, une règle pour tous : on touche, on contrôle, on s’arrête au signal.',
     blocs: [
       {
-        titre: 'Ce qu’un enfant apprend d’abord',
+        titre: 'Trois âges, trois façons de travailler',
         texte:
-          'Se tenir, regarder, attendre son tour, et s’arrêter net quand on le lui demande. La frappe vient après, et toujours contrôlée. Les parents qui viennent chercher un défouloir repartent souvent surpris : ce que la boxe installe en premier, c’est un cadre.',
+          'Chez les 3/6 ans, la boxe passe par le jeu : l’équilibre, la coordination, la distance. Chez les 7/11 ans, les gestes se précisent. Chez les 12/16 ans, le travail ressemble à celui des adultes, avec plus de technique et de souffle.',
       },
       {
-        titre: 'Le touché contrôlé, en pratique',
+        titre: 'Le MMA jeunes, à partir de 10 ans',
         texte:
-          'Le travail se fait en touché contrôlé : on cible, on effleure, on dose. Les protections sont adaptées à la taille, et ces créneaux se déroulent entièrement sous consigne du coach.',
+          'Le club publie un créneau MMA jeunes 10/16 ans dans la salle MMA, sur les tatamis. Les jeunes y travaillent la chute, les contrôles et les bases debout.',
       },
       {
-        titre: 'De la place, et ça compte',
+        titre: 'Le touché contrôlé, expliqué aux parents',
         texte:
-          'La salle fait 1 200 m² en trois espaces. Pour un cours enfants, ça veut dire un groupe qui garde ses distances, un coach qui voit tout le monde, et du matériel disponible pour chacun.',
+          'Les enfants touchent la cible sans appuyer le coup. Le coach arrête l’exercice au signal, et l’enfant apprend à doser avant d’apprendre à frapper fort. Les protections sont adaptées à la taille.',
       },
       {
-        titre: 'Le trajet, pour un parent',
+        titre: 'Depuis Castelginest, pour un parent',
         texte:
-          'En voiture, la D820 puis le périphérique et la sortie 33b « Lalande ». Depuis Castelginest, c’est le même axe du début à la fin. Deux allers-retours par semaine, c’est tenable une année entière.',
+          'Le 60 part de Castelginest et rejoint le métro à Trois Cocus ; une station plus loin, le 59 dessert l’avenue des États-Unis. En voiture, la D820 puis le périphérique, sortie 33b « Lalande ».',
       },
     ],
     seance: [
-      'Échauffement en jeu : déplacements, réactions, coordination',
-      'Rappel de la règle : la garde, la distance, le signal d’arrêt',
-      'Technique : un geste simple, répété, corrigé un par un',
-      'Application au sac ou aux pattes, en touché contrôlé',
-      'Retour au calme, et le mot du coach sur la séance',
+      'Échauffement en jeu : attraper, esquiver, réagir au signal',
+      'La garde et la distance, montrées puis imitées',
+      'Un geste simple, répété et corrigé enfant par enfant',
+      'Travail aux pattes d’ours, en touché contrôlé',
+      'Retour au calme, et le récapitulatif du coach',
     ],
     faq: [
       {
-        titre: 'À partir de quel âge ?',
+        titre: 'Dès quel âge mon enfant peut-il commencer ?',
         texte:
-          'Le club publie des cours enfants et donne les tranches d’âge sur ses plannings hebdomadaires. Elles peuvent bouger d’une saison à l’autre : c’est la seule source à jour, et c’est pour ça qu’on t’y envoie.',
+          'L’école de boxe du club commence avec le groupe 3/6 ans. Pour le MMA, le créneau jeunes accueille les 10/16 ans.',
       },
       {
-        titre: 'Mon enfant est très timide. Ça peut aller ?',
+        titre: 'Mon enfant va-t-il recevoir des coups ?',
         texte:
-          'C’est souvent lui qui en tire le plus. On travaille par deux, sur une consigne précise, et le coach circule. Beaucoup d’enfants réservés y trouvent leur premier sport où l’on garde son calme sans passer devant tout le monde.',
+          'Le travail se fait en touché contrôlé : la cible est effleurée, le geste est dosé, et le coach arrête au signal. Les protections sont adaptées à l’âge.',
       },
       {
-        titre: 'Et si c’est justement pour canaliser trop d’énergie ?',
+        titre: 'Boxe ou MMA pour un enfant de 11 ans ?',
         texte:
-          'C’est le cas de figure le plus courant, et il fonctionne — à une condition : que l’enfant accepte la règle. La boxe donne beaucoup à ceux qui ont trop d’énergie, et elle commence par leur demander de s’arrêter au signal.',
+          'Les deux existent pour cet âge : le groupe 7/11 ans de l’école de boxe, et le MMA jeunes à partir de 10 ans. Une séance d’essai dans chacun permet de choisir avec lui.',
       },
       {
-        titre: 'Il faut acheter des gants tout de suite ?',
+        titre: 'Que met-il dans son sac ?',
         texte:
-          'Pour découvrir, une tenue de sport et une bouteille d’eau suffisent. Si ton enfant continue, le club te dira quel matériel prendre et à quelle taille.',
+          'Une tenue de sport, une bouteille d’eau et des chaussures propres pour la salle. Pour les gants, le club indique quoi prendre après les premières séances.',
       },
     ],
   },
   {
     id: 'preparation-physique',
-    h1: 'Cross-training, Hyrox et musculation à proximité de Castelginest',
+    h1: 'Préparation physique près de Castelginest : Hyrox, cross-training et seize sacs',
     chapeau:
-      'Un espace de 400 m² pour la condition physique : seize sacs de frappe, une cage de cross-training, de la musculation, du cardio, l’Hyrox et le street workout. Le Boxing Fitness et le Boxing Lady s’y pratiquent aussi, en travail individuel.',
+      'Le troisième espace du club, 400 m², est consacré à la condition physique : seize sacs de frappe, une cage de street workout, la musculation et le cardio. Au planning Fitness, le club publie l’Hyrox, le Boxing HIIT, le Cross-Training et le Lady Punch. L’accès libre est ouvert six jours sur sept aux membres.',
     photoHero: 'preparation-physique-castelginest',
     photoSecondaire: 'sac-de-frappe-castelginest',
-    promesse: 'La forme et le défoulement, en restant au sol si tu préfères.',
+    promesse: 'La condition physique d’un boxeur, travaillée au sac, à la barre et au chrono.',
     blocs: [
       {
-        titre: 'De la boxe, en solo',
+        titre: 'Seize sacs pour un groupe entier',
         texte:
-          'Le Boxing Fitness reprend tout ce que fait un boxeur : la corde, les déplacements, le sac, les combinaisons, le gainage. La partie opposition en sort. Avec seize sacs, chacun garde le sien pendant tout le circuit.',
+          'Avec seize sacs de frappe dans le même espace, tout un groupe travaille en même temps. Le Boxing HIIT les utilise en circuit : des séries courtes et intenses, sans adversaire.',
       },
       {
-        titre: 'Boxing Lady, entre femmes',
+        titre: 'Lady Punch, entre femmes',
         texte:
-          'Un créneau publié sous ce nom, pensé pour un groupe de femmes. Le contenu reste entier : c’est le même travail technique, dans un groupe où chacune se reconnaît dans les autres.',
+          'Le cours Boxing Lady du club est exclusivement féminin et sans opposition. Il figure au planning Fitness sous le nom « Lady Punch ».',
       },
       {
-        titre: 'Le cross-training et l’Hyrox',
+        titre: 'Hyrox et cross-training',
         texte:
-          'Le club publie le cross-training et l’Hyrox, la préparation au format de course en salle. L’espace est équipé d’une cage de cross-training et de street workout, avec un coach spécialisé en callisthénie présent sur les entraînements en accès libre.',
+          'L’Hyrox prépare au format de course en salle, en cours mixtes, du débutant au confirmé. Le cross-training combine haltérophilie, gymnastique et cardio.',
       },
       {
-        titre: 'L’accès libre',
+        titre: 'La cage de street workout',
         texte:
-          'L’espace préparation physique est ouvert en dehors des cours : musculation, cardio, machines, vélo, rameur. Les conditions font partie de l’abonnement — demande-les au club.',
+          'Tractions, dips et gainage au poids du corps : la cage de street workout est en accès libre, avec la musculation et le cardio, six jours sur sept pour les membres.',
       },
     ],
     seance: [
-      'Échauffement cardio : corde, vélo ou rameur',
-      'Technique : une combinaison de boxe, apprise puis enchaînée',
-      'Circuit au sac : séries chronométrées, intensité choisie',
-      'Renforcement : gainage, poids du corps, charges',
-      'Étirements et retour au calme',
+      'Échauffement au rameur ou au vélo',
+      'Circuit au sac : séries courtes, récupération courte',
+      'Renforcement au poids du corps dans la cage de street workout',
+      'Un bloc de charges, la technique d’abord',
+      'Étirements et respiration pour finir',
     ],
     faq: [
       {
-        titre: 'Je vais devoir combattre ?',
+        titre: 'Où faire de la préparation physique près de Castelginest ?',
         texte:
-          'Le Boxing Fitness, le Boxing Lady et le cross-training se pratiquent en travail individuel, du début à la fin. Tu peux pratiquer des années sur ce format.',
+          'Au 388 avenue des États-Unis : le club consacre un espace de 400 m² à la condition physique. Depuis Castelginest, le 60, une station de métro B, puis le 59.',
       },
       {
-        titre: 'C’est quoi le street workout ici ?',
+        titre: 'Le Lady Punch, c’est quoi ?',
         texte:
-          'Du travail au poids du corps sur une cage prévue pour ça, avec un coach spécialisé en callisthénie présent pendant les entraînements en accès libre.',
+          'Le nom du cours Boxing Lady au planning Fitness : exclusivement féminin, sans opposition.',
       },
       {
-        titre: 'L’Hyrox, c’est pour qui ?',
+        titre: 'Je peux m’entraîner en dehors des cours ?',
         texte:
-          'Pour ceux qui préparent ce format de course en salle, et plus largement pour ceux qui veulent une préparation physique structurée. Le planning Fitness du club donne les créneaux.',
+          'Oui : l’accès libre est ouvert aux membres six jours sur sept, pour la musculation, le cardio, le cross-training et le street workout. Les conditions dépendent de l’abonnement, sur le site du club.',
       },
       {
-        titre: 'J’ai un genou fragile, je peux venir ?',
+        titre: 'L’Hyrox, pour un débutant ?',
         texte:
-          'Dis-le au coach dès la première séance : c’est une information utile. Beaucoup d’exercices se substituent — le sac remplace le saut, le rameur remplace la course. En cas de suivi médical, l’avis de ton médecin passe avant le nôtre.',
+          'Le club indique des cours mixtes, du débutant au confirmé. Le coach adapte les charges et les distances.',
       },
     ],
   },

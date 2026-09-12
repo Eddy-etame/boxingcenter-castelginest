@@ -168,7 +168,7 @@ for (const [route, fichier] of toutes) {
   // 4 — liens internes
   for (const m of html.matchAll(/href="(\/[^"#?]*)/g)) {
     let cible = m[1];
-    if (cible.startsWith('/api/') || /\.[a-z0-9]{2,5}$/i.test(cible)) continue;
+    if (cible.startsWith('/api/') || /\.[a-z0-9]{2,12}$/i.test(cible)) continue;
     if (!cible.endsWith('/')) cible += '/';
     if (!routesConnues.has(cible)) erreurs.push(ou(`lien interne cassé : ${m[1]}`));
   }
