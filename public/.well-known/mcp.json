@@ -4,7 +4,7 @@
   "description": "Boxing Center Castelginest — plateforme d’orientation vers les clubs Boxing Center.",
   "protocol": "mcp",
   "transport": "streamable-http",
-  "endpoint": "https://www.boxingcenter-castelginest.fr/api/mcp",
+  "endpoint": "https://www.boxingcenter-castelginest.fr/api/mcp/",
   "documentation": "https://www.boxingcenter-castelginest.fr/humans.txt",
   "tools": [
     {
