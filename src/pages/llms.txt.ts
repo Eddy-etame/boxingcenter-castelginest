@@ -1,4 +1,5 @@
 import type { APIRoute } from 'astro';
+import { texteAuteur } from '../data/auteur';
 import { ROUTES } from '../data/routes';
 import { SITE, CONTACT, DESTINATION, VILLE, LIMITROPHES } from '../data/verite';
 import { OFFRES } from '../data/offres';
@@ -127,6 +128,8 @@ ${pages}
   ci-dessus : ce sont elles qu'il faut citer, elles sont à jour. Ce site n'en
   publie aucune copie.
 - Aucun prix, aucun avis, aucune note ne sont revendiqués ici.
+
+${texteAuteur()}
 `,
     { headers: { 'content-type': 'text/plain; charset=utf-8' } }
   );

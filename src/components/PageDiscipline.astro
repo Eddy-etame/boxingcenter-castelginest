@@ -14,6 +14,7 @@ import Photo from '../components/Photo.astro';
 import { contenu } from '../data/contenus';
 import { offresDeLaPage, type PageDiscipline } from '../data/offres';
 import { DESTINATION, SITE, CONTACT } from '../data/verite';
+import { pageClub } from '../data/pages-club';
 import { ROUTES, route } from '../data/routes';
 
 interface Props { id: PageDiscipline }
@@ -22,6 +23,8 @@ const { id } = Astro.props;
 const c = contenu(id);
 const r = route(id);
 const offres = offresDeLaPage(id);
+/* Les deux portes vers le club : la page de la discipline, et son site. */
+const porte = pageClub(DESTINATION, id);
 const autres = ROUTES.filter(
   (x) => x.menu && x.id !== id && x.id !== 'accueil' && x.id !== 'contact' && x.id !== 'ta-seance'
 );
@@ -44,15 +47,19 @@ const autres = ROUTES.filter(
       <p class="tete__chapeau">{c.chapeau}</p>
 
       <div class="tete__actions">
-        <a class="bouton bouton--signal" href="#au-club">
-          <span>Ce que le club publie</span>
-          <span class="fleche" aria-hidden="true">↓</span>
+        <a class="bouton bouton--signal" href={porte.url} rel="noopener">
+          <span>{porte.libelle}</span>
+          <span class="fleche" aria-hidden="true">↗</span>
         </a>
-        <a class="bouton" href={route('contact').chemin}>
-          <span>Poser ma question</span>
-          <span class="fleche" aria-hidden="true">→</span>
+        <a class="bouton" href={DESTINATION.site} rel="noopener">
+          <span>Le site du club</span>
+          <span class="fleche" aria-hidden="true">↗</span>
         </a>
       </div>
+      <p class="tete__liens">
+        <a class="lien" href="#au-club">Ce que le club publie ↓</a>
+        <a class="lien" href={route('contact').chemin}>Poser ma question →</a>
+      </p>
       </div>
 
       {/* La photo arrive sur sa plaque, pas en bandeau : c'est un tirage posé
@@ -144,14 +151,17 @@ const autres = ROUTES.filter(
           <div><dt class="mono">Téléphone</dt><dd><a class="lien" href={`tel:${DESTINATION.telephoneLien}`}>{DESTINATION.telephone}</a></dd></div>
         </dl>
         <div class="auclub__portes">
-          <a class="bouton" href={DESTINATION.plannings} rel="noopener">
-            <span>Le planning</span><span class="fleche" aria-hidden="true">↗</span>
+          <a class="bouton bouton--signal" href={porte.url} rel="noopener">
+            <span>{porte.libelle}</span><span class="fleche" aria-hidden="true">↗</span>
+          </a>
+          <a class="bouton" href={DESTINATION.site} rel="noopener">
+            <span>Le site du club</span><span class="fleche" aria-hidden="true">↗</span>
           </a>
           <a class="bouton" href={DESTINATION.tarifs} rel="noopener">
             <span>Les tarifs</span><span class="fleche" aria-hidden="true">↗</span>
           </a>
-          <a class="bouton" href={DESTINATION.activites} rel="noopener">
-            <span>Toutes les activités</span><span class="fleche" aria-hidden="true">↗</span>
+          <a class="bouton" href={DESTINATION.plannings} rel="noopener">
+            <span>Le planning</span><span class="fleche" aria-hidden="true">↗</span>
           </a>
         </div>
       </div>
@@ -267,6 +277,7 @@ const autres = ROUTES.filter(
     color: var(--texte-faible);
   }
   .tete__actions { display: flex; flex-wrap: wrap; gap: var(--e-3); margin-top: var(--e-6); }
+  .tete__liens { display: flex; flex-wrap: wrap; gap: var(--e-2) var(--e-5); margin-top: var(--e-4); }
 
   /* ── Corps ───────────────────────────────────────────────────────── */
   .corps__grille { display: grid; grid-template-columns: 1fr 1fr; gap: var(--e-8); }
