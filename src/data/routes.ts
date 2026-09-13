@@ -100,7 +100,7 @@ export const ROUTES: readonly Route[] = [
     question: 'Quelle boxe pour mon enfant, et est-ce que c’est sans danger ?',
     titre: 'Boxe enfant près de Castelginest | Boxing Center',
     description:
-      'Le club publie des cours enfants, en touché contrôlé, avenue des États-Unis. Les jours et les âges sont sur ses plannings hebdomadaires.',
+      'À un trajet de Castelginest, le club de l’avenue des États-Unis enseigne la boxe aux enfants en touché contrôlé ; jours et âges sur ses plannings de la semaine.',
     menu: true,
     index: true,
   },
