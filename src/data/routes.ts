@@ -29,6 +29,7 @@ export type RouteId =
   | 'launaguet'
   | 'aucamville'
   | 'fenouillet'
+  | 'nos-clubs'
   | 'contact'
   | 'merci'
   | 'introuvable'
@@ -196,6 +197,18 @@ export const ROUTES: readonly Route[] = [
     menu: false,
     index: true,
     commune: true,
+  },
+  {
+    id: 'nos-clubs',
+    chemin: '/nos-clubs/',
+    nav: 'Nos clubs',
+    question: 'Où sont les cinq clubs Boxing Center, et quel est le site de chacun ?',
+    titre: 'Nos 5 clubs de boxe près de Castelginest | Boxing Center',
+    description:
+      'Portet-sur-Garonne, Minimes, États-Unis, Saint-Cyprien et Ramonville : les cinq clubs Boxing Center autour de Castelginest, leur adresse et le lien vers leur site.',
+    menu: true,
+    // hors index : mêmes adresses sur les sept sites de proximité ; liens suivis
+    index: false,
   },
   {
     id: 'contact',
