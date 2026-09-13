@@ -53,14 +53,14 @@ const voisinage = c.toucheLeClub
   : `${c.nom} est à une commune de ${DESTINATION.ville}`;
 
 const REPONSES: Record<string, string> = {
-  [`club de boxe ${c.nom}`]: `${DESTINATION.nom}, ${DESTINATION.adresse}, à côté de la sortie 33b « Lalande » du périphérique. 1 200 m² en trois espaces.`,
-  [`boxe anglaise ${c.nom}`]: `La boxe anglaise se travaille sur deux rings de compétition, dans l’espace boxe de 400 m².`,
-  [`club MMA ${c.nom}`]: `Le club publie le MMA, le grappling et le jiu-jitsu brésilien sur 400 m² de tatamis, avec une cage surélevée officielle.`,
-  [`salle MMA ${c.nom}`]: `La cage est au 388 avenue des États-Unis, avec des panneaux de séparation pour travailler le cage control.`,
-  [`sport de combat ${c.nom}`]: `Cette salle réunit toutes les disciplines du réseau : boxe, pieds-poings, Muay Thai, full contact, MMA, grappling, cours enfants et préparation physique.`,
-  [`club kick boxing ${c.nom}`]: `Le club publie la boxe pieds-poings et le full contact, sur les deux rings de compétition.`,
-  [`boxe pieds poings ${c.nom}`]: `C’est le nom exact du cours. Poings et jambes, en garde haute et sur appuis.`,
-  [`club boxe thaï ${c.nom}`]: `Cette salle publie la boxe pieds-poings et le full contact. Si tu cherches précisément le Muay Thaï, dis-le dans ton message : on te répond avec ce qui existe dans le réseau.`,
+  [`club de boxe ${c.nom}`]: `Le club du réseau à viser, c’est ${DESTINATION.nom}, ${DESTINATION.adresse}. ${voisinage}.`,
+  [`boxe anglaise ${c.nom}`]: `Deux rings de compétition dans un espace de 400 m² consacré à la boxe : c’est là que se donne la Boxe Anglaise.`,
+  [`club MMA ${c.nom}`]: `MMA, grappling et jiu-jitsu brésilien se partagent 400 m² de tatamis et une cage officielle surélevée.`,
+  [`salle MMA ${c.nom}`]: `La salle MMA est au 388 de l’avenue des États-Unis. Des panneaux de séparation y servent au travail contre la paroi.`,
+  [`sport de combat ${c.nom}`]: `Boxe, pieds-poings, Muay Thai, full contact, MMA, grappling, cours enfants et préparation physique : toutes les disciplines du réseau, dans une seule salle.`,
+  [`club kick boxing ${c.nom}`]: `Pieds-poings et full contact se pratiquent sur les deux rings de compétition du club.`,
+  [`boxe pieds poings ${c.nom}`]: `Le cours porte ce nom au planning : poings et jambes, garde haute, travail sur appuis.`,
+  [`club boxe thaï ${c.nom}`]: `Le Muay Thai figure parmi les disciplines publiées par le club : poings, pieds, coudes, genoux et clinch.`,
 };
 
 const LEGENDE = motifs(c.nom).map((m) => ({ motif: m, reponse: REPONSES[m] }));
@@ -118,11 +118,10 @@ const LEGENDE = motifs(c.nom).map((m) => ({ motif: m, reponse: REPONSES[m] }));
     <div class="enveloppe">
       <p class="cartouche"><span class="cartouche__num">02</span><span>Depuis {c.nom}</span></p>
       <div class="depuis__tete">
-        <h2 id="t-depuis">Comment tu y vas.</h2>
+        <h2 id="t-depuis">Du nord toulousain à l’avenue des États-Unis.</h2>
         <p class="lead faible">
-          {c.population}, {c.intercommunalite}. Voilà la route, les bus, et les
-          communes autour — de quoi savoir en trente secondes si c’est jouable
-          deux fois par semaine.
+          {c.population}, {c.intercommunalite}. Voici la voiture, le bus et le voisinage de la commune,
+          pour voir d’un coup d’œil si l’aller-retour tient deux soirs par semaine.
         </p>
       </div>
 
@@ -184,10 +183,9 @@ const LEGENDE = motifs(c.nom).map((m) => ({ motif: m, reponse: REPONSES[m] }));
     <div class="enveloppe">
       <p class="cartouche"><span class="cartouche__num">03</span><span>Légende</span></p>
       <div class="legende__tete">
-        <h2 id="t-legende">Les questions qu’on nous pose le plus.</h2>
+        <h2 id="t-legende">Les recherches les plus fréquentes.</h2>
         <p class="lead faible">
-          À gauche, ce que les gens cherchent. À droite, la réponse en une
-          phrase.
+          Une recherche à gauche, le fait qui y répond à droite.
         </p>
       </div>
       <dl class="legende__liste">
@@ -206,10 +204,9 @@ const LEGENDE = motifs(c.nom).map((m) => ({ motif: m, reponse: REPONSES[m] }));
     <div class="enveloppe">
       <p class="cartouche"><span class="cartouche__num">04</span><span>Au club</span></p>
       <div class="auclub__tete">
-        <h2 id="t-auclub">Ce que le club publie.</h2>
+        <h2 id="t-auclub">Tout ce qui s’y pratique.</h2>
         <p class="lead faible">
-          Voilà tout ce qui se pratique, avec les noms exacts que tu verras sur
-          le planning. {DESTINATION.singularite}
+          Chaque cours sous le nom exact du planning du club. {DESTINATION.singularite}
         </p>
       </div>
       <ul class="auclub__liste">
@@ -240,7 +237,7 @@ const LEGENDE = motifs(c.nom).map((m) => ({ motif: m, reponse: REPONSES[m] }));
     <div class="enveloppe questions__inner">
       <div>
         <p class="cartouche"><span class="cartouche__num">05</span><span>Questions</span></p>
-        <h2 id="t-questions">Ce qu’on nous demande<br />depuis {c.nom}.</h2>
+        <h2 id="t-questions">Ce que demandent<br />les habitants de {c.nom}.</h2>
         {c.pont && (
           <p class="pont">
             {c.pont.texte}
@@ -266,13 +263,13 @@ const LEGENDE = motifs(c.nom).map((m) => ({ motif: m, reponse: REPONSES[m] }));
   <section class="section voisines" aria-labelledby="t-voisines">
     <div class="enveloppe">
       <p class="cartouche"><span class="cartouche__num">06</span><span>Le secteur</span></p>
-      <h2 id="t-voisines">Tu pars d’une autre commune&nbsp;?</h2>
+      <h2 id="t-voisines">Tu viens d’ailleurs dans le secteur&nbsp;?</h2>
       <ul class="voisines__liste">
         <li class="reveler">
           <a class="carte" href="/">
             <span class="mono carte__cp">{SITE.codePostal}</span>
             <span class="carte__nom">{SITE.ville}</span>
-            <span class="carte__note">La ville du site — {SITE.gentile}</span>
+            <span class="carte__note">La commune du site — {SITE.gentile}</span>
           </a>
         </li>
         {autres.map((x, i) => (
@@ -297,13 +294,12 @@ const LEGENDE = motifs(c.nom).map((m) => ({ motif: m, reponse: REPONSES[m] }));
     <div class="enveloppe convergence__inner">
       <p class="cartouche"><span class="cartouche__num">07</span><span>Décider</span></p>
       <h2 id="t-conv">
-        Tu sais où c’est.<br />
-        <span class="convergence__accent">Reste à choisir ton cours.</span>
+        Le trajet est clair.<br />
+        <span class="convergence__accent">Le cours, maintenant.</span>
       </h2>
       <p class="lead convergence__texte">
-        Réponds à deux questions et on te dit quoi viser et quand venir. Si tu
-        préfères demander, écris-nous en deux lignes&nbsp;: on te répond avec un
-        créneau.
+        Deux réponses de ta part, et on t’indique la discipline et le moment qui te vont. Un
+        message de deux lignes marche aussi&nbsp;: on revient vers toi avec un créneau.
       </p>
       <div class="convergence__actions">
         <a class="bouton bouton--signal" href={route('contact').chemin}>
