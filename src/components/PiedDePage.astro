@@ -8,7 +8,7 @@
  * « en savoir plus ».
  */
 import { MENU, LIENS_CLUB, route } from '../data/routes';
-import { SITE, CONTACT, DESTINATION, LIMITROPHES, NOTE_SECTEUR } from '../data/verite';
+import { SITE, CONTACT, DESTINATION, LIMITROPHES, NOTE_SECTEUR, RESEAU_PROXIMITE } from '../data/verite';
 
 const annee = new Date().getFullYear();
 ---
@@ -81,6 +81,18 @@ const annee = new Date().getFullYear();
         ))}
       </p>
       {NOTE_SECTEUR && <p class="pied__note">{NOTE_SECTEUR}</p>}
+
+      {/* Les six autres sites de proximité : celui qui part d'une autre commune
+            trouve le site écrit pour lui. */}
+      <p class="mono pied__cle pied__cle--2">Tu pars d’une autre commune</p>
+      <p class="pied__communes pied__reseau">
+        {RESEAU_PROXIMITE.filter((s) => !s.url.startsWith(SITE.origine)).map((s, i) => (
+          <>
+            {i > 0 && <span aria-hidden="true"> · </span>}
+            <a class="lien" href={s.url}>Boxing Center près de {s.ville}</a>
+          </>
+        ))}
+      </p>
     </div>
 
     <div class="pied__bas">
@@ -162,6 +174,8 @@ const annee = new Date().getFullYear();
     margin-bottom: var(--e-3);
   }
   .pied__commune--cle { color: var(--signal-texte); }
+  /* chaque site voisin tient sur une ligne : « Boxing Center près de / Tournefeuille » se lisait mal sur téléphone */
+  .pied__reseau a { white-space: nowrap; }
   .pied__note { font-size: var(--t-micro); color: var(--graphite); max-width: 60ch; }
 
   .pied__bas {
