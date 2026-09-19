@@ -7,7 +7,7 @@
  * Les ancres nomment leur destination — « Boxe anglaise près de Muret », pas
  * « en savoir plus ».
  */
-import { MENU, LIENS_CLUB, route } from '../data/routes';
+import { MENU, LIENS_CLUB, ROUTES_COMMUNES, route } from '../data/routes';
 import { SITE, CONTACT, DESTINATION, LIMITROPHES, NOTE_SECTEUR, RESEAU_PROXIMITE } from '../data/verite';
 
 const annee = new Date().getFullYear();
@@ -39,6 +39,12 @@ const annee = new Date().getFullYear();
             <li><a class="lien" href={r.chemin}>{r.nav}{r.id !== 'accueil' && r.id !== 'contact' && r.id !== 'ta-seance' ? ` près de ${SITE.ville}` : ''}</a></li>
           ))}
           <li><a class="lien" href={route('premiere-seance').chemin}>Première séance, débutants</a></li>
+          {/* Les pages de commune étaient publiées mais liées 2 fois en tout
+              (mesuré le 19/09) : aucune n'entrait dans Google. Ici, elles sont
+              liées depuis chaque page du site, comme les disciplines. */}
+          {ROUTES_COMMUNES.map((r) => (
+            <li><a class="lien" href={r.chemin}>{r.nav}</a></li>
+          ))}
         </ul>
       </nav>
 
@@ -76,7 +82,9 @@ const annee = new Date().getFullYear();
         {LIMITROPHES.map((c, i) => (
           <>
             {i > 0 && <span aria-hidden="true"> · </span>}
-            <span class={c.note ? 'pied__commune pied__commune--cle' : 'pied__commune'} title={c.note}>{c.nom}</span>
+            {ROUTES_COMMUNES.find((r) => r.nav === c.nom)
+              ? <a class="lien pied__commune" href={ROUTES_COMMUNES.find((r) => r.nav === c.nom)!.chemin} title={c.note}>{c.nom}</a>
+              : <span class={c.note ? 'pied__commune pied__commune--cle' : 'pied__commune'} title={c.note}>{c.nom}</span>}
           </>
         ))}
       </p>
