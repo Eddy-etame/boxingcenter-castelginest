@@ -1,6 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
-import { CONTACT, SITE, DESTINATION } from '../data/verite';
+import { CONTACT, SITE, DESTINATION, EDITEUR } from '../data/verite';
 ---
 
 <Base page="mentions-legales">
@@ -13,13 +13,6 @@ import { CONTACT, SITE, DESTINATION } from '../data/verite';
 
       <h1 id="t-legal">Mentions légales</h1>
 
-      {/* Le SIRET et le directeur de publication ne figurent sur aucune source
-          publique du réseau. On ne les invente pas : un identifiant erroné dans
-          des mentions légales est pire que son absence. */}
-      <div class="avis mono" role="note">
-        Deux champs restent à renseigner avant la mise en ligne&nbsp;: le numéro
-        SIRET et le nom du directeur de la publication.
-      </div>
 
       <h2>Éditeur du site</h2>
       <p>
@@ -27,12 +20,15 @@ import { CONTACT, SITE, DESTINATION } from '../data/verite';
         Boxing Center, qui exploite le club de {DESTINATION.ville}.
       </p>
       <dl class="fiche">
-        <div><dt>Dénomination</dt><dd>Boxing Center</dd></div>
+        <div><dt>Dénomination</dt><dd>{EDITEUR.denomination.valeur}</dd></div>
+        <div><dt>Forme juridique</dt><dd>{EDITEUR.forme.valeur}</dd></div>
+        <div><dt>Siège social</dt><dd>{EDITEUR.siege.valeur}</dd></div>
         <div><dt>Établissement</dt><dd>{DESTINATION.adresse}</dd></div>
         <div><dt>Téléphone</dt><dd><a class="lien" href={`tel:${CONTACT.telephoneLien.valeur}`}>{CONTACT.telephone.valeur}</a></dd></div>
         <div><dt>Courriel</dt><dd><a class="lien" href={`mailto:${CONTACT.email.valeur}`}>{CONTACT.email.valeur}</a></dd></div>
-        <div><dt>SIRET</dt><dd class="attente">à renseigner</dd></div>
-        <div><dt>Directeur de la publication</dt><dd class="attente">à renseigner</dd></div>
+        <div><dt>SIRET du siège</dt><dd>{EDITEUR.siret.valeur}</dd></div>
+        <div><dt>Immatriculation</dt><dd>{EDITEUR.rcs.valeur}</dd></div>
+        <div><dt>Directeur de la publication</dt><dd>{EDITEUR.directeurPublication.valeur}</dd></div>
       </dl>
 
       <h2>Le club</h2>
@@ -97,17 +93,6 @@ import { CONTACT, SITE, DESTINATION } from '../data/verite';
   .legal p { color: var(--texte-faible); max-width: 64ch; }
   .legal strong { color: var(--encre); font-weight: 600; }
 
-  /* Ce qui manque est signalé, pas masqué. */
-  .avis {
-    padding: var(--e-4);
-    margin-bottom: var(--e-6);
-    border-left: 3px solid var(--signal-texte);
-    background: var(--signal-voile);
-    color: var(--encre);
-    text-transform: none;
-    letter-spacing: 0.03em;
-    line-height: 1.6;
-  }
 
   .fiche { display: grid; margin: var(--e-4) 0 0; }
   .fiche > div {
@@ -121,5 +106,4 @@ import { CONTACT, SITE, DESTINATION } from '../data/verite';
   @media (max-width: 40rem) { .fiche > div { grid-template-columns: 1fr; gap: 0.25rem; } }
   .fiche dt { color: var(--graphite); }
   .fiche dd { margin: 0; }
-  .attente { color: var(--signal-texte); font-style: italic; }
 </style>

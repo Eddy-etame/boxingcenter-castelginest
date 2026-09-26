@@ -13,7 +13,7 @@
  * une porte fermée.
  */
 
-export type Source = 'site-club' | 'wikipedia' | 'tisseo' | 'cahier-des-charges' | 'a-verifier';
+export type Source = 'site-club' | 'wikipedia' | 'tisseo' | 'cahier-des-charges' | 'registre-entreprises' | 'a-verifier';
 
 export type Fait<T = string> = { valeur: T; source: Source; verifie: string };
 
@@ -48,6 +48,27 @@ export const CONTACT = {
   telephone: CDC('09 39 03 67 48'),
   telephoneLien: CDC('+33939036748'),
   email: CDC('boxingcenter31@gmail.com'),
+} as const;
+
+/* ─────────────────────────────  ÉDITEUR  ───────────────────────────── */
+
+/**
+ * L'éditeur légal du site, tel que boxingcenter.fr/mentions-legales/ l'imprime,
+ * recoupé le 13/09/2026 au registre des entreprises
+ * (recherche-entreprises.api.gouv.fr, SIREN 821 817 889). Le SIRET est celui
+ * du siège. Le directeur de la publication est le directeur général de la
+ * société : la présidence est tenue par une personne morale (DISTRIB 31),
+ * Sébastien Dutilh n'est donc jamais « président ».
+ */
+const REG = (v: string): Fait<string> => ({ valeur: v, source: 'registre-entreprises', verifie: '2026-09-13' });
+
+export const EDITEUR = {
+  denomination: REG('SAS Boxing Center'),
+  forme: REG('Société par actions simplifiée au capital de 1 500 €'),
+  siret: REG('821 817 889 00016'),
+  rcs: REG('RCS Toulouse B 821 817 889'),
+  siege: REG('12 rue de Fenouillet, 31200 Toulouse'),
+  directeurPublication: REG('Sébastien Dutilh, directeur général de SAS Boxing Center'),
 } as const;
 
 /* ─────────────────────────────  LE CLUB  ───────────────────────────── */
@@ -163,6 +184,8 @@ export const LIMITROPHES: readonly { nom: string; note?: string }[] = [
 
 /** Laisser croire qu'une salle est DANS Castelginest. Refusé au build. */
 export const INTERDIT: readonly string[] = [
+  'avant la mise en ligne',
+  'à renseigner',
   'salle de Castelginest',
   'notre salle à Castelginest',
   'notre club à Castelginest',
