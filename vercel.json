@@ -2,14 +2,14 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "redirects": [
     {
-      "source": "/:path*",
+      "source": "/((?!sitemap\\.xml$).*)",
       "has": [
         {
           "type": "host",
-          "value": "boxingcenter-muret.fr"
+          "value": "boxingcenter-castelginest.fr"
         }
       ],
-      "destination": "https://www.boxingcenter-muret.fr/:path*",
+      "destination": "https://www.boxingcenter-castelginest.fr/$1",
       "permanent": true
     }
   ],
