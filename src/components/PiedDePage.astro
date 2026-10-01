@@ -39,6 +39,7 @@ const annee = new Date().getFullYear();
             <li><a class="lien" href={r.chemin}>{r.nav}{r.id !== 'accueil' && r.id !== 'contact' && r.id !== 'ta-seance' ? ` près de ${SITE.ville}` : ''}</a></li>
           ))}
           <li><a class="lien" href={route('premiere-seance').chemin}>Première séance, débutants</a></li>
+          <li><a class="lien" href={route('conseils').chemin}>Conseils : chaussures, sac de frappe</a></li>
           {/* Les pages de commune étaient publiées mais liées 2 fois en tout
               (mesuré le 19/09) : aucune n'entrait dans Google. Ici, elles sont
               liées depuis chaque page du site, comme les disciplines. */}

@@ -30,6 +30,11 @@ export type RouteId =
   | 'aucamville'
   | 'fenouillet'
   | 'nos-clubs'
+  /* conseils:début */
+  | 'conseils'
+  | 'chaussures-de-boxe-anglaise'
+  | 'sac-de-frappe-maison'
+  /* conseils:fin */
   | 'contact'
   | 'merci'
   | 'introuvable'
@@ -210,6 +215,41 @@ export const ROUTES: readonly Route[] = [
     // hors index : mêmes adresses sur les sept sites de proximité ; liens suivis
     index: true,
   },
+  /* conseils:routes */
+  {
+    id: 'conseils',
+    chemin: '/conseils/',
+    nav: 'Conseils matériel',
+    question: 'Faut-il des chaussures de boxe, et quel sac de frappe installer chez soi ?',
+    titre: 'Chaussures de boxe, sac de frappe : conseils | Castelginest',
+    description:
+      'Choisir des chaussures de boxe, installer un sac de frappe chez soi : les conseils de Boxing Center pour les Castelginestois, club à Toulouse États-Unis.',
+    menu: false,
+    index: true,
+  },
+  {
+    id: 'chaussures-de-boxe-anglaise',
+    chemin: '/conseils/chaussures-de-boxe-anglaise/',
+    nav: 'Chaussures de boxe',
+    question: 'Faut-il des chaussures de boxe, et comment les choisir ?',
+    titre: 'Chaussures de boxe anglaise : utiles ? Comment choisir',
+    description:
+      'Semelle fine, tige montante, pointure : à quoi servent les chaussures de boxe anglaise, quand les acheter, et pourquoi des baskets suffisent pour débuter.',
+    menu: false,
+    index: true,
+  },
+  {
+    id: 'sac-de-frappe-maison',
+    chemin: '/conseils/sac-de-frappe-maison/',
+    nav: 'Sac de frappe à la maison',
+    question: 'Quel sac de frappe installer chez soi ?',
+    titre: 'Sac de frappe à la maison : suspendu ou sur pied ?',
+    description:
+      'Suspendu ou sur pied, quel poids, quelle hauteur, quelle fixation : choisir un sac de frappe pour s’entraîner chez soi entre deux cours de boxe.',
+    menu: false,
+    index: true,
+  },
+  /* conseils:routes:fin */
   {
     id: 'contact',
     chemin: '/contact/',
