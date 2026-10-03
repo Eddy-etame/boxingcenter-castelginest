@@ -65,7 +65,7 @@ export const CONSEILS: readonly Conseil[] = [
     photo: 'garde-boxe-castelginest',
     sujet: 'Conseil · Chaussures de boxe',
     publie: '2026-10-02',
-    maj: '2026-10-02',
+    maj: '2026-10-03',
     sections: [
       {
         sur: 'Le besoin',
@@ -102,7 +102,7 @@ export const CONSEILS: readonly Conseil[] = [
         h2: 'Pieds nus dès qu’il y a des jambes ou du sol.',
         paras: [
           'La <a class="lien" href="/boxe-pieds-poings/">boxe pieds-poings</a>, le Muay Thai et le <a class="lien" href="/mma/">MMA</a> se pratiquent pieds nus, sur tatami. Si tu fais les deux, les chaussures restent dans le sac ces soirs-là.',
-          'Côté budget, <a class="lien" href="https://www.boutique-de-boxe.com/observatoire-des-prix/" rel="noopener">le relevé des prix de la boutique</a>, daté du 1er octobre 2026, donne un prix médian de 66,90 € pour une paire de chaussures de boxe ou de lutte.',
+          'Côté budget, <a class="lien" href="https://www.boutique-de-boxe.com/observatoire-des-prix/" rel="noopener">le relevé des prix de la boutique</a>, daté du 1er octobre 2026, donne un prix médian de 66,90 € pour une paire de chaussures de boxe ou de lutte. Gants à lacets, coquille, short : le reste d’un sac de combat est sur la page <a class="lien" href="https://www.boutique-de-boxe.com/materiel-boxe-competition/" rel="noopener">matériel de boxe de compétition</a>.',
         ],
       },
     ],
@@ -147,7 +147,7 @@ export const CONSEILS: readonly Conseil[] = [
     photo: 'sac-de-frappe-castelginest',
     sujet: 'Conseil · Sac de frappe',
     publie: '2026-10-02',
-    maj: '2026-10-02',
+    maj: '2026-10-03',
     sections: [
       {
         sur: 'L’usage',
@@ -161,7 +161,7 @@ export const CONSEILS: readonly Conseil[] = [
         h2: 'Le sac suspendu : le vrai, s’il y a un support.',
         paras: [
           'Il encaisse les coups lourds et balance comme au club. Le repère : un sac qui pèse environ la moitié de ton poids, soit 30 à 40 kg pour la plupart des adultes. Trop léger, il vole ; trop lourd, il ne bouge plus et les poignets encaissent.',
-          'La fixation est le vrai sujet : une poutre porteuse, une dalle en béton avec des chevilles adaptées, ou une potence murale — jamais un plafond en plaques de plâtre. <a class="lien" href="https://www.boutique-de-boxe.com/sacs-de-frappe/" rel="noopener">Les sacs de frappe</a> de Boutique de Boxe, la boutique de matériel du groupe, donnent le poids, la longueur et la fixation de chaque modèle.',
+          'La fixation est le vrai sujet : une poutre porteuse, une dalle en béton avec des chevilles adaptées, ou une potence murale — jamais un plafond en plaques de plâtre. <a class="lien" href="https://www.boutique-de-boxe.com/sacs-de-frappe/" rel="noopener">Les sacs de frappe</a> de Boutique de Boxe, la boutique de matériel du groupe, donnent le poids, la longueur et la fixation de chaque modèle. Un sac de frappe ne se livre qu’à domicile : <a class="lien" href="https://www.boutique-de-boxe.com/vente-materiel-de-boxe/" rel="noopener">la page vente de matériel de boxe</a> de la boutique en donne les conditions.',
         ],
       },
       {
